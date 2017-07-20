@@ -1,0 +1,58 @@
+---
+title: Installing BOSH Backup and Restore
+owner: BBR
+---
+
+This topic describes how to install BOSH Backup and Restore (BBR).
+
+##<a id="jumpbox-setup"></a> Step 1: Set Up Your Jumpbox
+
+Set up your jumpbox with the following settings:
+
+* The jumpbox must have sufficient space for the backup. `bbr` stores each backup in the current working directory, in a directory of the same name as the deployment.  
+* `bbr` connects to the VMs at their private IP address, so the jumpbox needs to be in the same network as the deployed VMs. `bbr` does not support SSH gateways.
+* `bbr` copies the backed-up data from the VMs to the jumpbox, so ensure you have minimal network latency between them to reduce transfer times.
+
+Consult the following table for more information about the network access permissions required by `bbr`.
+
+<table>
+<tr>
+<th>VM</th>
+<th>Default Port</th>
+<th>Description</th>
+</tr>
+<tr>
+<td>BOSH Director</td>
+<td>25555</td>
+<td><code>bbr</code> interacts with the BOSH Director API.</td>
+</tr>
+<tr>
+<td>Deployed Instances</td>
+<td>22</td>
+<td><code>bbr</code> uses SSH to orchestrate the backup on the instances.</td>
+</tr>
+<tr>
+<td>BOSH Director UAA</td>
+<td>8443</td>
+<td><code>bbr</code> interacts with the UAA API for authentication, if necessary.</td>
+</tr>
+</table>
+
+## <a id='scp'></a>Step 2: Transfer BBR to Your Jumpbox
+
+Perform the following steps to transfer `bbr` to your jumpbox:
+
+1. Download the [latest BBR release](https://github.com/pivotal-cf/bosh-backup-and-restore/releases/).
+1. Change the permissions of `bbr` in order to make it executable:
+	<pre class="terminal">$ chmod a+x bbr</pre>
+1. SCP the binary to your jumpbox:
+	<pre class="terminal">$ scp LOCAL\_PATH\_TO\_BBR/bbr JUMPBOX\_USER/JUMPBOX\_ADDRESS</pre>
+	If your jumpbox has access to the internet, you can also SSH into your jumpbox and use `wget`:
+	<pre class="terminal">
+	$ ssh JUMPBOX\_USER/JUMPBOX\_ADDRESS -i YOUR\_CERTIFICATE.pem
+	$ wget BBR\_RELEASE\_URL
+	$ chmod a+x bbr
+	</pre>
+
+Continue to the [Using BOSH Backup and Restore](using.html) topic.
+

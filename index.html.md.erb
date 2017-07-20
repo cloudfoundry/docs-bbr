@@ -1,0 +1,58 @@
+---
+title: BOSH Backup and Restore
+owner: BBR
+---
+
+This guide documents BOSH Backup and Restore (BBR), a framework for backing up and restoring BOSH deployments and BOSH Directors.
+
+<%= vars.bbr_pcf %>
+
+BBR orchestrates triggering the backup or restore process on the BOSH deployment or BOSH Director, 
+and transfers the backup artifacts to and from the BOSH deployment or BOSH Director.
+
+## <a id='supported'></a>Supported Components
+
+`bbr` is a binary that can back up and restore BOSH deployments and BOSH Directors. `bbr` requires that the backup targets supply scripts that implement the backup and restore functions.
+
+BBR is not dependent on a particular version of BOSH. 
+However, a BOSH deployment must have its backup and restore [scripts](#contract) packaged in the releases.
+
+BBR supports BOSH Directors that use one of the following:
+
+* Basic Auth
+* Client/Client-Secret UAA Authentication
+
+## <a id='contract'></a>BBR Contract
+
+BBR sets out a contract with BOSH release authors, to call specific backup and restore scripts in a specific order:
+
+1. **Pre-backup lock**: The pre-backup lock scripts locks the job so backups are consistent across the cluster.
+1. **Backup**: The backup script backs up the release.
+1. **Post-backup unlock**: The post-backup unlock script unlocks the job after the backup is complete.
+
+This approach has the following advantages:
+
+* The deployment itself encapsulates the knowledge of how to back up and restore the deployment. 
+* Because responsibility for writing and maintaining scripts sits with the release author, scripts can change as the deployment changes and do not get out of sync. 
+
+<%= vars.bbr_pcf2 %>
+
+## <a id='workflow'></a>Workflow
+
+Operators download the `bbr` binary and transfer it to a jumpbox. Then they run `bbr` from the jumpbox, specifying the name of the BOSH deployment or BOSH Director to back up.
+
+`bbr` examines the jobs in the BOSH deployment or BOSH Director, and triggers the pre-backup lock, backup, and post-backup unlock scripts.
+
+Scripts in the same stage are all triggered together. For instance, `bbr` triggers all pre-backup lock scripts before any backup scripts. Scripts within a stage may be triggered in any order.
+
+The backup artifacts are drained to the jumpbox, where the operator can transfer them to storage and use them to restore the BOSH deployment or BOSH Director.
+
+The following diagram shows a sample backup flow.
+
+<%= image_tag('backup-flow.png') %>
+
+For more information about installing and using `bbr`, see the [Installing BOSH Backup and Restore](installing.html) and [Using BOSH Backup and Restore](using.html) topics.
+
+
+
+
