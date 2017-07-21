@@ -9,11 +9,11 @@ This topic describes how to install BOSH Backup and Restore (BBR).
 
 Set up your jumpbox with the following settings:
 
-* The jumpbox must have sufficient space for the backup. `bbr` stores each backup in the current working directory, in a directory of the same name as the deployment.  
-* `bbr` connects to the VMs at their private IP address, so the jumpbox needs to be in the same network as the deployed VMs. `bbr` does not support SSH gateways.
-* `bbr` copies the backed-up data from the VMs to the jumpbox, so ensure you have minimal network latency between them to reduce transfer times.
+* The jumpbox must have sufficient space for the backup. 
+* BBR connects to the VMs at their private IP address, so the jumpbox needs to be in the same network as the deployed VMs. BBR does not support SSH gateways.
+* BBR copies the backed-up data from the VMs to the jumpbox, so ensure you have minimal network latency between them to reduce transfer times.
 
-Consult the following table for more information about the network access permissions required by `bbr`.
+Consult the following table for more information about the network access permissions required by BBR.
 
 <table>
 <tr>
@@ -24,23 +24,23 @@ Consult the following table for more information about the network access permis
 <tr>
 <td>BOSH Director</td>
 <td>25555</td>
-<td><code>bbr</code> interacts with the BOSH Director API.</td>
+<td>BBR interacts with the BOSH Director API.</td>
 </tr>
 <tr>
 <td>Deployed Instances</td>
 <td>22</td>
-<td><code>bbr</code> uses SSH to orchestrate the backup on the instances.</td>
+<td>BBR uses SSH to orchestrate the backup on the instances.</td>
 </tr>
 <tr>
 <td>BOSH Director UAA</td>
 <td>8443</td>
-<td><code>bbr</code> interacts with the UAA API for authentication, if necessary.</td>
+<td>BBR interacts with the UAA API for authentication, if necessary.</td>
 </tr>
 </table>
 
 ## <a id='scp'></a>Step 2: Transfer BBR to Your Jumpbox
 
-Perform the following steps to transfer `bbr` to your jumpbox:
+Perform the following steps to transfer the `bbr` binary to your jumpbox:
 
 1. Download the [latest BBR release](https://github.com/pivotal-cf/bosh-backup-and-restore/releases/).
 1. Change the permissions of `bbr` in order to make it executable:
@@ -53,6 +53,3 @@ Perform the following steps to transfer `bbr` to your jumpbox:
 	$ wget BBR\_RELEASE\_URL
 	$ chmod a+x bbr
 	</pre>
-
-Continue to the [Using BOSH Backup and Restore](using.html) topic.
-

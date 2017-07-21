@@ -28,7 +28,7 @@ For example, if a MySQL encryption key is different in the restore environment,
 the BBR restore could succeed while the restored MySQL release could be unusable.
 As a result, operators should validate their backups by using the backup artifacts in a restore.
 
-## <a id='back-up-director'></a> Back Up BOSH Director
+## <a id='back-up-director'></a> Back Up a BOSH Director
 
 ### <a id='check-director'></a> Step 1: Check Your BOSH Director
 
@@ -40,42 +40,54 @@ Perform the following steps to check that your BOSH Director is reachable and ca
   </pre>
 1. Run the BBR pre-backup check:
   <pre class="terminal">
-  $ BOSH\_CLIENT\_SECRET=BOSH\_CLIENT\_SECRET \
-      bbr director \
-      --target BOSH\_DIRECTOR\_IP \
-      --username BOSH\_CLIENT \
-      --ca-cert PATH\_TO\_PRIVATE\_KEY \
+  $ bbr director \
+      --private-key-path PATH\_TO\_PRIVATE\_KEY \
+      --username USER\_NAME \
+      --host HOST \
       pre-backup-check
   </pre>
 
+    Use the optional `--debug` flag to enable debug logs. See the [Exit Codes and Logging](logging.html) topic for more information.
+    <br><br>
     Replace the placeholder values as follows:
-    * `BOSH_CLIENT`, `BOSH_CLIENT_SECRET`: If you have a BOSH Director with User Account and Authentication (UAA) as the authentication provider, use a UAA client as the user name and a UAA client secret as the password. If you have a BOSH Director with basic auth configured, use your user name and password.
-    * `BOSH_DIRECTOR_IP`: This is the IP address of your BOSH Director
     * `PATH_TO_PRIVATE_KEY`: This is the path to the SSH private key used to connect to the BOSH Director.
+    * `USER_NAME`: This is the SSH username of the BOSH Director.
+    * `HOST`: This is the address of the BOSH Director, with an optional port that defaults to 22. If the BOSH Director is public, this is a URL, such as `https://my-bosh.xxx.cf-app.com`. Otherwise, this is the BOSH Director IP address. 
 
-1. If the pre-backup check succeeds, continue to the [next section](#bbr-backup). If it fails, the BOSH Director you selected may not have the correct backup scripts, or the connection to the BOSH Director may have failed.
+1. If the pre-backup check succeeds, continue to the [next section](#bbr-backup-director). If it fails, the command will print the reason why it cannot back up the deployment with the error code 1. The BOSH Director you selected may not have the correct backup scripts, or the connection to the BOSH Director may have failed.
 
 ### <a id='bbr-backup-director'></a> Step 2: Back Up Your BOSH Director
 
-1. Run the BBR backup command from your jumpbox to back up your BOSH Director:
-  <pre class="terminal">
-  $ bbr director \
-    --private-key-path PATH\_TO\_PRIVATE\_KEY \
-    --username bbr \
-    --host HOST \
-    backup
-  </pre>
+Run the BBR backup command from your jumpbox to back up your BOSH Director:
+<pre class="terminal">
+$ bbr director \
+  --private-key-path PATH\_TO\_PRIVATE\_KEY \
+  --username USER\_NAME \
+  --host HOST \
+  backup
+</pre>
 
-  Use the optional `--debug` flag to enable debug logs. See the [Logging](#logging) section for more information.
-  <br><br>
-  Replace the placeholder values as follows:
+Use the optional `--debug` flag to enable debug logs. See the [Exit Codes and Logging](logging.html) topic for more information.
+<br><br>
+Replace the placeholder values with the same values as above.
 
-  * `PATH_TO_PRIVATE_KEY`: This is the path to the SSH private key used to connect to the BOSH Director.
-  * `HOST`: This is the address of the BOSH Director. If the BOSH Director is public, this is a URL, such as `https://my-bosh.xxx.cf-app.com`. Otherwise, this is the BOSH Director IP address. 
-  
-## <a id='back-up-deployment'></a> Back Up BOSH Deployment
+If the commands completes successfully, do the following:
 
-## <a id='check-deployment'></a> Step 1: Check Your Deployment
+1. Move the backup artifact off the jumpbox to your preferred storage space. BBR stores each backup in the current working directory, in a directory named `HOST-TIMESTAMP`. The backup created by BBR consists of a folder with the backup artifacts and metadata files. 
+1. Compress and encrypt the backup artifacts when storing them.
+1. Make redundant copies of your backup and store them in multiple locations in order to minimize the risk of losing your backups in the event of a disaster.
+1. Attempt a test restore on every backup in order to validate it by performing the procedures in the [Restoring with BOSH Backup and Restore](restore.html) topic.
+
+If the command fails, do the following:
+
+1. If the backup artifact is corrupted, rerun the backup and discard the failing artifacts.
+1. Ensure all the parameters in the command are set.
+1. Ensure the BOSH Director credentials are valid.
+1. Consult the [Exit Codes and Logging](logging.html) topic.
+
+## <a id='back-up-deployment'></a> Back Up a BOSH Deployment
+
+### <a id='check-deployment'></a> Step 1: Check Your BOSH Deployment
 
 Perform the following steps to check that your BOSH Director is reachable and has a deployment that can be backed up:
 
@@ -87,25 +99,26 @@ Perform the following steps to check that your BOSH Director is reachable and ha
   <pre class="terminal">
   $ BOSH\_CLIENT\_SECRET=BOSH\_CLIENT\_SECRET \
       bbr deployment \
-      --target BOSH\_DIRECTOR\_IP \
+      --target BOSH\_TARGET \
       --username BOSH\_CLIENT \
       --deployment DEPLOYMENT\_NAME \
       --ca-cert PATH\_TO\_BOSH\_SERVER\_CERT \
       pre-backup-check
   </pre>
 
+    Use the optional `--debug` flag to enable debug logs. See the [Exit Codes and Logging](logging.html) topic for more information.
+    <br><br>
     Replace the placeholder values as follows:
-    * `BOSH_CLIENT`, `BOSH_CLIENT_SECRET`: From the Ops Manager Installation Dashboard, click **Ops Manager Director**, navigate to the **Credentials** tab, and click **Uaa Bbr Client Credentials** to retrieve the BOSH UAA credentials.<br><br>
-    You can also retrieve the credentials using the Ops Manager API with a GET request to the following endpoint: `/api/v0/deployed/director/credentials/uaa_bbr_client_credentials`. For more information, see the [Using the Ops Manager API](../ops-man-api.html) topic.<br><br>
-    * `BOSH_DIRECTOR_IP`: You retrieved this value in the [Step 4: Retrieve BOSH Director Address and Credentials](#retrieve) section.
-    * `DEPLOYMENT-NAME`: You retrieved this value in the [Step 5: Identify Your Deployment](#identify-deployment) section.
-    * `PATH_TO_BOSH_SERVER_CERT`: This is the path to the BOSH Director’s Certificate Authority (CA) certificate, if the certificate is not verifiable by the local machine’s certificate chain. If you are using the Ops Manager VM as your jumpbox, locate the certificate at `/var/tempest/workspaces/default/root_ca_certificate`. 
+    * `BOSH_CLIENT`, `BOSH_CLIENT_SECRET`: If you have a BOSH Director with User Account and Authentication (UAA) as the authentication provider, use a UAA client as the user name and a UAA client secret as the password. If you have a BOSH Director with basic auth configured, use your user name and password.
+    * `BOSH_TARGET`: This is the FQDN or IP address of your BOSH Director.
+    * `DEPLOYMENT-NAME`: This is the name of the deployment you want to back up. For a list of deployments, run `bosh deployments`.
+    * `PATH_TO_BOSH_SERVER_CERT`: This is the path to the BOSH Director’s Certificate Authority (CA) certificate, if the certificate is not verifiable by the local machine’s certificate chain.  
 
-1. If the pre-backup check succeeds, continue to the [next section](#bbr-backup). If it fails, the deployment you selected may not have the correct backup scripts, or the connection to the BOSH Director may have failed.
+1. If the pre-backup check succeeds, continue to the [next section](#bbr-backup-deployment). If it fails, the command will print the reason why it cannot back up the deployment with the error code 1. The deployment you selected may not have the correct backup scripts, or the connection to the BOSH Director may have failed.
 
-### <a id='bbr-backup-deployment'></a> Step 2: Back Up Your Deployment
+### <a id='bbr-backup-deployment'></a> Step 2: Back Up Your BOSH Deployment
 
-Run the BBR backup command from your jumpbox to back up your Elastic Runtime deployment:
+Run the BBR backup command from your jumpbox to back up your BOSH deployment:
 <pre class="terminal">
 $ BOSH\_CLIENT\_SECRET=BOSH\_CLIENT\_SECRET \
   nohup bbr deployment \
@@ -115,233 +128,86 @@ $ BOSH\_CLIENT\_SECRET=BOSH\_CLIENT\_SECRET \
   --ca-cert PATH\_TO\_BOSH\_SERVER\_CERT \
   backup</pre>
 
-Use the optional `--debug` flag to enable debug logs. See the [Logging](#logging) section for more information.
-<p class="note"><strong>Note</strong>: The BBR backup command can take a long time to complete. Pivotal recommends you run it independently of the SSH session, so that the process can continue running even if your connection to the jumpbox fails. The command above uses `nohup` but you could also run the command in a `screen` or `tmux` session.</p>
+Use the optional `--debug` flag to enable debug logs. See the [Exit Codes and Logging](logging.html) topic for more information.
+<br><br>
+Use the optional `--with-manifest` to include the deployment manifest with the backup artifact.
+<br><br>
+Replace the placeholder values with the same values as above.
+
+<p class="note"><strong>Note</strong>: The BBR backup command can take a long time to complete. You can run it independently of the SSH session, so that the process can continue running even if your connection to the jumpbox fails. The command above uses <code>nohup</code> but you could also run the command in a <code>screen</code> or <code>tmux</code> session.</p>
 
 If the commands completes successfully, do the following:
 
-1. Move the backup artifact off the jumpbox to your preferred storage space. The backup created by BBR consists of a folder with the backup artifacts and metadata files. However, Pivotal recommends compressing and encrypting the files.
+1. Move the backup artifact off the jumpbox to your preferred storage space. BBR stores each backup in the current working directory, in a directory named `DEPLOYMENT-TIMESTAMP`. The backup created by BBR consists of a folder with the backup artifacts and metadata files. 
+1. Compress and encrypt the backup artifacts when storing them.
 1. Make redundant copies of your backup and store them in multiple locations in order to minimize the risk of losing your backups in the event of a disaster.
-1. Attempt a test restore on every backup in order to validate it by performing the procedures in the [Step 11: Validate Your Backup](#validate-backup) section below.
+1. Attempt a test restore on every backup in order to validate it by performing the procedures in the [Restoring with BOSH Backup and Restore](restore.html) topic.
 
 If the command fails, do the following:
 
+1. If the backup artifact is corrupted, rerun the backup and discard the failing artifacts.
 1. Ensure all the parameters in the command are set.
 1. Ensure the BOSH Director credentials are valid.
 1. Ensure the specified deployment exists.
-1. Consult the [Exit Codes](#exit-codes) section below.
+1. Consult the [Exit Codes and Logging](logging.html) topic.
 
-## <a id='recommendations'></a> Recommendations
- 
+## <a id='cancel-backup'></a>Cancel a Backup
 
-We recommend that you make redundant copies of your backups and that you store 
-them in multiple locations in order to minimize the risk of losing your backups in the event of a disaster.
+If you need to cancel a backup, perform the following steps:
 
-We also recommend that you attempt a test restore on every backup 
-that you make in order to validate that the backup can be restored from.
+1. Terminate the BBR process by pressing Ctrl-C and then typing `yes` to confirm. 
+1. Stopping a backup can leave the system in an unusable state or prevent additional backups. Perform the procedures in the [Clean Up After Failed Backup](#manual-clean) section to enable future backups.
 
+## <a id="manual-clean"></a>Clean Up After Failed Backup
 
-### Using BOSH Backup & Restore
+If your backup process fails, it may leave the BBR backup folder on the instance, causing any subsequent attempts to backup to fail. In addition, BBR may not have run the post-backup scripts, leaving the instance in a locked state. 
 
-#### Stopping a backup
-Stopping a backup can leave the system in an unusable state or prevent a backup from being taken. For this reason, `bbr` will confirm that you want to stop the backup with `Ctrl-C` (`SIGINT`). If you do stop a backup, you can run the backup-cleanup subcommand to enable future backups to be taken. 
+In order to resolve these issues, run the BBR cleanup script.
 
-#### BBR Syntax
-The syntax for BOSH Backup & Restore (BBR) is:
-
-`bbr [command] [arguments...] [subcommand]`
-
-#### [command]
-`command`: options are `deployment`, `director`, `help`, `version`
-
-* `deployment` Specifies that the target of BBR is a BOSH deployment
-* `director` Specifies that the target of BBR is a BOSH director
-* `help` Output help text
-* `version` Output version of BBR binary
-
-#### [arguments]
-Arguments are specific to the command.
-
-##### Arguments for `director`
-The arguments to specify when running bbr for a BOSH Director are:
-
-```bash
+To clean up after a failed BOSH Director backup, run the following command:
+<pre class="terminal">
 $ bbr director \
-  --debug (OPTIONAL) \
-  --private-key-path <PATH_TO_PRIVATE_KEY \
-  --username <USER_NAME> \
-  --host <HOST> \
-  SUB-COMMAND [--artifact-path <PATH_TO_ARTIFACT_TO_RESTORE>]
- ```
+    --private-key-path PATH\_TO\_PRIVATE\_KEY \
+    --username USER\_NAME \
+    --host HOST
+    backup-cleanup
+</pre>
 
- The parameters are:
+To clean up after a failed BOSH deployment backup, run the following command:
 
- * `--debug`: display debug output
- * `--username`: SSH username of the Director
- * `--private-key-path`: path to the SSH private key used to connect to the Director
- * `--host`: address of the Director to back up, with an optional port which defaults to 22. If the BOSH Director is public, this will be a URL, e.g. https://my-bosh.xxx.cf-app.com. Otherwise, it will be the BOSH Director IP which you can be found in the Operations Manager UI, under Ops Manager Director > Status > Ops Manager Director > IPS.
- * `--artifact-path`: if running `bbr director restore`, path to the artifact directory that should be restored.
+<pre class="terminal">
+$ BOSH\_CLIENT\_SECRET=BOSH\_CLIENT\_SECRET \
+    bbr deployment \
+    --target BOSH\_TARGET \
+    --username BOSH\_CLIENT \
+    --deployment DEPLOYMENT\_NAME \
+    --ca-cert PATH\_TO\_BOSH\_SERVER\_CERT \
+    backup-cleanup
+</pre>
 
- > For BOSH Directors deployed with PCF 1.11 and up, the username to connect to the Director is `bbr`. The private key for this user can be found in the Operations Manager UI, under Ops Manager Director > Credentials > Bbr Ssh Credentials.
+If the cleanup script fails, consult the following table to match the exit codes to an error message.
 
-##### Arguments for `deployment`
-The arguments to specify when running bbr for a BOSH deployment are:
+<table>
+<tr>
+<th>Value</th>
+<th>Error</th>
+</tr>
+<tr>
+<td>0</td>
+<td>Success</td>
+</tr>
+<tr>
+<td>1</td>
+<td>General failure</td>
+</tr>
+<tr>
+<td>8</td>
+<td>The post-backup unlock failed. Your BOSH deployment or BOSH Director may be in a bad state and require attention.</td>
+</tr>
+<tr>
+<td>16</td>
+<td>The cleanup failed. This is a non-fatal error indicating that the utility has been unable to clean up open BOSH SSH connections to the deployment VMs. Manual cleanup may be required to clear any hanging BOSH users and connections.</td>
+</tr>
+</table>
 
-```bash
-$ BOSH_CLIENT_SECRET=<BOSH_CLIENT_SECRET> \
-  bbr deployment \
-  --debug (OPTIONAL)
-  --target <BOSH_TARGET> \
-  --username <BOSH_CLIENT> \
-  --deployment <DEPLOYMENT_NAME> \
-  --ca-cert <PATH_TO_BOSH_SERVER_CERTIFICATE> \
-    SUB-COMMAND [--artifact-path <PATH_TO_ARTIFACT_TO_RESTORE>]
-```
-
-The arguments are:
-
-* `--debug`: display debug output
-* `BOSH_CLIENT`, `BOSH_CLIENT_SECRET`: Use the BOSH UAA user provided in Pivotal Ops Manager > Credentials > Uaa Bbr Client Credentials
-* `--target`: the fully-qualified domain name or IP address of your BOSH director
-* `--username`: BOSH uaa client (see [Authentication](#authentication) for more details on what authentication details to provide)
-* `--deployment`: exact name of the deployment to restore (use `bosh deployments` to view a list of deployments)
-* `--ca-cert`: path to the BOSH Director's CA certificate, if the certificate is not verifiable by the local machine's certificate chain
-* `--artifact-path`: if running `bbr deployment restore`, path to the artifact directory that should be restored.
-* The BOSH password or uaa-client-secret should be provided using the env var `BOSH_CLIENT_SECRET` to avoid typing the password into the command prompt. Alternatively, the `--password` flag can be provided. (See [Authentication](#authentication) for more details on what authentication details to provide)
-
-The command will fail if:
-
-1. any of these arguments are not set
-1. the BOSH director credentials are invalid
-1. the specified deployment is not found
-
-
-Optional arguments
-
-* `--debug`: enable debug logs
-
-<a name="authentication"></a>
-**Authentication**
-If you have a BOSH director with UAA as the authentication provider, use a UAA client as user name and UAA client secret as the password. For BOSH Directors deployed with PCF 1.11 and up, a UAA client for BBR can be found in the Operations Manager UI, under Ops Manager Director > Credentials > Uaa Bbr Client Credentials.
-If you have a BOSH director with basic auth configured, use username and password as arguments.
-
-#### [subcommand]
-BBR supports four subcommands:
-
-* backup
-* restore
-* pre-backup-check
-* backup-cleanup
-
-##### Checking deployment or director can be backed up: pre-backup-check
-
-```bash
-bbr  command [command options] [arguments...] pre-backup-check
-```
-
-This will check if your BOSH director is reachable and, for the `deployment` command, has a deployment that can be backed up. If it finds the deployment can't be backed up, it will print the reason why and exit with error code 1.
-
-**Exit codes**
-
-| Value | Error                                                                                                                                                     |
-|:------|:----------------------------------------------------------------------------------------------------------------------------------------------------------|
-| 0     | Success                                                                                                                                                   |
-| 1     | **General failure** indicating the backup-check was unsuccessful. For example, the deployment has no backup scripts or connection to the director failed. |
-
-
-
-##### Backing up a BOSH deployment or director: backup
-
-```bash
-bbr command [command options] [arguments...] backup [backup options]
-```
-
-Backup can fail if the backup artifact becomes corrupted, in this case you can re-run the backup and discard failing artifacts.
-
-`bbr` stores each backup in the current working directory, in a directory of the same name as the deployment. This means that you will not be able to run multiple backups from the same working directory without first moving or renaming the existing backup.
-
-BBR backup gives you an artifact. We recommend you use your existing process to move the artifact off the jumpbox to your preferred storage space. The backup artifact created by the `bbr` utility consists of a tar file and a metadata file stored in a directory. For a deployment backup, the directory will be named `<deployment-name>-<timestamp>`. For a director backup, the directory will be named `<host-ip-or-name>-<timestamp>`.
-
-Running `bbr` manually against a deployment might be a long running process. It's best to start it so it runs independently of the SSH session, so it can continue running even if your connection to the jumpbox fails. For example with `nohup` or in a `screen` or `tmux` session.
-
-**Arguments for deployment backup**
-
-* `--with-manifest`: If set, the deployment manifest will be included in the backup artifact.
-
-**Exit codes**
-
-The exit code returned by the `bbr` utility indicates the status of the backup. Using bitwise AND, you can determine which of several possible failures occurred.
-
-| Value | Error                                                                                                                                                                                                                                                       |
-|:------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| 0     | Success                                                                                                  | 1     | **General failure** indicating the backup was unsuccessful. For example, the deployment has no backup scripts or the backup step failed. |
-| 4     | **Pre-backup lock failed**.                                                                                                                                                                                                                                 |
-| 8     | **Post-backup unlock failed**. Your deployment may be in a bad state and requires attention.                                                                                                                                                                |
-| 16    | **Cleanup failed**, a non-fatal error indicating that the utility has been unable to clean up open BOSH SSH connections to the deployment VMs. Manual cleanup might be required to clear any hanging BOSH users/connections                                 |
-
-For example, an error code 5 indicates lock failed *and* a general error occurred. Error code 20 indicates lock failed and cleanup failed.
-
-To check a bit is set, use bitwise AND. For example, for an error code 20:
-
-```ruby
-20 | 1  == 1    # false
-20 | 4  == 4    # true; lock failed
-20 | 8  == 8    # false
-20 | 16 == 16   # true; cleanup failed
-```
-
-##### Restoring a BOSH deployment or director: restore
-
-Before restoring a BOSH deployment or director, it is necessary to first create the VMs constituting the deployment. In a disaster recovery scenario, first re-create the deployment using your bosh deployment manifest (if the backup was taken using the `--with-manifest` flag, a copy of the manifest will be included in your backup artifact). Once the deployment has been re-created, run the bbr tool to restore your data.
-
-```bash
-bbr command [command options] [arguments...] restore
-```
-
-Restore will fail if the source deployment is incompatible with the target deployment.
-
-**Exit codes**
-
-| Value | Error                                                                                                                                                                                                                                                                              |
-|:------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| 0     | Success                                                                                                                                                                                                                                                                            |
-| 1     | **General failure** indicating the restore was unsuccessful. For example, the deployment has no restore scripts or connection to the director failed.                                                                                                                              |
-| 16    | **Cleanup failed**, a non-fatal error indicating that the utility has been unable to clean up the temporary files or to close the BOSH SSH connections and delete the SSH user in the deployment VMs. Manual cleanup might be required to clear any hanging BOSH users/connections |
-
-##### Manually Cleanup a BOSH deployment or director after failed backup: backup-cleanup
-
-If your backup process fails part way through and it may leave the bbr backup folder on the instance causing any subsequent attempts to backup to fail. In addition post-backup scripts may not have been run leaving the instance in a locked state. In order to resolve the issues we recommend running the cleanup script over the affected deployment.
-
-```bash
-bbr command [command options] [arguments...] backup-cleanup
-```
-
-**Exit codes**
-
-| Value | Error                                                                                                                                                                                                                       |
-|:------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| 0     | Success                                                                                                                                                                                                                     |
-| 1     | **General failure** indicating the cleanup was unsuccessful. For example the connection to the director failed.                                                                                                             |
-| 8     | **Post-backup unlock failed**. Your deployment may be in a bad state and requires attention.                                                                                                                                |
-| 16    | **Cleanup failed**, a non-fatal error indicating that the utility has been unable to clean up open BOSH SSH connections to the deployment VMs. Manual cleanup might be required to clear any hanging BOSH users/connections |
-
-See backup section on examples on how to interpret the exit code.
-
-
-#### Logging
-
-By default, during the `backup` or `restore` actions the utility will display:
-
-* the backup / restore scripts that it found
-* when it starts or finishes a stage, e.g. `pre-backup scripts` or `backup scripts`
-* when the process is complete
-* when any error occurs
-
-In addition, any errors associated with stack traces will be written to a file in of the form `bbr-<timestamp>.err.log` in the current directory.
-
-If more logging is needed, use the debug flag to print more information. Then, in addition to the default logging, the utility will also print:
-
-* logs about the API requests made to the BOSH server
-* all commands executed on remote instances
-* all commands executed on local environment
-* standard in and standard out streams for the backup and restore scripts, when they are executed.
+For more information about how to interpret the exit code, see the [Exit Codes](#exit-codes) section of the [Exit Codes and Logging](logging.html) topic.

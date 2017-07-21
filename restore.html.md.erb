@@ -4,3 +4,92 @@ owner: BBR
 ---
 
 This topic describes how to use BOSH Backup and Restore (BBR) to restore a BOSH deployment or BOSH Director.
+
+To back up a BOSH deployment or BOSH Director with BBR, see the [Backing Up with BOSH Backup and Restore](backup.html) topic.
+
+Perform the steps below to restore a BOSH Director, a BOSH deployment, or both.
+
+## <a id="recreate-vms"></a> Step 1: Recreate VMs
+
+Before restoring a BOSH Deployment or director, you must create the VMs that constitute the deployment.
+
+In a disaster recovery scenario, re-create the deployment with your BOSH deployment manifest. If you used the `--with-manifest` flag when running the BBR backup command, your backup artifact includes a copy of your manifest. 
+
+## <a id="artifacts-jumpbox"></a> Step 2: Transfer Artifacts to Jumpbox
+
+In the [Backing Up with BOSH Backup and Restore](backup.html) topic, you moved the TAR and metadata files of the backup artifact off your jumpbox to your preferred storage space. Now you must transfer those files back to your jumpbox.
+
+For instance, you could SCP the backup artifact to your jumpbox:
+  <pre class="terminal">$ scp LOCAL\_PATH\_TO\_BACKUP\_ARTIFACT JUMPBOX\_USER/JUMPBOX\_ADDRESS</pre>
+
+## <a id='restore'></a> Step 3: Restore
+
+### <a id='restore-director'></a> Restore a BOSH Director
+
+Perform the following steps to restore a BOSH Director:
+
+1. Ensure the BOSH Director backup artifact is in the folder you will run BBR from.
+1. Run the BBR restore command from your jumpbox to restore the BOSH Director:
+  <pre class="terminal">
+  $ nohup bbr director \
+      --private-key-path PATH\_TO\_PRIVATE\_KEY \
+      --username USER\_NAME \
+      --host HOST \
+      restore \
+      	--artifact-path PATH\_TO\_DIRECTOR\_BACKUP
+  </pre>
+
+    Use the optional `--debug` flag to enable debug logs. See the [Exit Codes and Logging](logging.html) topic for more information.
+    <br><br>
+    Replace the placeholder values as follows:
+    * `PATH_TO_PRIVATE_KEY`: This is the path to the SSH private key used to connect to the BOSH Director.
+    * `USER_NAME`: This is the SSH username of the BOSH Director.
+    * `HOST`: This is the address of the BOSH Director, with an optional port that defaults to 22. If the BOSH Director is public, this is a URL, such as `https://my-bosh.xxx.cf-app.com`. Otherwise, this is the BOSH Director IP address. 
+	* `PATH_TO_DIRECTOR_BACKUP`: This is the path to the BOSH Director backup you want to restore.
+
+<p class="note"><strong>Note</strong>: The BBR restore command can take a long time to complete. You can run it independently of the SSH session, so that the process can continue running even if your connection to the jumpbox fails. The command above uses <code>nohup</code> but you could also run the command in a <code>screen</code> or <code>tmux</code> session.</p>
+
+If the command fails, do the following:
+
+1. Ensure all the parameters in the command are set.
+1. Ensure the BOSH Director credentials are valid.
+1. Ensure the specified BOSH Director exists.
+1. Ensure that the jumpbox can reach the BOSH Director.
+1. Ensure the source BOSH Director is compatible with the target BOSH Director.
+1. Consult the [Exit Codes and Logging](logging.html) topic.
+
+### <a id='restore-deployment'></a> Restore a BOSH Deployment
+
+Perform the following steps to restore a BOSH deployment:
+
+1. Ensure the BOSH deployment backup artifact is in the folder you will run BBR from.
+1. Run the BBR pre-backup check:
+  <pre class="terminal">
+  $ BOSH\_CLIENT\_SECRET=BOSH\_CLIENT\_SECRET \
+      nohup bbr deployment \
+      --target BOSH\_TARGET \
+      --username BOSH\_CLIENT \
+      --deployment DEPLOYMENT\_NAME \
+      --ca-cert PATH\_TO\_BOSH\_SERVER\_CERT \
+      restore \
+      	--artifact-path PATH\_TO\_DEPLOYMENT\_BACKUP
+  </pre>
+
+    Use the optional `--debug` flag to enable debug logs. See the [Exit Codes and Logging](logging.html) topic for more information.
+    <br><br>
+    Replace the placeholder values as follows:
+    * `BOSH_CLIENT`, `BOSH_CLIENT_SECRET`: If you have a BOSH Director with User Account and Authentication (UAA) as the authentication provider, use a UAA client as the user name and a UAA client secret as the password. If you have a BOSH Director with basic auth configured, use your user name and password.
+    * `BOSH_TARGET`: This is the FQDN or IP address of your BOSH Director.
+    * `DEPLOYMENT-NAME`: This is the name of the deployment you want to restore.
+    * `PATH_TO_BOSH_SERVER_CERT`: This is the path to the BOSH Director’s Certificate Authority (CA) certificate, if the certificate is not verifiable by the local machine’s certificate chain. 
+	* `PATH_TO_DEPLOYMENT_BACKUP`: This is the path to the BOSH deployment backup you want to restore.
+	<p class="note"><strong>Note</strong>: The BBR restore command can take a long time to complete. You can run it independently of the SSH session, so that the process can continue running even if your connection to the jumpbox fails. The command above uses <code>nohup</code> but you could also run the command in a <code>screen</code> or <code>tmux</code> session.</p>
+
+If the command fails, do the following:
+
+1. Ensure all the parameters in the command are set.
+1. Ensure the BOSH Director credentials are valid.
+1. Ensure the specified BOSH deployment exists.
+1. Ensure that the jumpbox can reach the BOSH Director.
+1. Ensure the source BOSH deployment is compatible with the target BOSH deployment.
+1. Consult the [Exit Codes and Logging](logging.html) topic.
