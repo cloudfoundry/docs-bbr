@@ -37,9 +37,15 @@ BBR is not dependent on a particular version of BOSH or PCF. However, for a depl
 
 BBR sets out a contract with BOSH release authors, to call specific backup and restore scripts in a specific order:
 
-1. **Pre-backup lock**: The pre-backup lock scripts locks the job so backups are consistent across the cluster.
-1. **Backup**: The backup script backs up the release.
-1. **Post-backup unlock**: The post-backup unlock script unlocks the job after the backup is complete.
+### Backup scripts
+1. **pre-backup-lock**: The pre-backup lock scripts locks the job so backups are consistent across the cluster.
+1. **backup**: The backup script backs up the release.
+1. **post-backup-unlock**: The post-backup unlock script unlocks the job after the backup is complete.
+
+### Restore scripts
+1. **pre-restore-lock**: The pre-restore-lock scripts locks the job so restore is consistent across the cluster. (in development) 
+1. **restore**: The restore script restores the release.
+1. **post-restore-unlock**: The post-restore-unlock script unlocks the job after the restore is complete. (in development) 
 
 This approach has the following advantages:
 
