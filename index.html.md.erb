@@ -21,6 +21,12 @@ BBR is a binary that can back up and restore BOSH deployments and BOSH Directors
 BBR is not dependent on a particular version of BOSH. 
 However, a BOSH deployment must have its backup and restore [scripts](#contract) packaged in the releases.
 
+### Which BOSH deployments can be backed up / restored?
+* Elastic Runtime (PCF1.11+). Backup instructions 
+[here](https://docs.pivotal.io/pivotalcf/1-11/customizing/backup-restore/backup-pcf-bbr.html). 
+Restore instructions [here](https://docs.pivotal.io/pivotalcf/1-11/customizing/backup-restore/restore-pcf-bbr.html).
+* BOSH Director, including UAA and CredHub
+
 BBR supports BOSH Directors that use one of the following:
 
 * Basic Auth
