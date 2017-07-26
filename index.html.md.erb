@@ -27,7 +27,8 @@ However, a BOSH deployment must have its backup and restore [scripts](#contract)
 Restore instructions [here](https://docs.pivotal.io/pivotalcf/1-11/customizing/backup-restore/restore-pcf-bbr.html).
 * BOSH Director, including UAA and CredHub
 
-BBR supports BOSH Directors that use one of the following:
+## <a id='compatibility'></a>BOSH Backup & Restore Binary Compatibility
+BBR is not dependent on a particular version of BOSH or PCF. However, for a deployment to be backup-ready it must have its backup and restore scripts packaged in the release; check the documentation for the deployment. BBR supports BOSH directors which use one of the following:
 
 * Basic Auth
 * Client/Client-Secret UAA Authentication
