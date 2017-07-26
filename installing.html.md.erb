@@ -5,11 +5,14 @@ owner: BBR
 
 This topic describes how to install BOSH Backup and Restore (BBR).
 
+You install the `bbr` binary on a jumpbox, and then run `bbr` from the jumpbox to [back up](backup.html) and [restore](restore.html) your BOSH deployment or BOSH Director.
+
 ##<a id="jumpbox-setup"></a> Step 1: Set Up Your Jumpbox
 
 Set up your jumpbox with the following settings:
 
-* The jumpbox must have sufficient space for the backup. 
+* The jumpbox must be able to communicate with the network that contains your BOSH deployment.
+* The jumpbox must have sufficient space for the backup. For instance, a Cloud Foundry backup can be at least 1.5 GB in size.
 * BBR connects to the VMs at their private IP address, so the jumpbox needs to be in the same network as the deployed VMs. BBR does not support SSH gateways.
 * BBR copies the backed-up data from the VMs to the jumpbox, so ensure you have minimal network latency between them to reduce transfer times.
 
@@ -54,14 +57,4 @@ Perform the following steps to transfer the `bbr` binary to your jumpbox:
 	$ chmod a+x bbr
 	</pre>
 
-##<a id="advice"></a>  Advice for Operators
 
-You must place the `bbr` binary on a jumpbox that is able to communicate with 
-the network that your BOSH deployment is on, and that has sufficient storage to house 
-the backups you intend to keep on it. For instance, a CF backup can be at least 1.5GB in size.
-
-We recommend that you make redundant copies of your backups and that you store 
-them in multiple locations in order to minimize the risk of losing your backups in the event of a disaster.
-
-We also recommend that you attempt a test restore on every backup 
-that you make in order to validate that the backup can be restored from.

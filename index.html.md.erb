@@ -19,33 +19,23 @@ For more information about installing and using BBR, see the [Installing BOSH Ba
 BBR is a binary that can back up and restore BOSH deployments and BOSH Directors. BBR requires that the backup targets supply scripts that implement the backup and restore functions.
 
 BBR is not dependent on a particular version of BOSH. 
-However, a BOSH deployment must have its backup and restore [scripts](#contract) packaged in the releases.
+However, a BOSH deployment must have its backup and restore [scripts](#contract) packaged in the releases to be backed up and restored with BBR. For more information, consult the documentation for the deployment.
 
-### Which BOSH deployments can be backed up / restored?
-* Elastic Runtime (PCF1.11+). Backup instructions 
-[here](https://docs.pivotal.io/pivotalcf/1-11/customizing/backup-restore/backup-pcf-bbr.html). 
-Restore instructions [here](https://docs.pivotal.io/pivotalcf/1-11/customizing/backup-restore/restore-pcf-bbr.html).
-* BOSH Director, including UAA and CredHub
+You can back up and restore the following BOSH deployments with BBR:
 
-## <a id='compatibility'></a>BOSH Backup & Restore Binary Compatibility
-BBR is not dependent on a particular version of BOSH or PCF. However, for a deployment to be backup-ready it must have its backup and restore scripts packaged in the release; check the documentation for the deployment. BBR supports BOSH directors which use one of the following:
+<ul>
+<%= vars.bbr_ert %>
+<li>BOSH Director, including UAA and CredHub</li>
+</ul>
+
+BBR supports BOSH directors which use one of the following:
 
 * Basic Auth
 * Client/Client-Secret UAA Authentication
 
 ## <a id='contract'></a>BBR Contract
 
-BBR sets out a contract with BOSH release authors, to call specific backup and restore scripts in a specific order:
-
-### Backup scripts
-1. **pre-backup-lock**: The pre-backup lock scripts locks the job so backups are consistent across the cluster.
-1. **backup**: The backup script backs up the release.
-1. **post-backup-unlock**: The post-backup unlock script unlocks the job after the backup is complete.
-
-### Restore scripts
-1. **pre-restore-lock**: The pre-restore-lock scripts locks the job so restore is consistent across the cluster. (in development) 
-1. **restore**: The restore script restores the release.
-1. **post-restore-unlock**: The post-restore-unlock script unlocks the job after the restore is complete. (in development) 
+BBR sets out a contract with BOSH release authors, to call specific backup and restore scripts in a specific order.
 
 This approach has the following advantages:
 
@@ -53,6 +43,16 @@ This approach has the following advantages:
 * Because responsibility for writing and maintaining scripts sits with the release author, scripts can change as the deployment changes and do not get out of sync. 
 
 <%= vars.bbr_pcf2 %>
+
+### Backup Scripts
+1. **pre-backup-lock**: The pre-backup lock scripts locks the job so backups are consistent across the cluster.
+1. **backup**: The backup script backs up the release.
+1. **post-backup-unlock**: The post-backup unlock script unlocks the job after the backup is complete.
+
+### Restore Scripts
+1. **pre-restore-lock**: The pre-restore-lock scripts locks the job so the restore is consistent across the cluster. 
+1. **restore**: The restore script restores the release.
+1. **post-restore-unlock**: The post-restore-unlock script unlocks the job after the restore is complete. 
 
 ## <a id='workflow'></a>Workflow
 
