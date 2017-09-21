@@ -219,7 +219,7 @@ If errors occur during the backup workflow, clean-up tasks are executed to put t
 A normal workflow for backing up a deployment does the following:
 
 
-<% mermaid_diagram do%>
+<% mermaid_diagram do %>
  graph TB
     start(Start) --> check-deployment(Check that the deployment exists)
     check-deployment -- Yes --> make-local-artifact(Make a local artifact dir)
@@ -394,7 +394,7 @@ The release authors have chosen to create two new jobs to be incorporated into t
 
 Here is how the backup and restore job should be placed:
 
-<% mermaid_diagram do%>
+<% mermaid_diagram do %>
  graph LR
          subgraph Backup Restore VM
          database-backup-restorer
