@@ -82,7 +82,7 @@ If the command fails, do the following:
 Perform the following steps to restore a BOSH deployment:
 
 1. Ensure the BOSH deployment backup artifact is in the folder you will run BBR from.
-1. Run the BBR pre-backup check:
+1. Run the BBR restore:
   <pre class="terminal">
   $ BOSH\_CLIENT\_SECRET=BOSH\_CLIENT\_SECRET \
       nohup bbr deployment \
@@ -113,3 +113,63 @@ If the command fails, do the following:
 1. Ensure the source BOSH deployment is compatible with the target BOSH deployment.
 1. Consult the [Exit Codes and Logging](logging.html) topic.
 
+## <a id='cancel-restore'></a>Cancel a Restore
+
+If you need to cancel a restore, perform the following steps:
+
+1. Terminate the BBR process by pressing Ctrl-C and then typing `yes` to confirm.
+1. Stopping a restore can leave the system in an unusable state or prevent additional restores. Perform the procedures in the [Clean Up After Failed Restore](#manual-clean) section to enable future restores.
+
+## <a id="manual-clean"></a>Clean Up After Failed Restore
+
+If your restore process fails, it may leave the BBR restore folder on the instance, causing any subsequent attempts to restore to fail. In addition, BBR may not have run the post-restore scripts, leaving the instance in a locked state.
+
+In order to resolve these issues, run the BBR cleanup script.
+
+To clean up after a failed BOSH Director restore, run the following command:
+<pre class="terminal">
+$ bbr director \
+    --private-key-path PATH\_TO\_PRIVATE\_KEY \
+    --username USER\_NAME \
+    --host HOST
+    restore-cleanup
+</pre>
+
+To clean up after a failed BOSH deployment restore, run the following command:
+
+<pre class="terminal">
+$ BOSH_CLIENT_SECRET=BOSH_CLIENT_SECRET \
+    bbr deployment \
+    --target BOSH_TARGET \
+    --username BOSH_CLIENT \
+    --deployment DEPLOYMENT_NAME \
+    --ca-cert PATH_TO_BOSH_SERVER_CERT \
+    restore-cleanup
+</pre>
+
+If the cleanup script fails, consult the following table to match the exit codes to an error message.
+
+<table>
+<tr>
+<th>Value</th>
+<th>Error</th>
+</tr>
+<tr>
+<td>0</td>
+<td>Success</td>
+</tr>
+<tr>
+<td>1</td>
+<td>General failure</td>
+</tr>
+<tr>
+<td>8</td>
+<td>The post-restore unlock failed. Your BOSH deployment or BOSH Director may be in a bad state and require attention.</td>
+</tr>
+<tr>
+<td>16</td>
+<td>The cleanup failed. This is a non-fatal error indicating that the utility has been unable to clean up open BOSH SSH connections to the deployment VMs. Manual cleanup may be required to clear any hanging BOSH users and connections.</td>
+</tr>
+</table>
+
+For more information about how to interpret the exit code, see the [Exit Codes](#exit-codes) section of the [Exit Codes and Logging](logging.html) topic.
