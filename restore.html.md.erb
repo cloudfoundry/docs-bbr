@@ -63,10 +63,10 @@ Perform the following steps to restore a BOSH Director:
     Replace the placeholder values as follows:
     * `PATH_TO_PRIVATE_KEY`: This is the path to the SSH private key used to connect to the BOSH Director.
     * `USER_NAME`: This is the SSH username of the BOSH Director.
-    * `HOST`: This is the address of the BOSH Director, with an optional port that defaults to 22. If the BOSH Director is public, this is a URL, such as `https://my-bosh.xxx.cf-app.com`. Otherwise, this is the BOSH Director IP address. 
+    * `HOST`: This is the address of the BOSH Director with an optional port that defaults to 22. If the BOSH Director is public, this is a URL, such as `https://my-bosh.xxx.cf-app.com`. Otherwise, this is the BOSH Director IP address. 
 	* `PATH_TO_DIRECTOR_BACKUP`: This is the path to the BOSH Director backup you want to restore.
 
-<p class="note"><strong>Note</strong>: The BBR restore command can take a long time to complete. You can run it independently of the SSH session, so that the process can continue running even if your connection to the jumpbox fails. The command above uses <code>nohup</code> but you could also run the command in a <code>screen</code> or <code>tmux</code> session.</p>
+<p class="note"><strong>Note</strong>: The BBR restore command can take a long time to complete. You can run it independently of the SSH session so that the process can continue running even if your connection to the jumpbox fails. The command above uses <code>nohup</code>, but you could also run the command in a <code>screen</code> or <code>tmux</code> session.</p>
 
 If the command fails, do the following:
 
@@ -82,7 +82,7 @@ If the command fails, do the following:
 Perform the following steps to restore a BOSH deployment:
 
 1. Ensure the BOSH deployment backup artifact is in the folder you will run BBR from.
-1. Run the BBR pre-backup check:
+1. Run the BBR restore:
   <pre class="terminal">
   $ BOSH\_CLIENT\_SECRET=BOSH\_CLIENT\_SECRET \
       nohup bbr deployment \
@@ -97,12 +97,12 @@ Perform the following steps to restore a BOSH deployment:
     Use the optional `--debug` flag to enable debug logs. See the [Exit Codes and Logging](logging.html) topic for more information.
     <br><br>
     Replace the placeholder values as follows:
-    * `BOSH_CLIENT`, `BOSH_CLIENT_SECRET`: If you have a BOSH Director with User Account and Authentication (UAA) as the authentication provider, use a UAA client as the user name and a UAA client secret as the password. If you have a BOSH Director with basic auth configured, use your user name and password.
+    * `BOSH_CLIENT`, `BOSH_CLIENT_SECRET`: If you have a BOSH Director with User Account and Authentication (UAA) as the authentication provider, use a UAA client as the username and a UAA client secret as the password. If you have a BOSH Director with basic auth configured, use your username and password.
     * `BOSH_TARGET`: This is the FQDN or IP address of your BOSH Director.
     * `DEPLOYMENT-NAME`: This is the name of the deployment you want to restore.
-    * `PATH_TO_BOSH_SERVER_CERT`: This is the path to the BOSH Director’s Certificate Authority (CA) certificate, if the certificate is not verifiable by the local machine’s certificate chain. 
+    * `PATH_TO_BOSH_SERVER_CERT`: This is the path to the BOSH Director’s Certificate Authority (CA) certificate if the certificate is not verifiable by the local machine’s certificate chain. 
 	* `PATH_TO_DEPLOYMENT_BACKUP`: This is the path to the BOSH deployment backup you want to restore.
-	<p class="note"><strong>Note</strong>: The BBR restore command can take a long time to complete. You can run it independently of the SSH session, so that the process can continue running even if your connection to the jumpbox fails. The command above uses <code>nohup</code> but you could also run the command in a <code>screen</code> or <code>tmux</code> session.</p>
+	<p class="note"><strong>Note</strong>: The BBR restore command can take a long time to complete. You can run it independently of the SSH session so that the process can continue running even if your connection to the jumpbox fails. The command above uses <code>nohup</code>, but you could also run the command in a <code>screen</code> or <code>tmux</code> session.</p>
 
 If the command fails, do the following:
 
@@ -113,3 +113,63 @@ If the command fails, do the following:
 1. Ensure the source BOSH deployment is compatible with the target BOSH deployment.
 1. Consult the [Exit Codes and Logging](logging.html) topic.
 
+## <a id='cancel-restore'></a>Cancel a Restore
+
+If you need to cancel a restore, perform the following steps:
+
+1. Terminate the BBR process by pressing Ctrl-C and typing `yes` to confirm.
+1. Stopping a restore can leave the system in an unusable state and prevent future restores. Perform the procedures in the [Clean Up After Failed Restore](#manual-clean) section to enable future restores.
+
+## <a id="manual-clean"></a>Clean Up After Failed Restore
+
+If your restore process fails, then the process may leave the BBR restore folder on the instance. As a result, any subsequent restore attempts may also fail. In addition, BBR may not have run the post-restore scripts, which can leave the instance in a locked state.
+
+In order to resolve these issues, run the BBR cleanup script.
+
+To clean up after a failed BOSH Director restore, run the following command:
+<pre class="terminal">
+$ bbr director \
+    --private-key-path PATH\_TO\_PRIVATE\_KEY \
+    --username USER\_NAME \
+    --host HOST
+    restore-cleanup
+</pre>
+
+To clean up after a failed BOSH deployment restore, run the following command:
+
+<pre class="terminal">
+$ BOSH_CLIENT_SECRET=BOSH_CLIENT_SECRET \
+    bbr deployment \
+    --target BOSH_TARGET \
+    --username BOSH_CLIENT \
+    --deployment DEPLOYMENT_NAME \
+    --ca-cert PATH_TO_BOSH_SERVER_CERT \
+    restore-cleanup
+</pre>
+
+If the cleanup script fails, consult the following table to match the exit codes to an error message.
+
+<table>
+<tr>
+<th>Value</th>
+<th>Error</th>
+</tr>
+<tr>
+<td>0</td>
+<td>Success</td>
+</tr>
+<tr>
+<td>1</td>
+<td>General failure</td>
+</tr>
+<tr>
+<td>8</td>
+<td>The post-restore unlock failed. Your BOSH deployment or BOSH Director may be in a bad state and require attention.</td>
+</tr>
+<tr>
+<td>16</td>
+<td>The cleanup failed. This is a non-fatal error indicating that the utility has been unable to clean up open BOSH SSH connections to the deployment VMs. Manual cleanup may be required to clear any hanging BOSH users and connections.</td>
+</tr>
+</table>
+
+For more information about how to interpret the exit code, see the [Exit Codes](#exit-codes) section of the [Exit Codes and Logging](logging.html) topic.
