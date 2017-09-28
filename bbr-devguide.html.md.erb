@@ -148,18 +148,6 @@ templates:
 
 </pre>
 
-<li>
-If you want your <code>bin/bbr/pre-restore-lock</code> scripts to run in a specific order,
-    define that order using the optional metadata script as in the above step,
-    but with the <code>restore_should_be_locked_before</code> key. For example:
-
-<pre class="terminal">
-#!/usr/bin/env bash
-
-echo "---
-restore_should_be_locked_before:
-- job_name: lock-unlock-acme
-  release: acme-release" </pre>
 </ol>
 
 
@@ -242,11 +230,11 @@ A normal workflow for backing up a deployment does the following:
 
 ### <a id='pre-restore-lock'></a>Pre-Restore-Lock
 
-The release job can have a `pre-restore-lock` script that stops any processes capable of making changes to the components being restored.
+The release job can have a `pre-restore-lock` script that stops any processes that could make changes to the components being restored. This script must allow the job to lock so that restorations are consistent across a cluster.
 
 #### Job Configuration
 
-To add a `pre-restore-lock` script to a release, do the following:
+To add a `pre-restore-lock` script to a job, do the following:
 
 <ol>
 <li>
@@ -260,8 +248,34 @@ name: lock-unlock-acme
 templates:
   pre-restore-lock.sh.erb: bin/bbr/pre-restore-lock
 </pre>
+
 </li>
-</ol>
+<li>
+If you want your <code>bin/bbr/pre-restore-lock</code> scripts to run in a specific order, define that order using the optional metadata script. In the sample directory structure illustrated above, this script is called <code>metadata.sh.erb</code>.<br><br>
+
+#### Script Ordering
+
+The `pre-restore-lock` scripts are called before any `restore` scripts have been called. Success indicates the job is ready to be restored.
+
+    a. The metadata script specifies that the current job must be locked before some other job(s) in the deployment.
+       When run, this script must print a YAML file to stdout. For example:
+
+<pre class="terminal">
+#!/usr/bin/env bash
+
+echo "---
+restore_should_be_locked_before:
+- job_name: lock-unlock-acme
+  release: acme-release" </pre>
+
+    b. Add an entry to the templates section of the release job spec file:
+<pre class="terminal">
+templates:
+  ...
+  metadata.sh.erb: bin/bbr/metadata
+</li>
+
+</pre>
 
 ### <a id='restore'></a>Restore
 
@@ -360,6 +374,30 @@ restore_should_be_locked_before:
 
 
 
+
+### <a id='error-handling-restore'></a>Error Handling
+
+If errors occur during the restore workflow, clean-up tasks are executed to put the system back in a working state.
+
+A normal workflow for restoring a deployment does the following:
+
+
+<% mermaid_diagram do %>
+ graph TB
+    start(Start) --> validate-artifact(Check that the artifact is present and the checksums match)
+    validate-artifact --> check-deployment-exists(Check that the deployment exists)
+    check-deployment-exists -- Yes --> check-deployment-matches-backup(Check the structure of the backup matches the destination deployment)
+    check-deployment-exists -- No --> exit(Exit)
+    check-deployment-matches-backup -- Yes --> copy-to-remote(Copy the backup artifacts to the relevent VMs)
+    check-deployment-matches-backup -- No --> cleanup(Cleanup, close ssh connections)
+    copy-to-remote -- Success --> pre-restore-lock(run pre-restore-lock scripts)
+    copy-to-remote -- Failure --> cleanup
+    pre-restore-lock -- Success --> restore(Run restore scripts)
+    pre-restore-lock -- Failure --> post-restore-unlock(Run post-restore-unlock scripts)
+    restore --> post-restore-unlock
+    post-restore-unlock --> cleanup
+    cleanup --> exit
+<% end %>
 
 ## <a id='testing'></a>Testing
 The functional testing pattern recommended for BBR scripts is:
