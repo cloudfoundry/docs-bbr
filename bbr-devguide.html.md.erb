@@ -9,21 +9,6 @@ This guide describes the framework for release authors to add backup and restore
 
 BBR is a framework for backing up and restoring BOSH deployments and BOSH Directors. BBR triggers the backup or restore process on the deployment or BOSH Director and transfers the backup artifacts to and from the deployment or BOSH Director.
 
-BBR sets out a contract with release authors to call designated backup and restore scripts in a specific order:
-
-### <a id="backup-scripts"></a>Backup Scripts
-* pre-backup-lock
-
-* backup
-
-* post-backup-unlock
-
-### <a id="restore-scripts"></a>Restore Scripts
-* pre-restore-lock
-
-* restore
-
-* post-restore-unlock
 
 The BBR framework consists of a command line interface (CLI) and a set of hooks, which call out to scripts. The framework uses BOSH to orchestrate the execution of backup and restore scripts. BBR allows release authors fine-grained control over how their release is backed up.
 
@@ -41,18 +26,26 @@ To ensure that backup and restore scripts do not get out of sync with the releas
 
 <p class="note"><strong>Important</strong>: Release authors must ensure the following.<br><br>
     <strong>For all releases</strong>---Be aware of the possibility that these backup and restore jobs may be collocated with those of other releases. Therefore, give these jobs unique and descriptive names to avoid name collisions.
-
-    <br><br><strong>For CF Releases</strong>---Your scripts must respect the <code>release_level_backup</code> job property so the scripts run if set to <code>true</code>, but do nothing if set to <code>false</code>.
 </p>
 
-## <a id='backup-workflow'></a>Backup Workflow
+###  <a id='script-implementation'></a>Script Organization
 
+BBR sets out a contract with release authors to call designated backup and restore scripts:
 
-###  <a id='script-implementation'></a>Script Ordering
+* Backup
+  * pre-backup-lock
+  * backup
+  * post-backup-unlock
+* Restore
+  * pre-restore-lock
+  * restore
+  * post-restore-unlock
+* Metadata Script(if needed)
+  * metadata
 
 Release authors must implement scripts as part of the BBR contract. The scripts themselves are packaged and distributed as a BOSH release. The [Exemplar Backup and Restore Release](https://github.com/pivotal-cf-experimental/exemplar-backup-and-restore-release) provides examples of how release authors can structure their jobs to implement the contract with BBR.
 
-The `pre-backup-lock`, `backup`, `post-backup-unlock`, and `restore` scripts are executable scripts. ERB tags may be used for templating. These scripts are executed similarly to other release job scripts (`start`, `stop`, `drain`), and you can use the job's package dependencies.
+Scripts are executed in a specific order. For backup workflow, the order is `pre-backup-lock`, `backup`, and then `post-backup-unlock`. For restore workflow, the order is `pre-restore-lock`, `restore`, and then `post-restore-unlock`. All scripts should be executable scripts. ERB tags may be used for templating. These scripts are executed similarly to other release job scripts (`start`, `stop`, `drain`), and you can use the job's package dependencies.
 
 BBR checks exit codes of the scripts when orchestrating. Exit code `0` indicates success while any other exit code indicates a failure.
 
@@ -93,9 +86,20 @@ acme-release
 ```
 
 
-#### Logs
 
-The `stdout` and `stderr` streams are captured and sent to the operator invoking the backup.
+###  <a id='script-ordering'></a>Script Ordering Across Jobs
+
+During the backup workflow, all `pre-backup-lock` scripts would be invoke before the `backup` scripts on all of the jobs in the deployment. All `backup` scripts would be invoke before the `post-backup-unlock` scripts on all of the jobs in the deployment.
+
+During the restore workflow, all `pre-restore-lock` scripts would be invoke before the `restore` scripts on all of the jobs in the deployment. All `restore` scripts would be invoke before the `post-restore-unlock` scripts on all of the jobs in the deployment.
+
+By default `pre-backup-lock` and `pre-restore-lock` scripts from different jobs will be invoked in an arbitary order. If you would like to specify a ordering between lock scripts from specific jobs you can do so in the `metadata` script. The `post-backup-unlock` and `post-restore-unlock` scripts from different jobs will be invoked in arbitrary order when no locking dependency is specified, or the opposite order of lock scripts stated in `metadata` scripts. When a job specifies locking dependency to a job that does not exist in the current deployment, bbr would ignore that dependency.
+
+###  <a id='logs'></a> Logs
+
+The `stdout` and `stderr` streams are captured and sent to the operator invoking the backup and restore.
+
+## <a id='backup-workflow'></a>Backup Workflow
 
 ### <a id='pre-backup-lock'></a>Pre-Backup-Lock
 
@@ -145,8 +149,8 @@ templates:
 </pre>
 
 <li>
-If you want your <code>bin/bbr/pre-restore-lock</code> scripts to run in a specific order, 
-    define that order using the optional metadata script as in the above step, 
+If you want your <code>bin/bbr/pre-restore-lock</code> scripts to run in a specific order,
+    define that order using the optional metadata script as in the above step,
     but with the <code>restore_should_be_locked_before</code> key. For example:
 
 <pre class="terminal">
@@ -158,10 +162,6 @@ restore_should_be_locked_before:
   release: acme-release" </pre>
 </ol>
 
-
-#### Script Ordering
-
-The `pre-backup-lock` script is called before the backup scripts are called on any instances in the deployment. Success indicates to BBR that the job has successfully locked and is ready for backup.
 
 ### <a id='backup'></a>Backup
 
@@ -190,12 +190,6 @@ templates:
   backup.erb: bin/bbr/backup
 ```
 
-#### Script Ordering
-
-The `backup` script is called after all of the `pre-backup-lock` scripts have exited successfully across all jobs of the deployment. A single failed `pre-backup-lock` script halts the backup-restore process and runs the corresponding `post-backup-unlock` scripts. Success indicates the job successfully backed up.
-
-The `backup` script is called before any of the `post-backup-unlock` scripts are called on any jobs in the deployment. The `backup` scripts may be called in any order across the jobs in a deployment.
-
 ### <a id='post-backup-unlock'></a>Post-Backup-Unlock
 
 The backup and restore job can have a `post-backup-unlock` script that will undo the operations done by `pre-backup-lock`.
@@ -220,10 +214,6 @@ name: lock-unlock-acme
 templates:
   post-backup-unlock.erb: bin/bbr/post-backup-unlock
 ```
-
-#### Script Ordering
-
-The `post-backup-unlock` script is called after all of the `backup` scripts have exited on all nodes of the deployment. Success indicates the job successfully unlocked and is ready for normal operation.
 
 ### <a id='error-handling'></a>Error Handling
 
@@ -273,10 +263,6 @@ templates:
 </li>
 </ol>
 
-#### Script Ordering
-
-The `pre-restore-lock` scripts are called before all `restore` scripts have been called. Success indicates the job is ready to be restored.
-
 ### <a id='restore'></a>Restore
 
 If a release has a `backup` script, it should also have a `restore` script. The `restore` script expects a backup artifact to be provided in `$BBR_ARTIFACT_DIRECTORY`. For example, when restoring MySQL, the script invokes `mysql` to restore from a mysqldump file.
@@ -302,9 +288,6 @@ templates:
   restore.erb: bin/bbr/restore
 ```
 
-#### Script Ordering
-
-The `restore` scripts are called after all `pre-restore-lock` scripts have exited successfully. Success indicates the job was successfully restored.
 
 ### <a id='post-restore-unlock'></a>Post-Restore-Unlock
 
@@ -329,9 +312,54 @@ templates:
 </li>
 </ol>
 
-#### Script Ordering
+## <a id='metadata'></a>Metadata
 
-The `post-restore-unlock` scripts are called after all `restore` scripts have been called. These scripts are also invoked if the `restore` or `pre-restore-lock` scripts fail. You can also invoke them to do cleanup even when restore was not called. Success indicates the job has resumed normal operations.
+The `metadata` script is a optional script that would be executed by `bbr` before any other scripts are executed to get more information about the jobs, for example locking dependencies. The script is expected to print a `yaml` on standard out with more information about the job for backup and restore.
+
+#### Job Configuration
+
+To add a `metadata` script to a release job:
+
+<ol>
+<li>
+Create a script with any name in the templates directory of a release job.
+</li>
+<li>
+In the templates section of the release job spec file, add the script name and <code>bin/bbr/metadata</code> as a key-value pair. For example:
+</li>
+</ol>
+
+
+```yaml
+---
+name: backup-restore-acme
+templates:
+  metadata.erb: bin/bbr/metadata
+```
+
+#### Properties
+* `backup_should_be_locked_before`
+This property can be use to specify locking dependencies of the current job during backup. The jobs are specified as an array with their release names.
+
+<pre class="terminal">
+#!/usr/bin/env bash
+echo "---
+backup\_should\_be\_locked\_before:
+- job_name: lock-unlock-acme
+  release: acme-release" </pre>
+
+* `restore_should_be_locked_before`
+If you want your <code>bin/bbr/pre-restore-lock</code> scripts to run in a specific order, define that order using the optional metadata script as in the above step, but with the `restore_should_be_locked_before` key. For example:
+
+<pre class="terminal">
+#!/usr/bin/env bash
+echo "---
+restore_should_be_locked_before:
+- job_name: lock-unlock-acme
+  release: acme-release" </pre>
+
+
+
 
 ## <a id='testing'></a>Testing
 The functional testing pattern recommended for BBR scripts is:
@@ -392,6 +420,11 @@ cp $ARTIFACT_DIRECTORY <output_file>
 ```
 
 ## <a id="bbr-cf"></a>BBR and Cloud Foundry Databases
+
+<p class="note"><strong>Important</strong>: Release authors must ensure the following.
+    <br><strong>For CF Releases</strong>---Your scripts must respect the <code>release_level_backup</code> job property so the scripts run if set to <code>true</code>, but do nothing if set to <code>false</code>.
+</p>
+
 
 BBR provides a pattern for Cloud Foundry release authors that ensures their scripts abide by the BBR Framework contract.
 
