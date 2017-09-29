@@ -43,7 +43,9 @@ BBR sets out a contract with release authors to call designated backup and resto
 * Metadata Script(if needed)
   * metadata
 
-Release authors must implement scripts as part of the BBR contract. The scripts themselves are packaged and distributed as a BOSH release. The [Exemplar Backup and Restore Release](https://github.com/pivotal-cf-experimental/exemplar-backup-and-restore-release) provides examples of how release authors can structure their jobs to implement the contract with BBR.
+Release authors must implement scripts as part of the BBR contract. The scripts themselves should be packaged and distributed as part of your BOSH release. The [Exemplar Backup and Restore Release](https://github.com/pivotal-cf-experimental/exemplar-backup-and-restore-release) provides examples of how release authors can structure their jobs to implement the contract with BBR.
+
+The BBR CLI is able to remotely locate and run the scripts, even if they are located on different VMs. For example the lock/unlock scripts can be located on release VMs, while the backup/restore scripts are co-located onto a separate backup-restore VM due to disk space constraints.
 
 Scripts are executed in a specific order. For backup workflow, the order is `pre-backup-lock`, `backup`, and then `post-backup-unlock`. For restore workflow, the order is `pre-restore-lock`, `restore`, and then `post-restore-unlock`. All scripts should be executable scripts. ERB tags may be used for templating. These scripts are executed similarly to other release job scripts (`start`, `stop`, `drain`), and you can use the job's package dependencies.
 
