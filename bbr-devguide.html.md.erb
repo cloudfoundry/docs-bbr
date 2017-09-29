@@ -20,7 +20,8 @@ The following diagram illustrates an example BBR script execution sequence.
 
 ![Script execution order](images/script-execution-order.png)
 
-Since the framework is focused on the interface, hooks, backup destination, and intra-deployment orchestration, it is mechanism-agnostic. Release authors can choose to back up their release however they would like, as long as the scripts they write have the correct name and directory structure.
+Because the framework is focused on the interface, hooks, backup destination, and intra-deployment orchestration, it is mechanism-agnostic.
+Release authors can choose to back up their release how they like, as long as the scripts they write have the correct name and directory structure.
 
 To ensure that backup and restore scripts do not get out of sync with the releases themselves, release authors are responsible for naming, creating, testing, and troubleshooting their own backup and restore scripts.
 
@@ -43,13 +44,24 @@ BBR sets out a contract with release authors to call designated backup and resto
 * Metadata Script(if needed)
   * metadata
 
-Release authors must implement scripts as part of the BBR contract. The scripts themselves should be packaged and distributed as part of your BOSH release. The [Exemplar Backup and Restore Release](https://github.com/pivotal-cf-experimental/exemplar-backup-and-restore-release) provides examples of how release authors can structure their jobs to implement the contract with BBR.
+Release authors must implement scripts as part of the BBR contract.
+Package and distribute the scripts as part of your BOSH release.
+The [Exemplar Backup and Restore Release](https://github.com/pivotal-cf-experimental/exemplar-backup-and-restore-release) provides examples
+of how release authors can structure their jobs to implement the contract with BBR.
 
-The BBR CLI is able to remotely locate and run the scripts, even if they are located on different VMs. For example the lock/unlock scripts can be located on release VMs, while the backup/restore scripts are co-located onto a separate backup-restore VM due to disk space constraints.
+The BBR CLI is able to remotely locate and run the scripts, even if they are located on different VMs.
+For example, the lock/unlock scripts can be located on release VMs,
+while, due to disk-space constraints, the backup/restore scripts are co-located onto a separate backup-restore VM.
 
-Scripts are executed in a specific order. For backup workflow, the order is `pre-backup-lock`, `backup`, and then `post-backup-unlock`. For restore workflow, the order is `pre-restore-lock`, `restore`, and then `post-restore-unlock`. All scripts should be executable scripts. ERB tags may be used for templating. These scripts are executed similarly to other release job scripts (`start`, `stop`, `drain`), and you can use the job's package dependencies.
+Scripts are executed in a specific order.
+For backup workflow, the order is `pre-backup-lock`, `backup`, and then `post-backup-unlock`.
+For restore workflow, the order is `pre-restore-lock`, `restore`, and then `post-restore-unlock`.
+All scripts should be executable scripts.
+ERB tags may be used for templating.
+These scripts are executed similarly to other release job scripts (`start`, `stop`, `drain`), and you can use the job's package dependencies.
 
-BBR checks exit codes of the scripts when orchestrating. Exit code `0` indicates success while any other exit code indicates a failure.
+BBR checks exit codes of the scripts when orchestrating.
+Exit code `0` indicates success while any other exit code indicates a failure.
 
 #### Directory Structure
 
@@ -91,11 +103,17 @@ acme-release
 
 ###  <a id='script-ordering'></a>Script Ordering Across Jobs
 
-During the backup workflow, all `pre-backup-lock` scripts would be invoke before the `backup` scripts on all of the jobs in the deployment. All `backup` scripts would be invoke before the `post-backup-unlock` scripts on all of the jobs in the deployment.
+During the backup workflow, all `pre-backup-lock` scripts would be invoke before the `backup` scripts on all of the jobs in the deployment.
+All `backup` scripts would be invoke before the `post-backup-unlock` scripts on all of the jobs in the deployment.
 
-During the restore workflow, all `pre-restore-lock` scripts would be invoke before the `restore` scripts on all of the jobs in the deployment. All `restore` scripts would be invoke before the `post-restore-unlock` scripts on all of the jobs in the deployment.
+During the restore workflow, all `pre-restore-lock` scripts would be invoke before the `restore` scripts on all of the jobs in the deployment.
+All `restore` scripts would be invoke before the `post-restore-unlock` scripts on all of the jobs in the deployment.
 
-By default `pre-backup-lock` and `pre-restore-lock` scripts from different jobs will be invoked in an arbitary order. If you would like to specify a ordering between lock scripts from specific jobs you can do so in the `metadata` script. The `post-backup-unlock` and `post-restore-unlock` scripts from different jobs will be invoked in arbitrary order when no locking dependency is specified, or the opposite order of lock scripts stated in `metadata` scripts. When a job specifies locking dependency to a job that does not exist in the current deployment, bbr would ignore that dependency.
+By default `pre-backup-lock` and `pre-restore-lock` scripts from different jobs will be invoked in an arbitary order.
+If you would like to specify a ordering between lock scripts from specific jobs you can do so in the `metadata` script.
+The `post-backup-unlock` and `post-restore-unlock` scripts from different jobs will be invoked in arbitrary order
+when no locking dependency is specified, or the opposite order of lock scripts stated in `metadata` scripts.
+When a job specifies locking dependency to a job that does not exist in the current deployment, bbr would ignore that dependency.
 
 ###  <a id='logs'></a> Logs
 
@@ -105,9 +123,11 @@ The `stdout` and `stderr` streams are captured and sent to the operator invoking
 
 ### <a id='pre-backup-lock'></a>Pre-Backup-Lock
 
-The release job can have a `pre-backup-lock` script that stops any processes that could make changes to the components being backed up. This script must allow the job to lock so that backups are consistent across a cluster.
+The release job can have a `pre-backup-lock` script that stops any processes that could make changes to the components being backed up.
+This script must allow the job to lock so that backups are consistent across a cluster.
 
-For example, in a Cloud Foundry deployment, the `pre-backup-lock` script stops Cloud Controller processes that may make changes to its blobstore and database thus ensuring the blobstore and the Cloud Controller database are consistent with each other.
+For example, in a Cloud Foundry deployment, the `pre-backup-lock` script stops Cloud Controller processes 
+that may make changes to its blobstore and database thus ensuring the blobstore and the Cloud Controller database are consistent with each other.
 
 #### Job Configuration
 
