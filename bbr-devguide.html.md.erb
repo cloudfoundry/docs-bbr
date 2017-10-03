@@ -258,46 +258,40 @@ The release job can have a `pre-restore-lock` script that stops any processes th
 
 To add a `pre-restore-lock` script to a job, do the following:
 
-<ol>
-<li>
-Create a script with any name in the templates directory of your job.
-</li>
-<li>
-In the templates section of the release job spec file, add the script name and <code>bin/bbr/pre-restore-lock</code> as a key-value pair. For example:
-<pre class="terminal">
----
-name: lock-unlock-acme
-templates:
-  pre-restore-lock.sh.erb: bin/bbr/pre-restore-lock
-</pre>
+1. Create a script with any name in the templates directory of your job.
 
-</li>
-<li>
-If you want your <code>bin/bbr/pre-restore-lock</code> scripts to run in a specific order, define that order using the optional metadata script. In the sample directory structure illustrated above, this script is called <code>metadata.sh.erb</code>.<br><br>
+1. In the templates section of the release job spec file, add the script name and <code>bin/bbr/pre-restore-lock</code> as a key-value pair. For example:
 
-#### Script Ordering
+    <pre class="terminal">
+    ---
+    name: lock-unlock-acme
+    templates:
+      pre-restore-lock.sh.erb: bin/bbr/pre-restore-lock
+    </pre>
+
+1. If you want your <code>bin/bbr/pre-restore-lock</code> scripts to run in a specific order, define that order using the optional metadata script. In the sample directory structure illustrated above, this script is called <code>metadata.sh.erb</code>.
+
+#### <a id="script-ordering"></a> Script Ordering
 
 The `pre-restore-lock` scripts are called before any `restore` scripts have been called. Success indicates the job is ready to be restored.
 
-    a. The metadata script specifies that the current job must be locked before some other job(s) in the deployment.
-       When run, this script must print a YAML file to stdout. For example:
+1. The metadata script specifies that the current job must be locked before some other job(s) in the deployment. When run, this script must print a YAML file to stdout. For example:
 
-<pre class="terminal">
-#!/usr/bin/env bash
+    <pre class="terminal">
+    #!/usr/bin/env bash
+    echo "---
+    restore\_should\_be\_locked\_before:
+      job_name: lock-unlock-acme
+      release: acme-release" 
+    </pre>
 
-echo "---
-restore_should_be_locked_before:
-- job_name: lock-unlock-acme
-  release: acme-release" </pre>
+1. Add an entry to the templates section of the release job spec file:
 
-    b. Add an entry to the templates section of the release job spec file:
-<pre class="terminal">
-templates:
-  ...
-  metadata.sh.erb: bin/bbr/metadata
-</li>
-
-</pre>
+    <pre class="terminal">
+    templates:
+      ...
+      metadata.sh.erb: bin/bbr/metadata
+    </pre>
 
 ### <a id='restore'></a>Restore
 
