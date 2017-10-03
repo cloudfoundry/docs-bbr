@@ -1,13 +1,40 @@
 # BOSH Backup and Restore
 
-This is a guide for using BOSH Backup and Restore (BBR).
+This repo contains the documentation for BOSH Backup and Restore (BBR), a framework for backing up and restoring BOSH deployments and BOSH Directors. This is the generic BBR documentation: it describes how to use BBR with any BOSH deployment or BOSH Director.
 
-This doc is one of several doc repositories that go into a complete documentation set.
+## How This Repo Is Published
 
-The contents here are structured as a topic repository intended to be
-compiled into a larger document with
-[Bookbinder](http://github.com/cloudfoundry-incubator/bookbinder).
+This repo is published to the following locations:
 
-See the [docs-book-cloudfoundry](http://github.com/cloudfoundry/docs-book-cloudfoundry)
-repo for the complete list of open source documentation repositories, as well as
-information about the publishing process.
+* https://docs.cloudfoundry.org/bbr/ (OSS CF documentation)
+* https://docs.pivotal.io/bbr/ (PCF documentation)
+
+### BBR Release Notes
+
+The BBR release notes are published to the following locations:
+
+* http://docs.cloudfoundry.org/bbr/bbr-rn.html (OSS CF documentation)
+* https://docs.pivotal.io/pivotalcf/1-12/pcf-release-notes/bbr-pcf-rn.html (PCF documentation)
+
+### The BOSH Backup and Restore Developer's Guide
+
+The [PCF Tile Developers Guide](https://docs.pivotal.io/tiledev/) links out to the [BOSH Backup and Restore Developer's Guide](https://github.com/cloudfoundry/docs-bbr/blob/master/bbr-devguide.html.md.erb) topic from **Other Integrations >> BOSH Backup and Restore** in the subnav.
+
+## Where the Subnavs Live
+
+The BBR documentation published in the OSS CF documentation at https://docs.cloudfoundry.org/bbr/ is included in the main subnav in `docs-book-cloudfoundry`: https://github.com/cloudfoundry/docs-book-cloudfoundry/blob/master/master_middleman/source/subnavs/_cf-subnav.erb. The BBR section appears under **Information for Operators > Deploying Cloud Foundry**.
+
+The BBR documentation published in the PCF documentation at https://docs.pivotal.io/bbr/ has its own subnav in `docs-book-pcfservices`: https://github.com/pivotal-cf/docs-book-pcfservices/blob/master/master_middleman/source/subnavs/bbr-subnav.erb. 
+
+## Template Variables
+
+BBR template variables that contextualize topics for OSS CF and PCF live in both the `docs-book-pcfservices` template variables [file](https://github.com/pivotal-cf/docs-book-pcfservices/blob/master/config/template_variables.yml) and the `docs-book-cloudfoundry` template variables [file](https://github.com/cloudfoundry/docs-book-cloudfoundry/blob/master/config/template_variables.yml). 
+
+These variables appear in the following topics:
+* [BOSH Backup and Restore](https://github.com/cloudfoundry/docs-bbr/blob/master/index.html.md.erb)
+* [Backing Up with BOSH Backup and Restore](https://github.com/cloudfoundry/docs-bbr/blob/master/backup.html.md.erb)
+* [Installing BOSH Backup and Restore](https://github.com/cloudfoundry/docs-bbr/blob/master/installing.html.md.erb)
+
+## BBR for PCF Documentation
+
+There is a separate set of documentation that describes how to use BBR to back up and restore a PCF deployment. See the [Backup and Restore with BBR](https://docs.pivotal.io/pivotalcf/customizing/backup-restore/#bbr) section of the <em>Backing Up and Restoring Pivotal Cloud Foundry</em> topic in the PCF documentation. 
