@@ -183,22 +183,15 @@ There must be at least one job in the deployment providing a backup script. If t
 
 To add a `backup` script to a release job:
 
-<ol>
-<li>
-Create a script with any name in the templates directory of a release job.
-</li>
-<li>
-In the templates section of the release job spec file, add the script name and <code>bin/bbr/backup</code> as a key-value pair. For example:
-</li>
-</ol>
+1. Create a script with any name in the templates directory of a release job.
+2. In the templates section of the release job spec file, add the script name and <code>bin/bbr/backup</code> as a key-value pair. For example:
 
-
-```yaml
----
-name: backup-restore-acme
-templates:
-  backup.erb: bin/bbr/backup
-```
+    ```
+    ---
+    name: backup-restore-acme
+    templates:
+      backup.erb: bin/bbr/backup
+    ```
 
 ### <a id='post-backup-unlock'></a>Post-Backup-Unlock
 
@@ -208,22 +201,15 @@ The backup and restore job can have a `post-backup-unlock` script that will undo
 
 To add a `post-backup-unlock` script to a release job:
 
-<ol>
-<li>
-Create a script with any name in the templates directory of a release job.
-</li>
-<li>
-In the templates section of the release job spec file, add the script name and <code>bin/bbr/post-backup-unlock</code> as a key-value pair. For example:
-</li>
-</ol>
+1. Create a script with any name in the templates directory of a release job.
+2. In the templates section of the release job spec file, add the script name and <code>bin/bbr/post-backup-unlock</code> as a key-value pair. For example:
 
-
-```yaml
----
-name: lock-unlock-acme
-templates:
-  post-backup-unlock.erb: bin/bbr/post-backup-unlock
-```
+    ```
+    ---
+    name: lock-unlock-acme
+    templates:
+      post-backup-unlock.erb: bin/bbr/post-backup-unlock
+    ```
 
 ### <a id='error-handling'></a>Error Handling
 
@@ -262,36 +248,33 @@ To add a `pre-restore-lock` script to a job, do the following:
 
 1. In the templates section of the release job spec file, add the script name and <code>bin/bbr/pre-restore-lock</code> as a key-value pair. For example:
 
-    <pre class="terminal">
+    ```
     ---
     name: lock-unlock-acme
     templates:
       pre-restore-lock.sh.erb: bin/bbr/pre-restore-lock
-    </pre>
+    ```
 
-1. If you want your <code>bin/bbr/pre-restore-lock</code> scripts to run in a specific order, define that order using the optional metadata script. In the sample directory structure illustrated above, this script is called <code>metadata.sh.erb</code>.
+1. If you want your <code>bin/bbr/pre-restore-lock</code> scripts to run in a specific order, define that order using the optional metadata script. In the sample directory structure illustrated above, this script is called <code>metadata.sh.erb</code>.<br><br>
+  The `pre-restore-lock` scripts are called before any `restore` scripts have been called. Success indicates the job is ready to be restored.<br><br>
 
-#### <a id="script-ordering"></a> Script Ordering
+    a. The metadata script specifies that the current job must be locked before some other job(s) in the deployment. When run, this script must print a YAML file to stdout. For example:
 
-The `pre-restore-lock` scripts are called before any `restore` scripts have been called. Success indicates the job is ready to be restored.
+      <pre class="terminal">
+      #!/usr/bin/env bash
+      echo "---
+      restore\_should\_be\_locked\_before:
+        job_name: lock-unlock-acme
+        release: acme-release" 
+      </pre>
 
-1. The metadata script specifies that the current job must be locked before some other job(s) in the deployment. When run, this script must print a YAML file to stdout. For example:
+    b. Add an entry to the templates section of the release job spec file:
 
-    <pre class="terminal">
-    #!/usr/bin/env bash
-    echo "---
-    restore\_should\_be\_locked\_before:
-      job_name: lock-unlock-acme
-      release: acme-release" 
-    </pre>
-
-1. Add an entry to the templates section of the release job spec file:
-
-    <pre class="terminal">
+    ```
     templates:
       ...
       metadata.sh.erb: bin/bbr/metadata
-    </pre>
+    ```
 
 ### <a id='restore'></a>Restore
 
@@ -301,22 +284,16 @@ If a release has a `backup` script, it should also have a `restore` script. The 
 
 To add a `restore` script to a release job:
 
-<ol>
-<li>
-Create a script with any name in the templates directory of a release job.
-</li>
-<li>
-In the templates section of the release job spec file, add the script name and <code>bin/bbr/restore</code> as a key-value pair. For example:
-</li>
-</ol>
+1. Create a script with any name in the templates directory of a release job.
+2. In the templates section of the release job spec file, add the script name and <code>bin/bbr/restore</code> as a key-value pair. For example:
 
 
-```yaml
----
-name: backup-restore-acme
-templates:
-  restore.erb: bin/bbr/restore
-```
+    ```yaml
+    ---
+    name: backup-restore-acme
+    templates:
+      restore.erb: bin/bbr/restore
+    ```
 
 
 ### <a id='post-restore-unlock'></a>Post-Restore-Unlock
@@ -327,20 +304,15 @@ The release job can have a `post-restore-unlock` script that resumes normal serv
 
 To add a `post-restore-unlock` script to a release, do the following:
 
-<ol>
-<li>
-Create a script with any name in the templates directory of your job.
-</li>
-<li>
-In the templates section of the release job spec file, add the script name and <code>bin/bbr/post-restore-unlock</code> as a key-value pair. For example:
-<pre class="terminal">
----
-name: lock-unlock-acme
-templates:
-  post-restore-unlock.sh.erb: bin/bbr/post-restore-unlock
-</pre>
-</li>
-</ol>
+1. Create a script with any name in the templates directory of your job.
+2. In the templates section of the release job spec file, add the script name and <code>bin/bbr/post-restore-unlock</code> as a key-value pair. For example:
+
+    ```
+    ---
+    name: lock-unlock-acme
+    templates:
+      post-restore-unlock.sh.erb: bin/bbr/post-restore-unlock
+    ```
 
 ## <a id='metadata'></a>Metadata
 
@@ -350,33 +322,27 @@ The `metadata` script is a optional script that would be executed by `bbr` befor
 
 To add a `metadata` script to a release job:
 
-<ol>
-<li>
-Create a script with any name in the templates directory of a release job.
-</li>
-<li>
-In the templates section of the release job spec file, add the script name and <code>bin/bbr/metadata</code> as a key-value pair. For example:
-</li>
-</ol>
+1. Create a script with any name in the templates directory of a release job.
+2. In the templates section of the release job spec file, add the script name and <code>bin/bbr/metadata</code> as a key-value pair. For example:
 
-
-```yaml
----
-name: backup-restore-acme
-templates:
-  metadata.erb: bin/bbr/metadata
-```
+    ```yaml
+    ---
+    name: backup-restore-acme
+    templates:
+      metadata.erb: bin/bbr/metadata
+    ```
 
 #### Properties
+
 * `backup_should_be_locked_before`
 This property can be use to specify locking dependencies of the current job during backup. The jobs are specified as an array with their release names.
 
-<pre class="terminal">
-#!/usr/bin/env bash
-echo "---
-backup\_should\_be\_locked\_before:
-- job_name: lock-unlock-acme
-  release: acme-release" </pre>
+  <pre class="terminal">
+  #!/usr/bin/env bash
+  echo "---
+  backup\_should\_be\_locked\_before:
+  - job_name: lock-unlock-acme
+    release: acme-release" </pre>
 
 * `restore_should_be_locked_before`
 If you want your <code>bin/bbr/pre-restore-lock</code> scripts to run in a specific order, define that order using the optional metadata script as in the above step, but with the `restore_should_be_locked_before` key. For example:
