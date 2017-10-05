@@ -372,7 +372,7 @@ A normal workflow for restoring a deployment does the following:
     check-deployment-exists -- No --> exit(Exit)
     check-deployment-matches-backup -- Yes --> copy-to-remote(Copy the backup artifacts to the relevent VMs)
     check-deployment-matches-backup -- No --> cleanup(Cleanup, close ssh connections)
-    copy-to-remote -- Success --> pre-restore-lock(run pre-restore-lock scripts)
+    copy-to-remote -- Success --> pre-restore-lock(Run pre-restore-lock scripts)
     copy-to-remote -- Failure --> cleanup
     pre-restore-lock -- Success --> restore(Run restore scripts)
     pre-restore-lock -- Failure --> post-restore-unlock(Run post-restore-unlock scripts)
