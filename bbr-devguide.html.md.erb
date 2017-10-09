@@ -25,8 +25,7 @@ Release authors can choose to back up their release how they like, as long as th
 
 To ensure that backup and restore scripts do not get out of sync with the releases themselves, release authors are responsible for naming, creating, testing, and troubleshooting their own backup and restore scripts.
 
-<p class="note"><strong>Important</strong>: Release authors must ensure the following.<br><br>
-    <strong>For all releases</strong>---Be aware of the possibility that these backup and restore jobs may be collocated with those of other releases. Therefore, give these jobs unique and descriptive names to avoid name collisions.
+<p class="note"><strong>Important</strong>: For all releases, be aware of the possibility that these backup and restore jobs may be collocated with those of other releases. Therefore, release authors must give these jobs unique and descriptive names to avoid name collisions.
 </p>
 
 ###  <a id='script-implementation'></a>Script Organization
@@ -41,7 +40,7 @@ BBR sets out a contract with release authors to call designated backup and resto
   * pre-restore-lock
   * restore
   * post-restore-unlock
-* Metadata Script(if needed)
+* Metadata Script (if needed)
   * metadata
 
 Release authors must implement scripts as part of the BBR contract.
@@ -49,21 +48,23 @@ Package and distribute the scripts as part of your BOSH release.
 The [Exemplar Backup and Restore Release](https://github.com/pivotal-cf-experimental/exemplar-backup-and-restore-release) provides examples
 of how release authors can structure their jobs to implement the contract with BBR.
 
-The BBR CLI is able to remotely locate and run the scripts, even if they are located on different VMs.
-For example, the lock/unlock scripts can be located on release VMs,
-while, due to disk-space constraints, the backup/restore scripts are co-located onto a separate backup-restore VM.
+The BBR CLI can remotely locate and run the scripts, even if they are located on different VMs.
+For example, the lock/unlock scripts can be located on release VMs
+while, due to disk-space constraints, the backup/restore scripts are co-located on a separate backup-restore VM.
 
 Scripts are executed in a specific order.
-For backup workflow, the order is `pre-backup-lock`, `backup`, and then `post-backup-unlock`.
-For restore workflow, the order is `pre-restore-lock`, `restore`, and then `post-restore-unlock`.
+For the backup workflow, the order is `pre-backup-lock`, `backup`, and then `post-backup-unlock`.
+For the restore workflow, the order is `pre-restore-lock`, `restore`, and then `post-restore-unlock`.
+
 All scripts should be executable scripts.
 ERB tags may be used for templating.
-These scripts are executed similarly to other release job scripts (`start`, `stop`, `drain`), and you can use the job's package dependencies.
+
+These scripts are executed similarly to other release job scripts, such as `start`, `stop`, or `drain`, and you can use the job's package dependencies.
 
 BBR checks exit codes of the scripts when orchestrating.
-Exit code `0` indicates success while any other exit code indicates a failure.
+Exit code `0` indicates success, and any other exit code indicates a failure.
 
-#### Directory Structure
+### <a id="directory"></a> Directory Structure of a BOSH Release with BBR Scripts
 
 The following is an example directory structure of a BOSH release that includes BBR scripts.
 
@@ -100,24 +101,26 @@ acme-release
 ```
 
 
+### <a id='script-ordering'></a>Script Ordering Across Jobs
 
-###  <a id='script-ordering'></a>Script Ordering Across Jobs
+During the backup workflow, all `pre-backup-lock` scripts are invoked before the `backup` scripts on all of the jobs in the deployment.
+All `backup` scripts are invoked before the `post-backup-unlock` scripts on all of the jobs in the deployment.
 
-During the backup workflow, all `pre-backup-lock` scripts would be invoke before the `backup` scripts on all of the jobs in the deployment.
-All `backup` scripts would be invoke before the `post-backup-unlock` scripts on all of the jobs in the deployment.
+During the restore workflow, all `pre-restore-lock` scripts are invoked before the `restore` scripts on all of the jobs in the deployment.
+All `restore` scripts are invoked before the `post-restore-unlock` scripts on all of the jobs in the deployment.
 
-During the restore workflow, all `pre-restore-lock` scripts would be invoke before the `restore` scripts on all of the jobs in the deployment.
-All `restore` scripts would be invoke before the `post-restore-unlock` scripts on all of the jobs in the deployment.
+By default `pre-backup-lock` and `pre-restore-lock` scripts from different jobs are invoked in an arbitary order.
+If you want to specify an order for lock scripts from specific jobs you can do so in the `metadata` script.
 
-By default `pre-backup-lock` and `pre-restore-lock` scripts from different jobs will be invoked in an arbitary order.
-If you would like to specify a ordering between lock scripts from specific jobs you can do so in the `metadata` script.
-The `post-backup-unlock` and `post-restore-unlock` scripts from different jobs will be invoked in arbitrary order
-when no locking dependency is specified, or the opposite order of lock scripts stated in `metadata` scripts.
-When a job specifies locking dependency to a job that does not exist in the current deployment, bbr would ignore that dependency.
+The `post-backup-unlock` and `post-restore-unlock` scripts from different jobs are invoked in an arbitrary order
+when no locking dependency is specified, or the opposite order of lock scripts as stated in `metadata` scripts.
+When a job specifies locking dependency to a job that does not exist in the current deployment, BBR ignores that dependency.
 
-###  <a id='logs'></a> Logs
+For more information, see [Metadata Script](#metadata).
 
-The `stdout` and `stderr` streams are captured and sent to the operator invoking the backup and restore.
+### <a id='logs'></a> Logs
+
+The `stdout` and `stderr` streams are captured and sent to the operator who invokes the backup and restore.
 
 ## <a id='backup-workflow'></a>Backup Workflow
 
@@ -169,6 +172,7 @@ templates:
 </li>
 
 </pre>
+See <a href="#metadata">Metadata Script</a> for information on the properties you can use in this script.
 
 </ol>
 
@@ -211,7 +215,7 @@ To add a `post-backup-unlock` script to a release job:
       post-backup-unlock.erb: bin/bbr/post-backup-unlock
     ```
 
-### <a id='error-handling'></a>Error Handling
+### <a id='error-handling'></a>Error Handling During Backup
 
 If errors occur during the backup workflow, clean-up tasks are executed to put the system back in a working state.
 
@@ -275,6 +279,7 @@ To add a `pre-restore-lock` script to a job, do the following:
       ...
       metadata.sh.erb: bin/bbr/metadata
     ```
+    See <a href="#metadata">Metadata Script</a> for information on the properties you can use in this script.
 
 ### <a id='restore'></a>Restore
 
@@ -314,11 +319,35 @@ To add a `post-restore-unlock` script to a release, do the following:
       post-restore-unlock.sh.erb: bin/bbr/post-restore-unlock
     ```
 
-## <a id='metadata'></a>Metadata
+### <a id='error-handling-restore'></a>Error Handling During Restore
+
+If errors occur during the restore workflow, clean-up tasks are executed to put the system back in a working state.
+
+A normal workflow for restoring a deployment does the following:
+
+
+<% mermaid_diagram do %>
+ graph TB
+    start(Start) --> validate-artifact(Check that the artifact is present and the checksums match)
+    validate-artifact --> check-deployment-exists(Check that the deployment exists)
+    check-deployment-exists -- Yes --> check-deployment-matches-backup(Check the structure of the backup matches the destination deployment)
+    check-deployment-exists -- No --> exit(Exit)
+    check-deployment-matches-backup -- Yes --> copy-to-remote(Copy the backup artifacts to the relevent VMs)
+    check-deployment-matches-backup -- No --> cleanup(Cleanup, close ssh connections)
+    copy-to-remote -- Success --> pre-restore-lock(Run pre-restore-lock scripts)
+    copy-to-remote -- Failure --> cleanup
+    pre-restore-lock -- Success --> restore(Run restore scripts)
+    pre-restore-lock -- Failure --> post-restore-unlock(Run post-restore-unlock scripts)
+    restore --> post-restore-unlock
+    post-restore-unlock --> cleanup
+    cleanup --> exit
+<% end %>
+
+## <a id='metadata'></a>Metadata Script
 
 The `metadata` script is a optional script that would be executed by `bbr` before any other scripts are executed to get more information about the jobs, for example locking dependencies. The script is expected to print a `yaml` on standard out with more information about the job for backup and restore.
 
-#### Job Configuration
+### Job Configuration
 
 To add a `metadata` script to a release job:
 
@@ -332,7 +361,7 @@ To add a `metadata` script to a release job:
       metadata.erb: bin/bbr/metadata
     ```
 
-#### Properties
+### Properties
 
 * `backup_should_be_locked_before`
 This property can be use to specify locking dependencies of the current job during backup. The jobs are specified as an array with their release names.
@@ -356,30 +385,6 @@ restore_should_be_locked_before:
 
 
 
-
-### <a id='error-handling-restore'></a>Error Handling
-
-If errors occur during the restore workflow, clean-up tasks are executed to put the system back in a working state.
-
-A normal workflow for restoring a deployment does the following:
-
-
-<% mermaid_diagram do %>
- graph TB
-    start(Start) --> validate-artifact(Check that the artifact is present and the checksums match)
-    validate-artifact --> check-deployment-exists(Check that the deployment exists)
-    check-deployment-exists -- Yes --> check-deployment-matches-backup(Check the structure of the backup matches the destination deployment)
-    check-deployment-exists -- No --> exit(Exit)
-    check-deployment-matches-backup -- Yes --> copy-to-remote(Copy the backup artifacts to the relevent VMs)
-    check-deployment-matches-backup -- No --> cleanup(Cleanup, close ssh connections)
-    copy-to-remote -- Success --> pre-restore-lock(Run pre-restore-lock scripts)
-    copy-to-remote -- Failure --> cleanup
-    pre-restore-lock -- Success --> restore(Run restore scripts)
-    pre-restore-lock -- Failure --> post-restore-unlock(Run post-restore-unlock scripts)
-    restore --> post-restore-unlock
-    post-restore-unlock --> cleanup
-    cleanup --> exit
-<% end %>
 
 ## <a id='testing'></a>Testing
 The functional testing pattern recommended for BBR scripts is:
