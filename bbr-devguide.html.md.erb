@@ -40,7 +40,7 @@ BBR sets out a contract with release authors to call designated backup and resto
   * pre-restore-lock
   * restore
   * post-restore-unlock
-* Metadata Script (if needed)
+* Metadata script (if needed)
   * metadata
 
 Release authors must implement scripts as part of the BBR contract.
@@ -101,7 +101,7 @@ acme-release
 ```
 
 
-### <a id='script-ordering'></a>Script Ordering Across Jobs
+### <a id='script-ordering'></a>Script Ordering across Jobs
 
 During the backup workflow, all `pre-backup-lock` scripts are invoked before the `backup` scripts on all of the jobs in the deployment.
 All `backup` scripts are invoked before the `post-backup-unlock` scripts on all of the jobs in the deployment.
@@ -110,10 +110,10 @@ During the restore workflow, all `pre-restore-lock` scripts are invoked before t
 All `restore` scripts are invoked before the `post-restore-unlock` scripts on all of the jobs in the deployment.
 
 By default `pre-backup-lock` and `pre-restore-lock` scripts from different jobs are invoked in an arbitary order.
-If you want to specify an order for lock scripts from specific jobs you can do so in the `metadata` script.
+If you want to specify an order for lock scripts from specific jobs you can do so in the metadata script.
 
 The `post-backup-unlock` and `post-restore-unlock` scripts from different jobs are invoked in an arbitrary order
-when no locking dependency is specified, or the opposite order of lock scripts as stated in `metadata` scripts.
+when no locking dependency is specified, or the opposite order of lock scripts as stated in metadata scripts.
 When a job specifies locking dependency to a job that does not exist in the current deployment, BBR ignores that dependency.
 
 For more information, see [Metadata Script](#metadata).
