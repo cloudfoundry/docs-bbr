@@ -124,8 +124,8 @@ The `stdout` and `stderr` streams are captured and sent to the operator who invo
 
 <p class="note">
   <strong>Important</strong>: Release authors should avoid printing sensitive information to <code>stdout</code> or <code>stderr</code>.
-  BBR will print any output from the scripts in case of failure. Make sure your script is not printing any sensitive data, like credentials.
-  In particular, if you're using <code>set -x</code> in your script, make sure to add <code>set +x</code> before you use any credentials.
+  BBR prints any output from the scripts in case of failure. Make sure your script does not print any sensitive data, such as credentials.
+  In particular, if you are using <code>set -x</code> in your script, be sure to add <code>set +x</code> before you use any credentials.
 </p>
 
 ## <a id='backup-workflow'></a>Backup Workflow
