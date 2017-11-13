@@ -61,7 +61,7 @@ This table lists the GitHub locations and URLs for all BBR documentation.
 </tr>
 <tr>
   <td>Generic BBR docs in PCF</td>
-  <td>https://github.com/cloudfoundry/docs-kubo</td>
+  <td>https://github.com/cloudfoundry/docs-bbr</td>
   <td>https://docs.pivotal.io/bbr</td>
 </tr>
 <tr>
