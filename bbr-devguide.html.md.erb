@@ -135,7 +135,7 @@ The `stdout` and `stderr` streams are captured and sent to the operator who invo
 The release job can have a `pre-backup-lock` script that stops any processes that could make changes to the components being backed up.
 This script must allow the job to lock so that backups are consistent across a cluster.
 
-For example, in a Cloud Foundry deployment, the `pre-backup-lock` script stops Cloud Controller processes 
+For example, in a Cloud Foundry deployment, the `pre-backup-lock` script stops Cloud Controller processes
 that may make changes to its blobstore and database thus ensuring the blobstore and the Cloud Controller database are consistent with each other.
 
 #### Job Configuration
@@ -275,7 +275,7 @@ To add a `pre-restore-lock` script to a job, do the following:
       echo "---
       restore\_should\_be\_locked\_before:
         job_name: lock-unlock-acme
-        release: acme-release" 
+        release: acme-release"
       </pre>
 
     b. Add an entry to the templates section of the release job spec file:
@@ -475,16 +475,16 @@ Here is how the backup and restore job should be placed:
  graph LR
          subgraph Backup Restore VM
          database-backup-restorer
-         bbr_acmedb
+         bbr-acmedb
          end
          subgraph Acme VM
          acme
-         bbr_lock_unlock_acme
+         bbr-lock-unlock-acme
          end
          subgraph Acme Release
-         jobs/acme_job-->acme
-         jobs/bbr_lock_unlock_acme-->bbr_lock_unlock_acme
-         jobs/bbr_acmedb-->bbr_acmedb
+         jobs/acme-job-->acme
+         jobs/bbr-lock-unlock-acme-->bbr-lock-unlock-acme
+         jobs/bbr-acmedb-->bbr-acmedb
          end
          subgraph BBR SDK Release
          jobs/database-backup-restorer-->database-backup-restorer
@@ -492,15 +492,15 @@ Here is how the backup and restore job should be placed:
 
 classDef lavender fill:#8ca5ce,stroke:#333
 classDef turquoise fill:#8bc1ce,stroke:#333
-class jobs/acme_job lavender
-class jobs/bbr_lock_unlock_acme lavender
-class jobs/bbr_acmedb lavender
+class jobs/acme-job lavender
+class jobs/bbr-lock-unlock-acme lavender
+class jobs/bbr-acmedb lavender
 class jobs/database-backup-restorer turquoise
 <% end %>
 
 #### Naming Conventions
 
-Multiple backup and restore scripts will be collocated on the `backup-restore` instance, separated by job name. For this reason, each release should name the jobs containing their `backup` and `restore` scripts following the pattern `bbr_[RELEASE_NAME]db`. For example, in the scenario above, the job containing the backup and restore scripts is `bbr_acmedb`.
+Multiple backup and restore scripts will be collocated on the `backup-restore` instance, separated by job name. For this reason, each release should name the jobs containing their `backup` and `restore` scripts following the pattern `bbr-[RELEASE_NAME]db`. For example, in the scenario above, the job containing the backup and restore scripts is `bbr-acmedb`.
 
 ## <a id='drats'></a>Acceptance Tests
 
