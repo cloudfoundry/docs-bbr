@@ -81,7 +81,7 @@ This table lists the GitHub locations and URLs for all BBR documentation.
 </tr>
 <tr>
   <td>PCF Tile Developers Guide subnav</td>
-  <td>https://github.com/pivotal-cf/docs-book-tiledev/blob/master/docs-book/master_middleman/source/subnavs/tiledev_subnav.erb</td>
+  <td>https://github.com/pivotal-cf/docs-book-tiledev/blob/master/master_middleman/source/subnavs/tiledev_subnav.erb</td>
   <td>https://docs.pivotal.io/tiledev</td>
 </tr>
 <tr>  
