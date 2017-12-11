@@ -18,7 +18,7 @@ The BBR release notes are published to the following locations:
 
 ### The BOSH Backup and Restore Developer's Guide
 
-The [PCF Tile Developers Guide](https://docs.pivotal.io/tiledev/) links out to the [BOSH Backup and Restore Developer's Guide](https://github.com/cloudfoundry/docs-bbr/blob/master/bbr-devguide.html.md.erb) topic from **Other Integrations > BOSH Backup and Restore** in the subnav.
+The [PCF Tile Developer Guide](https://docs.pivotal.io/tiledev/) links out to the [BOSH Backup and Restore Developer's Guide](https://github.com/cloudfoundry/docs-bbr/blob/master/bbr-devguide.html.md.erb) topic from **Other Integrations > BOSH Backup and Restore** in the subnav.
 
 ## Where the Subnavs Live
 
@@ -80,7 +80,7 @@ This table lists the GitHub locations and URLs for all BBR documentation.
   <td>https://docs.pivotal.io/pivotalcf/pcf-release-notes/bbr-pcf-rn.html</td>
 </tr>
 <tr>
-  <td>PCF Tile Developers Guide subnav</td>
+  <td>PCF Tile Developer Guide subnav</td>
   <td>https://github.com/pivotal-cf/docs-book-tiledev/blob/master/master_middleman/source/subnavs/tiledev_subnav.erb</td>
   <td>https://docs.pivotal.io/tiledev</td>
 </tr>
