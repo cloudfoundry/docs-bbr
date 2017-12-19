@@ -51,7 +51,7 @@ This table lists the GitHub locations and URLs for all BBR documentation.
 </tr>
 <tr>
   <td>Generic BBR docs in OSS CF</td>
-  <td>https://github.com/cloudfoundry/docs-kubo</td>
+  <td>https://github.com/cloudfoundry/docs-bbr</td>
   <td>https://docs.cloudfoundry.org/bbr/</td>
 </tr>
 <tr>
