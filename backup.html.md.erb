@@ -116,7 +116,7 @@ Perform the following steps to check that your BOSH Director is reachable and ha
     * `BOSH_CLIENT`, `BOSH_CLIENT_SECRET`: If you have a BOSH Director with User Account and Authentication (UAA) as the authentication provider, use a UAA client as the username and a UAA client secret as the password. If you have a BOSH Director with basic auth configured, use your username and password.
     * `BOSH_TARGET`: This is the FQDN or IP address of your BOSH Director.
     * `DEPLOYMENT-NAME`: This is the name of the deployment you want to back up. For a list of deployments, run `bosh deployments`.
-    * `PATH_TO_BOSH_SERVER_CERT`: This is the path to the BOSH Director’s Certificate Authority (CA) certificate if the certificate is not verifiable by the local machine’s certificate chain.  
+    * `PATH_TO_BOSH_CA_CERT`: This is the path to the BOSH Director’s Certificate Authority (CA) certificate if the certificate is not verifiable by the local machine’s certificate chain.
 
 1. If the pre-backup check succeeds, continue to the [next section](#bbr-backup-deployment). If it fails, the command will print the reason why it cannot back up the deployment with the error code 1. The deployment you selected may not have the correct backup scripts, or the connection to the BOSH Director may have failed.
 
@@ -185,7 +185,7 @@ $ BOSH_CLIENT_SECRET=BOSH_CLIENT_SECRET \
     --target BOSH_TARGET \
     --username BOSH_CLIENT \
     --deployment DEPLOYMENT_NAME \
-    --ca-cert PATH_TO_BOSH_SERVER_CERT \
+    --ca-cert PATH_TO_BOSH_CA_CERT \
     backup-cleanup
 </pre>
 
