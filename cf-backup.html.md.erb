@@ -1,9 +1,9 @@
 ---
-title: Backing Up Cloud Foundry with BBR
+title: Configuring your Cloud Foundry for BOSH Backup and Restore
 owner: BBR
 ---
 
-This topic describes how to use BOSH Backup and Restore (BBR) to back up a deployment of Cloud Foundry (CF).
+This topic describes what ops-files and additional configuration you need for your Cloud Foundry deployment to work with BOSH Backup and Restore (BBR).
 
 <div class="note warning">
   <strong>Warnings</strong>:
@@ -21,15 +21,25 @@ This topic describes how to use BOSH Backup and Restore (BBR) to back up a deplo
   <strong>Note</strong>: it is possible to configure a CF that has been deployed without <code>cf-deployment</code> or explicitly using the specified opsfiles by mimicking their behaviour by collocating the same jobs on your deployment.
 </div>
 
-BBR is compatible for CFs deployed using `cf-deployment` v1.4.0 onwards when deployed with the [`enable-backup-restore.yml`](https://github.com/cloudfoundry/cf-deployment/blob/master/operations/experimental/enable-backup-restore.yml) opsfile. This is sufficient for a deployment configured with an internal MySQL database and a WebDAV/NFS blobstore and no optional components, depending on the specifics of other opsfiles used for the deployment additional backup-restore opsfiles may be required for the backup and restore processes to be complete:
+If you are using a [`cf-deployment`](https://github.com/cloudfoundry/cf-deployment) with:
+<ul>
+  <li>an internal MySQL database</li>
+  <li>an internal WebDAV/NFS blobstore</li>
+  <li>no optional components</li>
+</ul>
+ then any `cf-deployment` version from v1.3.0 onwards is compatible with BBR, when deployed with the [`enable-backup-restore.yml`](https://github.com/cloudfoundry/cf-deployment/blob/master/operations/experimental/enable-backup-restore.yml) opsfile.
+
+If you are using a `cf-deployment` which does not fit in to that category, you will need to use a later version of `cf-deployment` and apply more ops-files - see below sections for more details.
 
 ### <a id='external-blobstore'></a> External Blobstores
 
-Backup and restore is supported for External Blobstores hosted on Amazon S3 or compatible storage solutions, as long as they support S3 versioning, see [Backup and Restore of External Blobstores](external-blobstores.html) for full details including different restore strategies that can be used. All other External Blobstore configurations are not currently supported
+BBR supports External Blobstores hosted on Amazon S3 or compatible storage solutions, as long as they support S3 versioning. See [Backup and Restore of External Blobstores](external-blobstores.html) for details of configuration instructions, necessary ops-files and different restore strategies that can be used. All other External Blobstore configurations are not currently supported
 
 ### <a id='external-database'></a> External Databases
 
-If the internal MySQL database has been replaced with an external MySQL database (with a MariaDB 10.1 engine) hosted on RDS using [`use-external-dbs.yml`](https://github.com/cloudfoundry/cf-deployment/blob/master/operations/use-external-dbs.yml) then the backup and restore of the CF should simply work as long as the opsfile is specified before the `enable-backup-restore.yml` opsfile. Support for RDS with a MySQL 5.5, 5.6 or 5.7 engine is coming soon.
+If the internal MySQL database has been replaced with an external MySQL database (with a MariaDB 10.1 engine) hosted on RDS using [`use-external-dbs.yml`](https://github.com/cloudfoundry/cf-deployment/blob/master/operations/use-external-dbs.yml) then the backup and restore of the CF should simply work as long as the `use-external-dbs.yml` opsfile is specified before the `enable-backup-restore.yml` opsfile.
+
+Support for RDS with a MySQL 5.5, 5.6 or 5.7 engine is coming soon.
 
 ### <a id='optional-components'></a> Optional Components
 
