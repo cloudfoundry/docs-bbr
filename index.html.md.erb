@@ -55,7 +55,9 @@ Operators download the BBR binary and transfer it to a jumpbox. Then they run BB
 
 BBR examines the jobs in the BOSH deployment or BOSH Director, and triggers the pre-backup lock, backup, and post-backup unlock scripts.
 
-Scripts in the same stage are all triggered together. For instance, BBR triggers all pre-backup lock scripts before any backup scripts. Scripts within a stage may be triggered in any order.
+Scripts in the same stage all finish before the next stage starts. For instance, BBR triggers and waits for completion of all `pre-backup-lock` scripts before it triggers any `backup` scripts.
+Scripts within the `backup` and `restore` stages may happen in any order. A release author can configure ordering for scripts in in the `locking` and `unlocking` stages, but any scripts that are unconstrained by that ordering
+can also happen in any order within their stage.
 
 The backup artifacts are drained to the jumpbox where the operator can transfer them to storage and use them to restore the BOSH deployment or BOSH Director.
 
