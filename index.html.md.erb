@@ -9,7 +9,7 @@ This guide documents BOSH Backup and Restore (BBR), a framework for backing up a
 
 ## <a id='overview'></a>Overview
 
-BBR orchestrates triggering the backup or restore process on the BOSH deployment or BOSH Director, 
+BBR orchestrates triggering the backup or restore process on the BOSH deployment or BOSH Director,
 and transfers the backup artifacts to and from the BOSH deployment or BOSH Director.
 
 For more information about installing and using BBR, see the [Installing BOSH Backup and Restore](installing.html), [Backing Up with BOSH Backup and Restore](backup.html), and [Restoring with BOSH Backup and Restore](restore.html) topics. Information for release authors and developers is also available in the [BOSH Backup and Restore Developer's Guide](bbr-devguide.html).
@@ -34,8 +34,8 @@ BBR sets out a contract with BOSH release authors to call designated backup and 
 
 This approach has the following advantages:
 
-* The deployment itself encapsulates the knowledge of how to back up and restore the deployment. 
-* Because responsibility for writing and maintaining scripts sits with the release author, scripts can change as the deployment changes and do not get out of sync. 
+* The deployment itself encapsulates the knowledge of how to back up and restore the deployment.
+* Because responsibility for writing and maintaining scripts sits with the release author, scripts can change as the deployment changes and do not get out of sync.
 
 <%= vars.bbr_pcf2 %>
 

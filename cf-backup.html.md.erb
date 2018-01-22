@@ -29,21 +29,21 @@ If you are using a [`cf-deployment`](https://github.com/cloudfoundry/cf-deployme
 </ul>
  then any `cf-deployment` version from v1.3.0 onwards is compatible with BBR, when deployed with the [`enable-backup-restore.yml`](https://github.com/cloudfoundry/cf-deployment/blob/master/operations/experimental/enable-backup-restore.yml) opsfile.
 
-If you are using a `cf-deployment` which does not fit in to that category, you will need to use a later version of `cf-deployment` and apply more ops-files - see below sections for more details.
+If you are using a `cf-deployment` which does not fit in to that category, you may need to use a later version of `cf-deployment` and apply more ops-files - see below sections for more details.
 
 ### <a id='external-blobstore'></a> External Blobstores
 
-BBR supports External Blobstores hosted on Amazon S3 or compatible storage solutions, as long as they support S3 versioning. See [Backup and Restore of External Blobstores](external-blobstores.html) for details of configuration instructions, necessary ops-files and different restore strategies that can be used. All other External Blobstore configurations are not currently supported
+If you are using a `cf-deployment` with an external blobstores hosted on Amazon S3 or compatible storage solutions, you will be able to use BBR as long as your blobstore supports S3 versioning. You will need to deploy your `cf-deployment` with additional opsfiles, see [Backup and Restore of External Blobstores](external-blobstores.html) for details.
 
 ### <a id='external-database'></a> External Databases
 
-If the internal MySQL database has been replaced with an external MySQL database (with a MariaDB 10.1 engine) hosted on RDS using [`use-external-dbs.yml`](https://github.com/cloudfoundry/cf-deployment/blob/master/operations/use-external-dbs.yml) then the backup and restore of the CF should simply work as long as the `use-external-dbs.yml` opsfile is specified before the `enable-backup-restore.yml` opsfile.
+If you are using a `cf-deployment` configured with an external MySQL database (with a MariaDB 10.1 engine) hosted on RDS using [`use-external-dbs.yml`](https://github.com/cloudfoundry/cf-deployment/blob/master/operations/use-external-dbs.yml) then you can use BBR as long as the `use-external-dbs.yml` opsfile is specified before the `enable-backup-restore.yml` opsfile when deploying your Cloud Foundry.
 
 Support for RDS with a MySQL 5.5, 5.6 or 5.7 engine is coming soon.
 
 ### <a id='optional-components'></a> Optional Components
 
-Some optional components that can be deployed with `cf-deployment` opsfiles require an additional backup-restore opsfile to be applied for the backup and restore process to work correctly with the optional component:
+Some optional components that can be deployed with `cf-deployment` opsfiles require an additional backup-restore opsfile to be applied for the backup and restore process to work correctly with the optional component.
 
 <table>
 <tr>
