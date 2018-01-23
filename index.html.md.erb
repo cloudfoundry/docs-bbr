@@ -9,7 +9,7 @@ This guide documents BOSH Backup and Restore (BBR), a framework for backing up a
 
 ## <a id='overview'></a>Overview
 
-BBR orchestrates triggering the backup or restore process on the BOSH deployment or BOSH Director, 
+BBR orchestrates triggering the backup or restore process on the BOSH deployment or BOSH Director,
 and transfers the backup artifacts to and from the BOSH deployment or BOSH Director.
 
 For more information about installing and using BBR, see the [Installing BOSH Backup and Restore](installing.html), [Backing Up with BOSH Backup and Restore](backup.html), and [Restoring with BOSH Backup and Restore](restore.html) topics. Information for release authors and developers is also available in the [BOSH Backup and Restore Developer's Guide](bbr-devguide.html).
@@ -18,20 +18,15 @@ For more information about installing and using BBR, see the [Installing BOSH Ba
 
 BBR is a binary that can back up and restore BOSH deployments and BOSH Directors. BBR requires that the backup targets supply scripts that implement the backup and restore functions.
 
-BBR is not dependent on a particular version of BOSH. 
+BBR is not dependent on a particular version of BOSH.
 However, a BOSH deployment must have its backup and restore [scripts](#contract) packaged in the releases to be backed up and restored with BBR. For more information, consult the documentation for the deployment.
 
-You can back up and restore the following BOSH deployments with BBR:
-
-<ul>
+<b>You can currently back up and restore the following BOSH deployments with BBR:</b>
 <%= vars.bbr_ert %>
-<li>BOSH Director, including UAA and CredHub</li>
-</ul>
 
-BBR supports BOSH Directors which use one of the following:
+1. BOSH Director, including UAA and CredHub, with either Basic Auth or Client/Client-Secret UAA authentication
 
-* Basic Auth
-* Client/Client-Secret UAA Authentication
+1. Cloud Foundry with specific [configuration](cf-backup.html)
 
 ## <a id='contract'></a>Contract
 
@@ -39,8 +34,8 @@ BBR sets out a contract with BOSH release authors to call designated backup and 
 
 This approach has the following advantages:
 
-* The deployment itself encapsulates the knowledge of how to back up and restore the deployment. 
-* Because responsibility for writing and maintaining scripts sits with the release author, scripts can change as the deployment changes and do not get out of sync. 
+* The deployment itself encapsulates the knowledge of how to back up and restore the deployment.
+* Because responsibility for writing and maintaining scripts sits with the release author, scripts can change as the deployment changes and do not get out of sync.
 
 <%= vars.bbr_pcf2 %>
 
@@ -50,23 +45,49 @@ This approach has the following advantages:
 1. **post-backup-unlock**: The post-backup unlock script unlocks the job after the backup is complete.
 
 ### Restore Scripts
-1. **pre-restore-lock**: The pre-restore-lock script locks the job so the restore is consistent across the cluster. 
+1. **pre-restore-lock**: The pre-restore-lock script locks the job so the restore is consistent across the cluster.
 1. **restore**: The restore script restores the release.
-1. **post-restore-unlock**: The post-restore-unlock script unlocks the job after the restore is complete. 
+1. **post-restore-unlock**: The post-restore-unlock script unlocks the job after the restore is complete.
 
-## <a id='workflow'></a>Workflow
+## <a id='workflow'></a>What happens when you run a BBR backup?
 
-Operators download the BBR binary and transfer it to a jumpbox. Then they run BBR from the jumpbox, specifying the name of the BOSH deployment or BOSH Director to back up.
+*Prerequisite:* The operator has [installed BBR](installing.html)
 
-BBR examines the jobs in the BOSH deployment or BOSH Director, and triggers the pre-backup lock, backup, and post-backup unlock scripts.
+When a BBR `backup` command is run the following things happen:
 
-Scripts in the same stage are all triggered together. For instance, BBR triggers all pre-backup lock scripts before any backup scripts. Scripts within a stage may be triggered in any order.
+BBR connects to instances in the deployment/director that was specified in the BBR command invocation.
+Using these connections, BBR gathers information on which scripts it should run for each stage in the backup.
 
-The backup artifacts are drained to the jumpbox where the operator can transfer them to storage and use them to restore the BOSH deployment or BOSH Director.
+BBR then runs the `pre-backup-lock`, `backup`, and `post-backup-unlock` scripts in stages.
+
+Scripts in the same stage all finish before the next stage starts. For instance, BBR triggers and waits for completion of all `pre-backup-lock` scripts before it triggers any `backup` scripts.
+Scripts within the `backup` stage may happen in any order. A release author can configure ordering for scripts in in the `locking` and `unlocking` stages, but any scripts that are unconstrained by that ordering
+can also happen in any order within their stage.
+
+BBR drains and tars the backup artifacts to the jumpbox from where the operator can transfer the resulting artifact to storage and use it to restore the BOSH deployment or BOSH Director.
 
 The following diagram shows a sample backup flow.
 
 <%= image_tag('backup-flow.png') %>
+
+
+## <a id='workflow'></a>What happens when you run a BBR restore?
+
+*Prerequisite:* You have available on the jumpbox an artifact produced by a BBR `backup` of your deployment or director.
+
+When a BBR `restore` command is run for that artifact the following things happen:
+
+BBR connects to instances in the deployment/director that was specified in the command invocation.
+Using these connections, BBR gathers information on which scripts it should run for each stage in the restore.
+
+BBR uploads the each part of the artifact to the instance it belongs to.
+
+BBR then runs the `pre-restore-lock`, `restore`, and `post-restore-unlock` scripts in stages.
+
+Scripts in the same stage all finish before the next stage starts. For instance, BBR triggers and waits for completion of all `pre-restore-lock` scripts before it triggers any `restore` scripts.
+Scripts within the `restore` stage may happen in any order. A release author can configure ordering for scripts in in the `locking` and `unlocking` stages, but any scripts that are unconstrained by that ordering
+can also happen in any order within their stage.
+
 
 ## <a id='syntax'></a>Syntax
 
@@ -105,8 +126,8 @@ The parameters are:
 * `--debug`: This is an optional flag to display debug output.
 * `--private-key-path`: This is the path to the SSH private key used to connect to the BOSH Director.
 * `--username`: This is the SSH username of the BOSH Director.
-* `--host`: This is the address of the BOSH Director with an optional port that defaults to 22. If the BOSH Director is public, this is a URL, such as `https://my-bosh.xxx.cf-app.com`. Otherwise, this is the BOSH Director IP address. 
-* `--artifact-path`: This is the path to the BOSH Director backup you want to restore.
+* `--host`: This is the address of the BOSH Director with an optional port that defaults to 22. If the BOSH Director is public, this is a URL, such as `https://my-bosh.xxx.cf-app.com`. Otherwise, this is the BOSH Director IP address.
+* `--artifact-path`: This is the path to the BOSH Director backup artifact you want to restore from.
 
 ### BOSH Deployment
 
@@ -119,7 +140,7 @@ $ BOSH_CLIENT_SECRET=BOSH_CLIENT_SECRET \
   --target BOSH_TARGET \
   --username BOSH_CLIENT \
   --deployment DEPLOYMENT_NAME \
-  --ca-cert PATH_TO_BOSH_SERVER_CERTIFICATE \
+  --ca-cert PATH_TO_BOSH_CA_CERTIFICATE \
     SUB-COMMAND [--artifact-path PATH_TO_ARTIFACT_TO_RESTORE]
 ```
 
@@ -130,7 +151,7 @@ The arguments are:
 * `--target`: This is the FQDN or IP address of your BOSH Director.
 * `--deployment`: This is the name of the deployment you want to back up. For a list of deployments, run `bosh deployments`.
 * `--ca-cert`: This is the path to the BOSH Director’s Certificate Authority (CA) certificate if the certificate is not verifiable by the local machine’s certificate chain.
-* `--artifact-path`: This is the path to the BOSH deployment backup you want to restore.
+* `--artifact-path`: This is the path to the BOSH deployment backup artifact you want to restore from.
 
 ### Subcommands
 
