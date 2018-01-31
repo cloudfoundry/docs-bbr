@@ -3,24 +3,31 @@ title: Configuring your Cloud Foundry for BOSH Backup and Restore
 owner: BBR
 ---
 
-This topic describes what additional configuration you need for your Cloud Foundry deployment to work with BOSH Backup and Restore (BBR).
+This topic describes the configuration you need for your Cloud Foundry deployment to work with BOSH Backup and Restore (BBR).
 
-This page describes how to alter your [`cf-deployment`](https://github.com/cloudfoundry/cf-deployment)
-with opsfiles to support BBR.
-If you deploy your Cloud Foundry another way, you can examine the referenced
-opsfiles and alter your deployment accordingly.
+This topic assumes the use of ops files to customize your Cloud Foundry deployment.
+
+If you do not use ops files for customization, 
+you can still customize your Cloud Foundry to use BBR. 
+Examine the contents of the ops files on this page,
+and use them as a guide to customize your deployment manifest directly.
+
+[//]: # (This page describes how to alter your [`cf-deployment`](https://github.com/cloudfoundry/cf-deployment))
 
 
 <div class="note warning">
   <strong>WARNING</strong>:
   <ul>
-    <li><strong>Backup artifacts can contain secrets.</strong> Secure backup artifacts by using encryption or other means.</li>
+    <li><strong>Backup artifacts can contain secrets.</strong> Secure backup artifacts with encryption or by other means.</li>
     <li><strong>The restore is a destructive operation.</strong> BBR is designed to restore CF after a disaster.
         If it fails, the environment can be left in an unusable state and require reprovisioning.
-        The generic method for restoring a deployment is detailed in <a href="restore.html">Restoring with BOSH Backup and Restore</a>.</li>
-    <li><strong>The Cloud Controller API (CC API) stops sending and receiving calls</strong> for some time during backup and during restore.</li>
+        For the generic method of restoring a deployment, see <a href="restore.html">Restoring with BOSH Backup and Restore</a>.</li>
+    <li><strong>Developers are unable to push apps for a few minutes during the backup and the restore.</strong>
+        This is because the Cloud Controller API (CC API) stops sending and receiving calls
+        for part of the process, for example,
+        between the <code>pre-backup-lock</code> and <code>post-backup-unlock</code> stages.
     <li><strong>BBR does not back up any service data.</strong>
-        That needs to be arranged separately.</strong></li>
+        Back up Service data, such as Redis or RabbitMQ data, separately.</li>
   </ul>
 </div>
 
@@ -28,24 +35,25 @@ opsfiles and alter your deployment accordingly.
 
 Unless otherwise stated, the described functionality is available in `cf-deployment` v 1.3.0 and later.
 
-Your CF deployment is compatible with BBR if the following are true:
+Your CF deployment is compatible with BBR if the following requirements are met:
 
-  + An `enable-backup-restore.yml` opsfile is deployed</li>
+  + An `enable-backup-restore.yml` ops file is deployed</li>
   + An internal MySQL database is present</li>
   + An internal WebDAV/NFS blobstore is present</li>
-  + No optional components are deployed</li>
+  + No optional components, such as a runtime CredHub store or an NFS volume service, are deployed</li>
 
-If your CF deployment doesn't fit the above compatibility requirements, 
-then you might be to use BBR by applying additional opsfiles described below
-or by using a later version of `cf-deployment`. 
+If your CF deployment does not fit these requirements, 
+then you might be to use BBR by applying additional ops files described below
+and by using a later version of `cf-deployment`. 
  
 #### <a id='external-blobstore'></a> To Use BBR with External Blobstores
 
 For external blobstore support configure your `cf-deployment`:
 
    + With  v1.4.0 or later
-   + Verify that your external blobstore supports Amazon S3 versioning
-   + Deploy your `cf-deployment` with `enable-backup-restore-s3.yml` opsfile
+   + Verify that your external blobstore supports Amazon S3 versioning.
+     For information, see <a href="external-blobstores.html">Backup and Restore of External Blobstores</a>.
+   + Deploy your `cf-deployment` with `enable-backup-restore-s3.yml` ops file
 
 #### <a id='external-database'></a> To use BBR with External Databases
 
@@ -53,19 +61,19 @@ To use BBR with an an external MySQL database (with a MariaDB 10.1 engine) hoste
 
    + Verify that the database uses a MariaDB 10.1 engine
    + Verify that the database is hosted on RDS using [`use-external-dbs.yml`](https://github.com/cloudfoundry/cf-deployment/blob/master/operations/use-external-dbs.yml)
-   + Deploy your `cf-deployment` with the `use-external-dbs.yml` opsfile specified before the `enable-backup-restore.yml` opsfile
+   + Deploy your `cf-deployment` with the `use-external-dbs.yml` ops file specified before the `enable-backup-restore.yml` ops file
 
-Support for RDS with a MySQL 5.5, 5.6 or 5.7 engine is coming soon.
+Support for RDS with a MySQL 5.5, 5.6, or 5.7 engine is coming soon.
 
 #### <a id='optional-components'></a> Optional Components
 
-These optional `cf-deployment` components require additional backup-restore opsfiles to support BBR.
-Apply the backup-restore opsfiles when you deploy your Cloud Foundry.
+These optional `cf-deployment` components require additional backup-restore ops files to support BBR.
+Apply the backup-restore ops files when you deploy your Cloud Foundry.
 
 <table>
 <tr>
 <th>Optional component</th>
-<th>Required backup-restore opsfile</th>
+<th>Required backup-restore ops file</th>
 </tr>
 <tr>
 <td>NFS volume service <code>enable-nfs-volume-service.yml</code></td>
@@ -78,12 +86,32 @@ Apply the backup-restore opsfiles when you deploy your Cloud Foundry.
 <tr>
 </table>
 
-## <a id='process'></a> Taking a Backup or Doing a Restore
+## <a id="order"></a> Apply Ops Files in the Correct Order
+
+Apply the ops files in the following order: 
+
+1. `use-s3-blobstore.yml`
+
+1. `use-external-dbs.yml`
+ 
+1. `enable-backup-restore.yml`
+
+1. `enable-backup-restore-s3.yml`
+
+1. `enable-nfs-broker-backup.yml`
+
+1. `enable-backup-restore-credhub.yml`
+
+
+## <a id='process'></a> Next Steps
 
 After Cloud Foundry is configured to be compatible with BBR,
-it can be backed up and restored using the procedures in [Back Up a BOSH Deployment](backup.html#back-up-deployment)
+it can be backed up and restored. 
+Follow the procedures in [Back Up a BOSH Deployment](backup.html#back-up-deployment)
 and [Restore a BOSH Deployment](restore.html#restore-deployment).
 
+At minimum, run the pre-backup check against your Cloud Foundry deployment.
+Follow the first two steps of [
 The CC API is stopped between the `pre-backup-lock` and `post-backup-unlock` stages to ensure that
 the backup taken is internally consistent.
 This means developers are unable to push apps for a few minutes during the backup.
