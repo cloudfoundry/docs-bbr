@@ -12,8 +12,7 @@ you can still customize your Cloud Foundry to use BBR.
 Examine the contents of the ops files on this page,
 and use them as a guide to customize your deployment manifest directly.
 
-[//]: # (This page describes how to alter your [`cf-deployment`](https://github.com/cloudfoundry/cf-deployment))
-
+The repository for the Cloud Foundry deployment is [`cf-deployment`](https://github.com/cloudfoundry/cf-deployment).
 
 <div class="note warning">
   <strong>WARNING</strong>:
@@ -107,16 +106,16 @@ Apply the ops files in the following order:
 
 After Cloud Foundry is configured to be compatible with BBR,
 it can be backed up and restored. 
+
 Follow the procedures in [Back Up a BOSH Deployment](backup.html#back-up-deployment)
 and [Restore a BOSH Deployment](restore.html#restore-deployment).
 
 At minimum, run the pre-backup check against your Cloud Foundry deployment.
-Follow the first two steps of [
-The CC API is stopped between the `pre-backup-lock` and `post-backup-unlock` stages to ensure that
+Follow the first two steps of [Back Up a BOSH Deployment](./backup.html#back-up-deployment). 
+This lists the scripts that run during a backup and the order that they are applied in.
+
+<p class="note">
+The CC API is stopped between the <code>pre-backup-lock</code> and <code>post-backup-unlock</code> stages to ensure that
 the backup taken is internally consistent.
 This means developers are unable to push apps for a few minutes during the backup.
-
-If you want to see what the backup or restore process will do, it is recommended to run a [`pre-backup-check`](backup.html#check-deployment) against your Cloud Foundry deployment. This will
-list the scripts that will be run during a backup, and any ordering of those scripts that will be applied.
-You can then examine those scripts.
-
+</p>
