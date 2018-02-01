@@ -3,51 +3,81 @@ title: Enabling an External Blobstore
 owner: BBR
 ---
 
-`cf-deployment` provides BBR support for the backup and restore of external blobstores hosted on Amazon S3 or compatible storage
-solutions, as long as they support S3 versioning.
+This topic describes how to enable an external blobstore so that it can be backed up
+and restored by BOSH Backup and Restore (BBR). 
 
-The backup artifact only contains references to versions of blobs, not the actual files. As a consequence, **restores will only work if the original bucket still exists**. If the bucket gets
-deleted, all
-its versions will be deleted with it, and there will be no way to restore it (unless you have a
-[replica](#restore-from-replicas)).
+If your external blobstore is hosted on Amazon S3 or a compatible storage solution that supports S3 versioning,
+`cf-deployment` provides support for it to be backed up and restored by BBR.<br>
+OR<br>
+If your external blobstore is hosted on Amazon S3 or a compatible storage solution that supports S3 versioning, 
+it can be backed up and restored by BBR.
+
+The backup artifact only contains references to versions of blobs, not the actual files.
+As a consequence, **restores only work if the original bucket still exists**.
+If the bucket gets deleted, all its versions are deleted with it,
+and you cannot restore it unless you have a replica. 
+For how to restore from a replica, see [Restore from Replicas](#restore-from-replicas) below.
 
 
-## <a id="enable-versioning"></a> Enable versioning on your external blobstore
+## <a id="enable-versioning"></a> Enable Versioning on Your External Blobstore
 
 BBR only supports the backup and restore of blobstores stored in versioned, S3-compatible buckets.
-Please refer to the Amazon S3 documentation on
-[how to enable versioning of your blobstore buckets](https://docs.aws.amazon.com/AmazonS3/latest/user-guide/enable-versioning.html).
 
-If your blobstore buckets are not empty, run the following command on each one of them, using the
+To enable versioning of S3 buckets, do the following:
+
+1. Follow the instructions in the Amazon S3 documentation, [How Do I Enable or Suspend Versioning for an S3 Bucket?]
+(https://docs.aws.amazon.com/AmazonS3/latest/user-guide/enable-versioning.html)
+to enable versioning. 
+
+2. If your blobstore buckets are not empty, run the following command on each one of them, using the
 [AWS CLI](https://aws.amazon.com/cli/):
 
-```
-aws s3 cp s3://<bucket-name>/ s3://<bucket-name>/ --recursive --metadata bump=true
-```
+    <code>aws s3 cp s3://BUCKET-NAME/ s3://BUCKET-NAME/ --recursive --metadata bump=true</code>
 
-This makes sure that each file in your buckets has a valid version ID.
+    <pre class="terminal">
+    $ aws s3 cp s3://my-bucket/ s3://my-bucket/ --recursive --metadata bump=true
+    </pre>
+ 
+    This makes sure that each file in your buckets has a valid version ID.
 
-## <a id="enable-backup-and-restore"></a> Enable backup and restore of external blobstores
+**Questions**
+1. What do I do if I have a non-S3 but compatible bucket? <br>
+2. Do we have a sample output from the aws s3 command. 
 
-To backup a Cloud Foundry deployment that uses an S3-compatible blobstore, colocate the
-`s3-versioned-blobstore-backup-restorer` job from the
+
+## <a id="enable-backup-and-restore"></a> Enable Backup and Restore of External Blobstores
+
+To backup a Cloud Foundry deployment that uses an S3-compatible blobstore, do the following:
+
+1. Colocate the `s3-versioned-blobstore-backup-restorer` job from the
 [`backup-and-restore-sdk-release`](https://github.com/cloudfoundry-incubator/backup-and-restore-sdk-release/tree/master)
-as part of your deployment. If you are using [`cf-deployment`](https://github.com/cloudfoundry/cf-deployment)
- then you can include the `enable-backup-restore-s3.yml` opsfile in your deployment. You should apply
- `enable-backup-restore.yml` and `use-s3-blobstore.yml` before `enable-backup-restore-s3.yml`.
-If you are not using `cf-deployment`, you can still refer to the opsfile for an example of how to
-configure the job.
+as part of your deployment.
+
+2. If you are using [`cf-deployment`](https://github.com/cloudfoundry/cf-deployment), 
+   include the `enable-backup-restore-s3.yml` ops file in your deployment.
+
+    <p class="note"> You should apply <code>enable-backup-restore.yml</code> and <code>use-s3-blobstore.yml</code>
+       before <code>enable-backup-restore-s3.yml</code>
+       See <a href="cf-backup.html#order">Apply Ops Files in the Correct Order</a>.</p>
+
+    Even if you do not use `cf-deployment`, review the ops file for examples of how to configure the job.
 
 ## <a id="supported-restore-scenarios"></a> Supported Restore Scenarios
 
-### <a id="in-place-restore"></a> In-place restore
+There are three distinct restore scenarios:
+
++ [In-Place Restore](#in-place-restore)
++ [Restore to New Buckets](#restore-to-new-buckets)
++ [Restore from Replicas](#restore-from-replicas)
+
+### <a id="in-place-restore"></a> In-Place Restore
 When backing up an
 external blobstore, the backup consists of a snapshot of the objects' ids and versions.
 If your destination Cloud Foundry for a restore uses the original buckets of the backed-up Cloud Foundry (i.e. you
 are doing an in-place restore), then during a restore
 those versions are retrieved and set to be the current versions in the buckets.
 
-### <a id="restore-to-new-buckets"></a> Restore to new buckets
+### <a id="restore-to-new-buckets"></a> Restore to New Buckets
 
 If your destination Cloud Foundry for a restore uses different buckets then you can also restore into
 those buckets, provided the original buckets still exist. During restore the original versions are copied from the
