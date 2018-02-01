@@ -41,49 +41,47 @@ Your CF deployment is compatible with BBR if the following requirements are met:
   + An internal WebDAV/NFS blobstore is present</li>
   + No optional components, such as a runtime CredHub store or an NFS volume service, are deployed</li>
 
-If your CF deployment does not fit these requirements, 
-then you might be to use BBR by applying additional ops files described below
+If your CF deployment does not fit the above requirements, 
+then you might be able to use BBR by applying additional ops files as described in the table below
 and by using a later version of `cf-deployment`. 
- 
-#### <a id='external-blobstore'></a> To Use BBR with External Blobstores
 
-For external blobstore support configure your `cf-deployment`:
 
-   + With  v1.4.0 or later
-   + Verify that your external blobstore supports Amazon S3 versioning.
-     For information, see <a href="external-blobstores.html">Backup and Restore of External Blobstores</a>.
-   + Deploy your `cf-deployment` with `enable-backup-restore-s3.yml` ops file
-
-#### <a id='external-database'></a> To use BBR with External Databases
-
-To use BBR with an an external MySQL database (with a MariaDB 10.1 engine) hosted on RDS:
-
-   + Verify that the database uses a MariaDB 10.1 engine
-   + Verify that the database is hosted on RDS using [`use-external-dbs.yml`](https://github.com/cloudfoundry/cf-deployment/blob/master/operations/use-external-dbs.yml)
-   + Deploy your `cf-deployment` with the `use-external-dbs.yml` ops file specified before the `enable-backup-restore.yml` ops file
-
-Support for RDS with a MySQL 5.5, 5.6, or 5.7 engine is coming soon.
-
-#### <a id='optional-components'></a> Optional Components
-
-These optional `cf-deployment` components require additional backup-restore ops files to support BBR.
-Apply the backup-restore ops files when you deploy your Cloud Foundry.
-
-<table>
-<tr>
-<th>Optional component</th>
-<th>Required backup-restore ops file</th>
-</tr>
-<tr>
-<td>NFS volume service <code>enable-nfs-volume-service.yml</code></td>
-<td><a href="https://github.com/cloudfoundry/cf-deployment/blob/master/operations/experimental/enable-nfs-broker-backup.yml"><code>enable-nfs-broker-backup.yml</code></a></td>
-</tr>
-<tr>
-<td>CredHub data store <code>secure-service-credentials.yml</code></td>
-<td><a href="https://github.com/cloudfoundry/cf-deployment/blob/master/operations/experimental/enable-backup-restore-credhub.yml"><code>enable-backup-restore-credhub.yml</code></a></td>
-</tr>
-<tr>
+<table class="nice">
+  <tr>
+    <th>To use BBR with…</th>
+    <th>Use this ops file…</th>
+    <th>And…</th>
+  </tr>
+  <tr>
+    <td>An internal MySQL database (with a MariaDB 10.1 engine*) hosted on RDS using <code>use-external-dbs.yml</code></td>
+    <td><a href="https://github.com/cloudfoundry/cf-deployment/blob/master/operations/use-external-dbs.yml"><code>use-external-dbs.yml</code></a></td>
+    <td><em>NA</em></td>
+  </tr>
+  <tr>
+    <td>An internal WebDAV/NFS blobstore hosted on Amazon S3 or a compatible storage solution that supports S3 versioning
+</td>
+    <td><code>use-s3-blobstore.yml</code><br>
+        <code>enable-backup-restore-s3.yml</code><br>
+    </td>
+    <td><code>cf-deployment</code> v1.4.0 or later.<br>
+        For how to verify that the blobstore supports Amazon S3 versioning,
+        see <a href=”external-blobstores.html”>Enabling an External Blobstore</a></code>.
+     </td>
+  </tr>
+  <tr>
+    <td>An NFS volume service component<br>
+<code>enable-nfs-volume-service.yml</code></td>
+    <td><a href="https://github.com/cloudfoundry/cf-deployment/blob/master/operations/experimental/enable-nfs-broker-backup.yml"><code>enable-nfs-broker-backup.yml</code></a></td>
+    <td><em>NA</em></td>
+  </tr>
+  <tr>
+    <td>CredHub data store component<br> <code>secure-service-credentials.yml</code></td>
+    <td><a href="https://github.com/cloudfoundry/cf-deployment/blob/master/operations/experimental/enable-backup-restore-credhub.yml"><code>enable-backup-restore-credhub.yml</code></a></td>
+    <td><em>NA</em></td>
+  </tr>
 </table>
+
+\* Support for RDS with a MySQL 5.5, 5.6, and 5.7 engine is coming soon.
 
 ## <a id="order"></a> Apply Ops Files in the Correct Order
 
