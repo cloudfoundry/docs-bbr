@@ -23,7 +23,7 @@ The repository for the Cloud Foundry deployment is [`cf-deployment`](https://git
         For the generic method of restoring a deployment, see <a href="restore.html">Restoring with BOSH Backup and Restore</a>.</li>
     <li><strong>Developers are unable to push apps for a few minutes during backup and restore.</strong>
         This is because the Cloud Controller API (CC API) stops sending and receiving calls
-        during data tranfer to ensure data consistency.
+        The CC API is stopped between the <code>pre-backup-lock</code> and <code>post-backup-unlock</code> stages.</li>
     <li><strong>BBR does not back up any service data.</strong>
         Back up Service data, such as Redis or RabbitMQ data, separately.</li>
   </ul>
@@ -57,7 +57,7 @@ and by using a later version of `cf-deployment`.
     <td><em>NA</em></td>
   </tr>
   <tr>
-    <td>An external WebDAV/NFS blobstore hosted on Amazon S3 or a compatible storage solution that supports S3 versioning<br>
+    <td>An external blobstore hosted on Amazon S3 or a compatible storage solution that supports S3 versioning<br>
         <code>use-s3-blobstore.yml</code>
     </td>
     <td><code>enable-backup-restore-s3.yml</code><br>
@@ -114,9 +114,3 @@ and [Restore a BOSH Deployment](restore.html#restore-deployment).
 At minimum, run the pre-backup check against your Cloud Foundry deployment.
 Follow the first two steps of [Back Up a BOSH Deployment](./backup.html#back-up-deployment). 
 This lists the scripts that run during a backup and the order that they are applied in.
-
-<p class="note"><strong>Note</strong>: 
-The CC API is stopped between the <code>pre-backup-lock</code> and <code>post-backup-unlock</code> stages
-to ensure that the backup taken is internally consistent.
-This means developers are unable to push apps for a few minutes during the backup.
-</p>
