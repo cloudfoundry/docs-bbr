@@ -23,7 +23,7 @@ The repository for the Cloud Foundry deployment is [`cf-deployment`](https://git
         For the generic method of restoring a deployment, see <a href="restore.html">Restoring with BOSH Backup and Restore</a>.</li>
     <li><strong>Developers are unable to push apps for a few minutes during backup and restore.</strong>
         This is because the Cloud Controller API (CC API) stops sending and receiving calls
-        The CC API is stopped between the <code>pre-backup-lock</code> and <code>post-backup-unlock</code> stages.</li>
+        for part of the process, for example, between the <code>pre-backup-lock</code> and <code>post-backup-unlock</code> stages.</li>
     <li><strong>BBR does not back up any service data.</strong>
         Back up Service data, such as Redis or RabbitMQ data, separately.</li>
   </ul>
