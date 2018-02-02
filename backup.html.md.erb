@@ -40,9 +40,9 @@ Follow these steps to verify that your BOSH Director is reachable and can be bac
 
     <pre class="terminal">
     $ bbr director \
-        --private-key-path PATH-TO-PRIVATE-KEY \
-        --username USER-NAME \
-        --host HOST \
+        --private-key-path bosh.pem \
+        --username vcap \
+        --host bosh.example.com \
         pre-backup-check
   </pre>
 
@@ -53,7 +53,7 @@ Follow these steps to verify that your BOSH Director is reachable and can be bac
      For example, the command fails if the BOSH Director selected did not have the correct backup scripts
      or if the connection to the BOSH Director failed.
 
-3. Run the BBR backup command from your jumpbox to back up your BOSH Director:
+4. Run the BBR backup command from your jumpbox to back up your BOSH Director:
 
     <code>bbr director --private-key-path PATH-TO-PRIVATE-KEY --username USER-NAME --host HOST backup</code>
 
@@ -63,9 +63,9 @@ Follow these steps to verify that your BOSH Director is reachable and can be bac
 
     <pre class="terminal">
     $ bbr director \
-      --private-key-path PATH-TO-PRIVATE-KEY \
-      --username USER-NAME \
-      --host HOST \
+      --private-key-path bosh.pem \
+      --username vcap \
+      --host bosh.example.com \
       backup
     </pre>
 
@@ -103,7 +103,8 @@ Perform the following steps to check that your BOSH Director is reachable and ha
     `DEPLOYMENT-NAME`: The name of the deployment you want to back up.
                        For a list of deployments, run `bosh deployments`.<br><br>
 
-    `PATH-TO-BOSH-SERVER-CERT`: The path to the BOSH Director’s Certificate Authority (CA) certificate if the certificate is not verifiable by the local machine’s certificate chain:
+    `PATH-TO-BOSH-CA-CERT`: The path to the BOSH Director’s Certificate Authority (CA) certificate
+                            if the certificate is not verifiable by the local machine’s certificate chain:
        + If you used [`bbl`](https://github.com/cloudfoundry/bosh-bootloader) spin up your director
        to retrieve the CA cert with `bbl director-ca-cert`.
        + If you manually deployed then it may be stored in a `secrets.yml` or similar.
@@ -113,10 +114,10 @@ Perform the following steps to check that your BOSH Director is reachable and ha
     <pre class="terminal">
   $ BOSH-CLIENT-SECRET=BOSH-CLIENT-SECRET \
       bbr deployment \
-      --target BOSH-TARGET \
-      --username BOSH-CLIENT \
-      --deployment DEPLOYMENT-NAME \
-      --ca-cert PATH-TO-BOSH-SERVER-CERT \
+      --target bosh.example.com \
+      --username admin \
+      --deployment cf-acceptance-0 \
+      --ca-cert bosh.ca.cert \
       pre-backup-check
   </pre>
 
@@ -143,10 +144,10 @@ Perform the following steps to check that your BOSH Director is reachable and ha
     <pre class="terminal">
     $ BOSH-CLIENT-SECRET=BOSH-CLIENT-SECRET \
         nohup bbr deployment \
-        --target BOSH-DIRECTOR-IP \
-        --username BOSH-CLIENT \
-        --deployment DEPLOYMENT-NAME \
-        --ca-cert PATH-TO-BOSH-SERVER-CERT \
+        --target bosh.example.com \
+        --username admin \
+        --deployment cf-acceptance-0 \
+        --ca-cert bosh.ca.cert \
         backup</pre>
 
     <p class="note"><strong>Note</strong>: The BBR backup command can take a long time to complete.
@@ -202,9 +203,9 @@ Follow the steps below to use the BBR cleanup script to tidy up after a failed b
 
     <pre class="terminal">
     $ bbr director \
-        --private-key-path PATH-TO-PRIVATE-KEY \
-        --username USER-NAME \
-        --host HOST
+        --private-key-path bosh.pem \
+        --username vcap \
+        --host bosh.example.com
         backup-cleanup
     </pre>
 
@@ -217,10 +218,10 @@ Follow the steps below to use the BBR cleanup script to tidy up after a failed b
     <pre class="terminal">
     $ BOSH_CLIENT_SECRET=BOSH_CLIENT_SECRET \
     bbr deployment \
-    --target BOSH-TARGET \
-    --username BOSH-CLIENT \
-    --deployment DEPLOYMENT-NAME \
-    --ca-cert PATH-TO-BOSH-CA-CERT \
+    --target bosh.example.com \
+    --username admin \
+    --deployment cf-acceptance-0 \
+    --ca-cert bosh.ca.crt \
     backup-cleanup
     </pre>
 
