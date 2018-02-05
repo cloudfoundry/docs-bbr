@@ -86,11 +86,11 @@ Perform the following steps to check that your BOSH Director is reachable and ha
 
 2. Run the BBR pre-backup check:
 
-    <code>BOSH_CLIENT_SECRET=BOSH_CLIENT_SECRET bbr deployment --target BOSH-TARGET --username BOSH-CLIENT --deployment DEPLOYMENT-NAME --ca-cert PATH-TO-BOSH-SERVER-CERT pre-backup-check</code>
+    <code>BOSH_CLIENT_SECRET=BOSH-CLIENT-SECRET bbr deployment --target BOSH-TARGET --username BOSH-CLIENT --deployment DEPLOYMENT-NAME --ca-cert PATH-TO-BOSH-SERVER-CERT pre-backup-check</code>
 
     <br>Where:<br><br>
 
-    `BOSH_CLIENT_SECRET`: If you have a BOSH Director with User Account and Authentication (UAA) as the authentication provider, 
+    `BOSH-CLIENT-SECRET`: If you have a BOSH Director with User Account and Authentication (UAA) as the authentication provider, 
                           this is a UAA client secret as the password.<br>
                           If you have a BOSH Director with basic auth configured, this is your password.<br><br>
 
@@ -112,7 +112,7 @@ Perform the following steps to check that your BOSH Director is reachable and ha
     For example,
 
     <pre class="terminal">
-  $ BOSH_CLIENT_SECRET=BOSH_CLIENT_SECRET \
+  $ BOSH_CLIENT_SECRET=p455w0rd \
       bbr deployment \
       --target bosh.example.com \
       --username admin \
@@ -131,7 +131,7 @@ Perform the following steps to check that your BOSH Director is reachable and ha
 
 4. If the pre-backup check succeeds, run the BBR backup command from your jumpbox to back up your BOSH deployment:
 
-    <code>BOSH_CLIENT_SECRET=BOSH_CLIENT_SECRET nohup bbr deployment --target BOSH-DIRECTOR-IP --username BOSH-CLIENT --deployment DEPLOYMENT-NAME --ca-cert PATH-TO-BOSH-SERVER-CERT backup</code>
+    <code>BOSH_CLIENT_SECRET=BOSH-CLIENT-SECRET nohup bbr deployment --target BOSH-DIRECTOR-IP --username BOSH-CLIENT --deployment DEPLOYMENT-NAME --ca-cert PATH-TO-BOSH-SERVER-CERT backup</code>
 
     Replace the placeholder values with the same values as above.<br><br>
 
@@ -142,7 +142,7 @@ Perform the following steps to check that your BOSH Director is reachable and ha
     For example,
 
     <pre class="terminal">
-    $ BOSH_CLIENT_SECRET=BOSH_CLIENT_SECRET \
+    $ BOSH_CLIENT_SECRET=p455w0rd \
         nohup bbr deployment \
         --target bosh.example.com \
         --username admin \
@@ -211,12 +211,12 @@ Follow the steps below to use the BBR cleanup script to tidy up after a failed b
 
 1. If the BOSH deployment backup failed, run the following command:
 
-    <code>BOSH_CLIENT_SECRET=BOSH_CLIENT_SECRET bbr deployment --target BOSH-TARGET --username BOSH-CLIENT --deployment DEPLOYMENT-NAME --ca-cert PATH-TO-BOSH-CA-CERT backup-cleanup</code>
+    <code>BOSH_CLIENT_SECRET=BOSH-CLIENT-SECRET bbr deployment --target BOSH-TARGET --username BOSH-CLIENT --deployment DEPLOYMENT-NAME --ca-cert PATH-TO-BOSH-CA-CERT backup-cleanup</code>
 
     For example,
 
     <pre class="terminal">
-    $ BOSH_CLIENT_SECRET=BOSH_CLIENT_SECRET \
+    $ BOSH_CLIENT_SECRET=p455w0rd \
     bbr deployment \
     --target bosh.example.com \
     --username admin \
