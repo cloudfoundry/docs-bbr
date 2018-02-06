@@ -6,10 +6,8 @@ owner: BBR
 This topic describes how to enable an external blobstore so that it can be backed up
 and restored by BOSH Backup and Restore (BBR). 
 
-If your external blobstore is hosted on Amazon S3 or a compatible storage solution that supports S3 versioning,
-`cf-deployment` provides support for it to be backed up and restored by BBR.<br>
-OR<br>
-If your external blobstore is hosted on Amazon S3 or a compatible storage solution that supports S3 versioning, 
+If your external blobstore is hosted on Amazon S3 or a compatible storage solution that supports S3 versioning
+and AWS Signature Version 4,
 it can be backed up and restored by BBR.
 
 The backup artifact only contains references to versions of blobs, not the actual files.
@@ -21,7 +19,8 @@ For how to restore from a replica, see [Restore from Replicas](#restore-from-rep
 
 ## <a id="enable-versioning"></a> Enable Versioning on Your External Blobstore
 
-BBR only supports the backup and restore of blobstores stored in versioned, S3-compatible buckets.
+BBR only supports the backup and restore of blobstores stored in versioned, S3-compatible buckets
+that support AWS Signature Version 4.
 
 To enable versioning of S3 buckets, do the following:
 
@@ -48,7 +47,8 @@ to enable versioning.
 
 ## <a id="enable-backup-and-restore"></a> Enable Backup and Restore of External Blobstores
 
-To back up a Cloud Foundry deployment that uses an S3-compatible blobstore, do the following:
+To back up a Cloud Foundry deployment that uses an S3-compatible blobstore that supports AWS Signature Version 4,
+do the following:
 
 1. Colocate the `s3-versioned-blobstore-backup-restorer` job from the
 [`backup-and-restore-sdk-release`](https://github.com/cloudfoundry-incubator/backup-and-restore-sdk-release/tree/master)
