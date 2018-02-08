@@ -15,10 +15,9 @@ and, if necessary, how to prepare the backup artifact for restore.
 
 The backup artifact only contains references to versions of blobs, not the actual files.
 As a consequence, **restores only work if the original bucket still exists**.
-If the bucket gets deleted, all its versions are deleted with it,
+If the bucket gets deleted, all its versions are deleted with it
 and you cannot restore it unless you have a replica. 
 For how to restore from a replica, see [Restore from Replicas](#restore-from-replicas) below.
-
 
 ## <a id="enable-versioning"></a> Enable Versioning on Your External Blobstore
 
@@ -44,34 +43,31 @@ to enable versioning.
     This ensures that each file in your buckets has a valid version ID.
 
 <p class="note"><strong>Note</strong>: If your blobstore uses S3-compatible buckets not from Amazon, 
-then, see the documentation for that storage provider to enable versioning.</p>
+see the documentation for that storage provider to enable versioning.</p>
 
 ## <a id="enable-backup-and-restore"></a> Enable Backup and Restore of External Blobstores
 
-To back up a Cloud Foundry deployment that uses an S3-compatible blobstore that supports AWS Signature Version 4,
-do the following:
+To back up a Cloud Foundry deployment that uses an external blobstore,
+you must colocate the `s3-versioned-blobstore-backup-restorer` job
+from [`backup-and-restore-sdk-release`](https://github.com/cloudfoundry-incubator/backup-and-restore-sdk-release/tree/master) as part of your deployment.
 
-Step 2 gives the exact ops files method to do the colocation. 
-However, if not ops files, then you need to the co-location in the manner (downloading a manifest)
-that you normally use.
+This procedure describes how to do this if you are using ops files to customize your deployment:
 
-1. Colocate the `s3-versioned-blobstore-backup-restorer` job from the
-[`backup-and-restore-sdk-release`](https://github.com/cloudfoundry-incubator/backup-and-restore-sdk-release/tree/master)
-as part of your deployment.
+1. Verify that your blobstore is one of the following:
+   + Amazon S3 buckets with versioning enabled.
+     See [Enable Versioning on Your External Blobstore](#enable-versioning) above.
+   + S3-compatible buckets with versioning enabled and support for AWS Signature Version 4.
 
-1. Verify that the buckets in the blobstore are one of the followings:
+2. Include the `enable-backup-restore-s3.yml` ops file in your deployment.
 
-   Amazon S3 versioned as above
-   S3-compatabile versioned and signaure
- 
-2. If you are using [`cf-deployment`](https://github.com/cloudfoundry/cf-deployment), 
-   include the `enable-backup-restore-s3.yml` ops file in your deployment.
-
-  <p class="note"><strong>Note</strong>: Apply <code>enable-backup-restore.yml</code> and <code>use-s3-blobstore.yml</code>
+    <p class="note"><strong>Note</strong>: Apply <code>enable-backup-restore.yml</code> and <code>use-s3-blobstore.yml</code>
        before <code>enable-backup-restore-s3.yml</code>.
        See <a href="cf-backup.html#order">Apply Ops Files in the Correct Order</a>.</p>
 
-Even if you do not use `cf-deployment`, review the ops file for examples of how to configure the job.
+If you do not use ops files for customization,
+you can still customize your Cloud Foundry to use BBR.
+Examine the contents of the ops file,
+and use it as a guide to customize your deployment manifest directly.
 
 ## <a id="supported-restore-scenarios"></a> Supported Restore Scenarios
 
@@ -81,61 +77,64 @@ There are three distinct restore scenarios:
 + [Restore to New Buckets](#restore-to-new-buckets)
 + [Restore from Replicas](#restore-from-replicas)
 
+Make sure that you understand which scenario applies to you before beginning a restore.
+
 ### <a id="in-place-restore"></a> In-Place Restore
 When backing up an
 external blobstore, the backup consists of a snapshot of the objects' IDs and versions.
-If your destination Cloud Foundry for a restore uses the original buckets of the backed-up Cloud Foundry (i.e. you
-are doing an in-place restore), then during a restore
-those versions are retrieved and set to be the current versions in the buckets.
+If your destination Cloud Foundry for a restore uses the original buckets of the backed-up Cloud Foundry,
+that is, you are doing an in-place restore),
+then, during a restore, those versions are retrieved and set to be the current versions in the buckets.
 
 ### <a id="restore-to-new-buckets"></a> Restore to New Buckets
 
-If your destination Cloud Foundry for a restore uses different buckets then you can also restore into
-those buckets, if the original buckets still exist.
-During restore the original versions are copied from the original buckets to the destination buckets.
+If your destination Cloud Foundry for a restore uses different buckets,
+then you can also restore into those buckets, if the original buckets still exist.
+During restore, the original versions are copied from the original buckets to the destination buckets.
 
-The destination buckets must be versioned. (cross-reference Enable Versioning on Your External Blobstore)
+The destination buckets must be versioned.
+For how to version an Amazon S3 blobstore, see [Enable Versioning on Your External Blobstore](#enable-versioning) above.
 
-Ensure that the `s3-versioned-blobstore-backup-restorer` job is configured to point to the
-destination buckets, and then run the `bbr` `restore` command.
-
-Ensure that the deployed `s3-versioned-blobstore-backup-restorer` job is configured to point to the
-destination buckets, and then run the `bbr` `restore` command.
+Before restoring, ensure that the `s3-versioned-blobstore-backup-restorer` job is configured to point to the
+destination buckets.
 
 ### <a id="restore-from-replicas"></a> Restore from Replicas
 
-To protect yourself from losing your blobstore buckets, set up [Cross-Region Replication](https://docs.aws.amazon.com/AmazonS3/latest/dev/crr.html).
+To protect yourself from losing your blobstore buckets,
+set up [Cross-Region Replication](https://docs.aws.amazon.com/AmazonS3/latest/dev/crr.html).
 Replication results in buckets that are identical to the original ones, including their version IDs.
-This allowss you to perform restores from the replicas, in case your original buckets are lost.
+This allows you to perform restores from the replicas, in case your original buckets are lost.
 
-To do so, you need to modify your backup artifacts to point to the replicas:
+If you need to restore from replicas, you must modify the backup artifacts to point to the replicas
+before beginning a restore. 
 
-- move into the backup artifact directory
-- extract the blobstore backup archive:
+To modify the backup artifacts, do the following: 
 
-```
-tar xvf BLOBSTORE-ARTIFACT.tar
-```
+1. Change into the backup artifact directory.
 
-For example
-```
-tar xvf backup-restore-0-s3-versioned-blobstore-backup-restorer.tar
-```
+2. Run the following command to extract the blobstore backup archive:
+
+    <code>tar xvf BLOBSTORE-ARTIFACT.tar</code>
+
+    For example,
+
+    <pre class="terminal">$ tar xvf backup-restore-0-s3-versioned-blobstore-backup-restorer.tar</pre>
 
 
-- modify the `blobstore.json` to point to the replicated buckets
-- recalculate the shasum of `blobstore.json`
+3. Modify the `blobstore.json` to point to the replicated buckets.
 
-```
-shasum -a 256 blobstore.json
-```
+4. Run the following command to recalculate the shasum of `blobstore.json`:
 
-- update the metadata file entry for that `blobstore.json` with the new checksum.
+    <code>shasum -a 256 blobstore.json</code>
 
-- recreate the archive
+5. Update the metadata file entry for that `blobstore.json` with the new checksum.
 
-```
-tar cvf backup-restore-0-s3-versioned-blobstore-backup-restorer.tar blobstore.json
-```
+6. Run the following command to recreate the archive:
+
+    <code>tar cvf BLOBSTORE-ARTIFACT.tar blobstore.json</code>
+
+    For example, 
+
+    <pre class="terminal">$ tar cvf backup-restore-0-s3-versioned-blobstore-backup-restorer.tar blobstore.json</pre>
 
 The backup artifact is now ready to be restored from the replicated buckets.
