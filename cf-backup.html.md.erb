@@ -1,11 +1,14 @@
 ---
-title: Configuring Cloud Foundry for BOSH Backup and Restore
+title: Configuring Cloud Foundry for BOSH Backup and Restore (Experimental)
 owner: BBR
 ---
 
 This topic describes the configuration you need for your Cloud Foundry deployment to work with BOSH Backup and Restore (BBR).
 
 This topic assumes the use of ops files to customize your Cloud Foundry deployment.
+
+<p class="note warning"><strong>WARNING</strong>: The <code>enable-backup-restore.yml</code>, <code>enable-backup-restore-s3.yml</code>, <code>enable-nfs-broker-backup.yml</code>,
+and <code>enable-backup-restore-credhub.yml</code> ops files are currently experimental and should be used with caution.</p>
 
 If you do not use ops files for customization, 
 you can still customize your Cloud Foundry to use BBR. 
