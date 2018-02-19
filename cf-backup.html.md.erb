@@ -19,8 +19,6 @@ you can still customize your Cloud Foundry to use BBR.
 Examine the contents of the ops files on this page,
 and use them as a guide to customize your deployment manifest directly.
 
-The repository for the Cloud Foundry deployment is [cf-deployment](https://github.com/cloudfoundry/cf-deployment).
-
 <div class="note warning">
   <strong>WARNING</strong>:
   <ul>
@@ -42,10 +40,10 @@ Unless otherwise stated, the described functionality is available in `cf-deploym
 
 Your CF deployment is compatible with BBR if the following requirements are met:
 
-  + An `enable-backup-restore.yml` ops file is deployed.</li>
-  + An internal MySQL database is present.</li>
-  + An internal WebDAV/NFS blobstore is present.</li>
-  + No optional components, such as a runtime CredHub store or an NFS volume service, are deployed.</li>
+  + An `enable-backup-restore.yml` ops file is deployed.
+  + An internal MySQL database is present.
+  + An internal WebDAV/NFS blobstore is present.
+  + No optional components, such as a runtime CredHub store or an NFS volume service, are deployed.
 
 If your CF deployment does not fit the above requirements, 
 then you might be able to use BBR by applying additional ops files as described in the table below
@@ -108,7 +106,7 @@ and by using a later version of `cf-deployment`.
 Select the ops files you need and apply them in the following order:
 
 <p class="note"><strong>Note</strong>: This is the <em>relative</em> order.
-You do not have to apply all ops files listed below. You can also apply other ops files in between.<br>
+You do not have to apply all ops files listed below and you can apply other ops files in between.<br>
 For example, you can apply an ops file between <code>use-external-dbs.yml</code> and <code>enable-backup-restore.yml</code>,
 but do not apply <code>enable-backup-restore.yml</code> <em>before</em> <code>use-external-dbs.yml</code>.
 </p>
