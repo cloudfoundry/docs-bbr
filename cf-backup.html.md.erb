@@ -9,10 +9,12 @@ to work with BOSH Backup and Restore (BBR).
 This topic assumes that you are using [cf-deployment](https://github.com/cloudfoundry/cf-deployment) 
 with ops files for your Cloud Foundry deployment.
 
-<p class="note warning"><strong>WARNING</strong>: The <code>enable-backup-restore.yml</code>, 
+<p class="note warning">
+  <strong>WARNING</strong>: The <code>enable-backup-restore.yml</code>, 
   <code>enable-backup-restore-s3.yml</code>, <code>enable-nfs-broker-backup.yml</code>, 
   and <code>enable-backup-restore-credhub.yml</code> ops files are currently 
-  experimental and should be used with caution.</p>
+  experimental and should be used with caution.
+</p>
 
 If you do not use ops files for customization, 
 you can still customize your Cloud Foundry to use BBR. 
@@ -34,7 +36,8 @@ and use them as a guide to customize your deployment manifest directly.
   </ul>
 </div>
 
-## <a id='configure-cf'></a> Supported CF Configurations
+
+## <a id='configure-cf'></a>Supported CF Configurations
 
 Unless otherwise stated, the described functionality is available in `cf-deployment` v1.3.0 and later.
 
