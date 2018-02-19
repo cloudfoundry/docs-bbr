@@ -3,11 +3,16 @@ title: Configuring Cloud Foundry for BOSH Backup and Restore (Experimental)
 owner: BBR
 ---
 
-This topic describes the configuration you need for your Cloud Foundry deployment to work with BOSH Backup and Restore (BBR).
+This topic describes the configuration you need for your Cloud Foundry deployment 
+to work with BOSH Backup and Restore (BBR).
 
-This topic assumes the use of ops files to customize your Cloud Foundry deployment.
+This topic assumes that you are using [cf-deployment](https://github.com/cloudfoundry/cf-deployment) 
+with ops files for your Cloud Foundry deployment.
 
-<p class="note warning"><strong>WARNING</strong>: The <code>enable-backup-restore.yml</code>, <code>enable-backup-restore-s3.yml</code>, <code>enable-nfs-broker-backup.yml</code>, and <code>enable-backup-restore-credhub.yml</code> ops files are currently experimental and should be used with caution.</p>
+<p class="note warning"><strong>WARNING</strong>: The <code>enable-backup-restore.yml</code>, 
+  <code>enable-backup-restore-s3.yml</code>, <code>enable-nfs-broker-backup.yml</code>, 
+  and <code>enable-backup-restore-credhub.yml</code> ops files are currently 
+  experimental and should be used with caution.</p>
 
 If you do not use ops files for customization, 
 you can still customize your Cloud Foundry to use BBR. 
@@ -25,7 +30,7 @@ The repository for the Cloud Foundry deployment is [cf-deployment](https://githu
         For the generic method of restoring a deployment, see <a href="restore.html">Restoring with BOSH Backup and Restore</a>.</li>
     <li><strong>Developers are unable to push apps for a few minutes during backup and restore.</strong>
         This is because the Cloud Controller API (CC API) stops sending and receiving calls
-        for part of the process, for example, between the <code>pre-backup-lock</code> and <code>post-backup-unlock</code> stages.</li>
+        between the <code>pre-backup-lock</code> and <code>post-backup-unlock</code> stages of the process.</li>
     <li><strong>BBR does not back up any service data.</strong>
         Back up Service data, such as Redis or RabbitMQ data, separately.</li>
   </ul>
@@ -54,30 +59,44 @@ and by using a later version of `cf-deployment`.
     <th>And…</th>
   </tr>
   <tr>
-    <td>An external MySQL database (with a MariaDB 10.1 engine*) hosted on RDS using <code>use-external-dbs.yml</code></td>
-    <td><a href="https://github.com/cloudfoundry/cf-deployment/blob/master/operations/use-external-dbs.yml"><code>use-external-dbs.yml</code></a></td>
+    <td>An external MySQL database (with a MariaDB 10.1 engine*) hosted on RDS using 
+      <code>use-external-dbs.yml</code></td>
+    <td><a href="https://github.com/cloudfoundry/cf-deployment/blob/master/operations/use-external-dbs.yml">
+      <code>use-external-dbs.yml</code></a></td>
     <td><em>n/a</em></td>
   </tr>
   <tr>
-    <td>An external blobstore hosted on Amazon S3 or a compatible storage solution that supports S3 versioning
-        and AWS Signature Version 4<br>
-        <code>use-s3-blobstore.yml</code>
+    <td>
+      An external blobstore hosted on Amazon S3 or a compatible storage solution that supports S3 versioning
+      and AWS Signature Version 4<br>
+      <code>use-s3-blobstore.yml</code>
     </td>
-    <td><code>enable-backup-restore-s3.yml</code><br>
+    <td>
+      <a href="https://github.com/cloudfoundry/cf-deployment/blob/master/operations/experimental/enable-backup-restore-s3.yml">
+        <code>enable-backup-restore-s3.yml</code></a>
     </td>
-    <td><code>cf-deployment</code> v1.4.0 or later.<br>
-        For instructions, see <a href="external-blobstores.html">Backup and Restore with External Blobstores</a>.
-     </td>
+    <td>
+      <code>cf-deployment</code> v1.4.0 or later.<br>
+      For instructions, see <a href="external-blobstores.html">Backup and Restore with External Blobstores</a>.
+    </td>
   </tr>
   <tr>
-    <td>An NFS volume service component<br>
-<code>enable-nfs-volume-service.yml</code></td>
-    <td><a href="https://github.com/cloudfoundry/cf-deployment/blob/master/operations/experimental/enable-nfs-broker-backup.yml"><code>enable-nfs-broker-backup.yml</code></a></td>
+    <td>
+      An NFS volume service component<br>
+      <code>enable-nfs-volume-service.yml</code>
+    </td>
+    <td>
+      <a href="https://github.com/cloudfoundry/cf-deployment/blob/master/operations/experimental/enable-nfs-broker-backup.yml">
+      <code>enable-nfs-broker-backup.yml</code></a>
+    </td>
     <td><em>n/a</em></td>
   </tr>
   <tr>
     <td>CredHub data store component<br> <code>secure-service-credentials.yml</code></td>
-    <td><a href="https://github.com/cloudfoundry/cf-deployment/blob/master/operations/experimental/enable-backup-restore-credhub.yml"><code>enable-backup-restore-credhub.yml</code></a></td>
+    <td>
+      <a href="https://github.com/cloudfoundry/cf-deployment/blob/master/operations/experimental/enable-backup-restore-credhub.yml">
+      <code>enable-backup-restore-credhub.yml</code></a>
+    </td>
     <td><em>n/a</em></td>
   </tr>
 </table>
@@ -86,7 +105,13 @@ and by using a later version of `cf-deployment`.
 
 ## <a id="order"></a> Apply Ops Files in the Correct Order
 
-Apply the ops files in the following order:
+Select the ops files you need and apply them in the following order:
+
+<p class="note"><strong>Note</strong>: This is the <em>relative</em> order.
+You do not have to apply all ops files listed below. You can also apply other ops files in between.<br>
+For example, you can apply an ops file between <code>use-external-dbs.yml</code> and <code>enable-backup-restore.yml</code>,
+but do not apply <code>enable-backup-restore.yml</code> <em>before</em> <code>use-external-dbs.yml</code>.
+</p>
 
 1. `use-s3-blobstore.yml`
 
@@ -100,11 +125,6 @@ Apply the ops files in the following order:
 
 1. `enable-backup-restore-credhub.yml`
 
-<p class="note"><strong>Note</strong>: This is the <em>relative</em> order.
-You can apply other ops files in between.<br>
-For example, you can apply an ops file between <code>use-external-dbs.yml</code> and <code>enable-backup-restore.yml</code>,
-but do not apply <code>enable-backup-restore.yml</code> <em>before</em> <code>use-external-dbs.yml</code>.
-</p>
 
 ## <a id='process'></a> Next Steps
 
