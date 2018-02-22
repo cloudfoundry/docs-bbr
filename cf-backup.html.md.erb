@@ -60,7 +60,7 @@ and by using a later version of `cf-deployment`.
     <th>And…</th>
   </tr>
   <tr>
-    <td>An external MySQL database (with a MariaDB 10.1 engine*) hosted on RDS using 
+    <td>A <a href="cf-backup.html#supported-external-databases">supported external database</a>
       <code>use-external-dbs.yml</code></td>
     <td><a href="https://github.com/cloudfoundry/cf-deployment/blob/master/operations/use-external-dbs.yml">
       <code>use-external-dbs.yml</code></a></td>
@@ -102,7 +102,18 @@ and by using a later version of `cf-deployment`.
   </tr>
 </table>
 
-\* Support for RDS with a MySQL 5.5, 5.6, and 5.7 engine is coming soon.
+### <a id='supported-external-databases'></a>Supported External Databases
+Cloud foundry components use the backup and restore sdk to interface with databases for backup and restore, which supports the following database versions:
+
+| Name     | Version |
+|:---------|:--------|
+| MariaDB  | 10.1.x  |
+| MySQL    | 5.5.x   |
+| MySQL    | 5.6.x   |
+| MySQL    | 5.7.x   |
+| Postgres | 9.4.x   |
+| Postgres | 9.6.x   |
+
 
 ## <a id="order"></a> Apply Ops Files in the Correct Order
 
