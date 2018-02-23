@@ -26,9 +26,12 @@ and in S3-compatible buckets that are versioned and support AWS Signature Versio
 
 To enable versioning of Amazon S3 buckets, do the following:
 
-1. Follow the instructions in the Amazon S3 documentation, [How Do I Enable or Suspend Versioning for an S3 Bucket?]
-(https://docs.aws.amazon.com/AmazonS3/latest/user-guide/enable-versioning.html)
-to enable versioning.
+1. Follow the instructions in the Amazon S3 documentation, [How Do I Enable or
+Suspend Versioning for an S3
+Bucket?](https://docs.aws.amazon.com/AmazonS3/latest/user-guide/enable-versioning.html)
+to enable versioning. If you prefer to use the `aws` CLI, you can make use of
+the [`put-bucket-versioning`
+command](https://docs.aws.amazon.com/cli/latest/reference/s3api/put-bucket-versioning.html).
 
 2. If your blobstore buckets are not empty, run the following command on each one of them, using the
 [AWS CLI](https://aws.amazon.com/cli/):
@@ -58,7 +61,11 @@ while the backup artifact only contains identifiers.
 
 If the bucket gets deleted, all its versions are deleted with it, and you will
 not be able to restore it. To prevent this from happening, you can set up
-[Cross-Region Replication](https://docs.aws.amazon.com/AmazonS3/latest/dev/crr.html).
+[Cross-Region
+Replication](https://docs.aws.amazon.com/AmazonS3/latest/dev/crr.html) (see the
+[`put-bucket-replication`
+command](https://docs.aws.amazon.com/cli/latest/reference/s3api/put-bucket-replication.html)
+if you prefer to use the `aws` CLI).
 Replication results in buckets that are identical to the original ones,
 including their version identifiers. This allows you to perform restores from
 the replicas, in case your original buckets are lost. For how to restore from a
