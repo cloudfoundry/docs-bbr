@@ -14,7 +14,7 @@ and transfers the backup artifacts to and from the BOSH deployment or BOSH Direc
 
 For more information about installing and using BBR, see the [Installing BOSH Backup and Restore](installing.html), [Backing Up with BOSH Backup and Restore](backup.html), and [Restoring with BOSH Backup and Restore](restore.html) topics. Information for release authors and developers is also available in the [BOSH Backup and Restore Developer's Guide](bbr-devguide.html).
 
-For more information about backing up and restoring cf-deployment with BBR, see [Configuring Cloud Foundry for BOSH Backup and Restore](https://docs.cloudfoundry.org/bbr/cf-backup.html).
+For more information about backing up and restoring cf-deployment with BBR, see [Configuring Cloud Foundry for BOSH Backup and Restore](cf-backup.html).
 
 ## <a id='supported'></a>Supported Components
 
@@ -152,7 +152,7 @@ The arguments are:
 * `BOSH_CLIENT`, `BOSH_CLIENT_SECRET`: If you have a BOSH Director with User Account and Authentication (UAA) as the authentication provider, use a UAA client as the username and a UAA client secret as the password. If you have a BOSH Director with basic auth configured, use your username and password.
 * `--target`: This is the FQDN or IP address of your BOSH Director.
 * `--deployment`: This is the name of the deployment you want to back up. For a list of deployments, run `bosh deployments`.
-* `--ca-cert`: This is the path to the BOSH Director’s Certificate Authority (CA) certificate if the certificate is not verifiable by the local machine’s certificate chain.
+* `--ca-cert`: This is the path to the BOSH Director's Certificate Authority (CA) certificate if the certificate is not verifiable by the local machine's certificate chain.
 * `--artifact-path`: This is the path to the BOSH deployment backup artifact you want to restore from.
 
 ### Subcommands

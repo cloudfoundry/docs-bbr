@@ -187,7 +187,7 @@ See <a href="#metadata">Metadata Script</a> for information about the properties
 
 The release job can have a backup script that dumps the backup of the job's database to the directory specified by `$BBR_ARTIFACT_DIRECTORY`. For example, when backing up MySQL, this script can invoke the `mysqldump` binary for the MySQL adapter.
 
-There must be at least one job in the deployment providing a backup script. If there isn't a backup script, calling `backup` or `pre-backup-check` for the deployment will fail.
+There must be at least one job in the deployment providing a backup script. If there is no backup script, calling `backup` or `pre-backup-check` for the deployment will fail.
 
 #### Job Configuration
 
