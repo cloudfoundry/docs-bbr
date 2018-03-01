@@ -19,6 +19,10 @@ If the bucket gets deleted, all its versions are deleted with it
 and you cannot restore it unless you have a replica. 
 For how to restore from a replica, see [Restore from Replicas](#restore-from-replicas) below.
 
+<p class="note warning">
+  <strong>WARNING</strong>: For versions of the blobstore-backup-restorer from backup-and-restore-sdk v1.5.1 or earlier the backup and restore of an AWS S3 blobstore with individual blobs greater than 5GB will not work.
+</p>
+
 ## <a id="enable-versioning"></a> Enable Versioning on Your External Blobstore
 
 BBR only supports the backup and restore of blobstores stored in versioned, Amazon S3 buckets
