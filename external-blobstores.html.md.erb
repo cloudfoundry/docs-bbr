@@ -48,6 +48,10 @@ to enable versioning.
  
     This ensures that each file in your buckets has a valid version ID.
 
+3. After enabling versioning, for each object, you have a current version and zero or more noncurrent versions. 
+We recommend setting a retention policy on your buckets to delete old noncurrent versions and minimize storage costs. 
+See the <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/lifecycle-configuration-examples.html#lifecycle-config-conceptual-ex6">AWS documentation</a>.</p>
+
 <p class="note"><strong>Note</strong>: If your blobstore uses S3-compatible buckets not from Amazon, 
 see the documentation for that storage provider to enable versioning.</p>
 
