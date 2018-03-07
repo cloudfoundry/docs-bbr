@@ -10,8 +10,7 @@ If your external blobstore is hosted on Amazon S3 or a compatible storage soluti
 and AWS Signature Version 4,
 it can be backed up and restored by BBR.
 
-This topic also decribes the different restore scenarios for external blobstores
-and, if necessary, how to prepare the backup artifact for restore.
+This topic also describes the different restore scenarios for external blobstores and, if necessary, how to prepare the backup artifact for restore.
 
 The backup artifact only contains references to versions of blobs, not the actual files.
 As a consequence, **restores only work if the original bucket still exists**.
@@ -48,8 +47,8 @@ to enable versioning.
  
     This ensures that each file in your buckets has a valid version ID.
 
-3. After enabling versioning, for each object, you have a current version and zero or more noncurrent versions. 
-We recommend setting a retention policy on your buckets to delete old noncurrent versions and minimize storage costs. 
+3. After enabling versioning, for each object, you have a current version and zero or more non-current versions. 
+We recommend setting a retention policy on your buckets to delete old non-current versions and minimize storage costs. 
 See the <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/lifecycle-configuration-examples.html#lifecycle-config-conceptual-ex6">AWS documentation</a>.</p>
 
 <p class="note"><strong>Note</strong>: If your blobstore uses S3-compatible buckets not from Amazon, 
@@ -93,7 +92,7 @@ Make sure that you understand which scenario applies to you before beginning a r
 When backing up an
 external blobstore, the backup consists of a snapshot of the objects' IDs and versions.
 If your destination Cloud Foundry for a restore uses the original buckets of the backed-up Cloud Foundry,
-that is, you are doing an in-place restore),
+that is, you are doing an in-place restore,
 then, during a restore, those versions are retrieved and set to be the current versions in the buckets.
 
 ### <a id="restore-to-new-buckets"></a> Restore to New Buckets

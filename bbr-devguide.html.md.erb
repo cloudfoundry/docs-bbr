@@ -113,7 +113,7 @@ All `backup` scripts are invoked before the `post-backup-unlock` scripts on all 
 During the restore workflow, all `pre-restore-lock` scripts are invoked before the `restore` scripts on all of the jobs in the deployment.
 All `restore` scripts are invoked before the `post-restore-unlock` scripts on all of the jobs in the deployment.
 
-By default `pre-backup-lock` and `pre-restore-lock` scripts from different jobs are invoked in an arbitary order.
+By default `pre-backup-lock` and `pre-restore-lock` scripts from different jobs are invoked in an arbitrary order.
 If you want to specify an order for lock scripts from specific jobs you can do so in the metadata script.
 
 The `post-backup-unlock` and `post-restore-unlock` scripts from different jobs are invoked in an arbitrary order
@@ -342,7 +342,7 @@ A normal workflow for restoring a deployment does the following:
     validate-artifact --> check-deployment-exists(Check that the deployment exists)
     check-deployment-exists -- Yes --> check-deployment-matches-backup(Check the structure of the backup matches the destination deployment)
     check-deployment-exists -- No --> exit(Exit)
-    check-deployment-matches-backup -- Yes --> copy-to-remote(Copy the backup artifacts to the relevent VMs)
+    check-deployment-matches-backup -- Yes --> copy-to-remote(Copy the backup artifacts to the relevant VMs)
     check-deployment-matches-backup -- No --> cleanup(Cleanup, close ssh connections)
     copy-to-remote -- Success --> pre-restore-lock(Run pre-restore-lock scripts)
     copy-to-remote -- Failure --> cleanup
