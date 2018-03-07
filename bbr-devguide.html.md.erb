@@ -106,6 +106,10 @@ acme-release
 During the backup workflow, all `pre-backup-lock` scripts are invoked before the `backup` scripts on all of the jobs in the deployment.
 All `backup` scripts are invoked before the `post-backup-unlock` scripts on all of the jobs in the deployment.
 
+<p class="note">
+  <strong>Important</strong>: Both the <code>pre-backup-lock</code> and <code>post-backup-unlock</code> are called in parallel while respecting the locking order constraints.
+</p>
+
 During the restore workflow, all `pre-restore-lock` scripts are invoked before the `restore` scripts on all of the jobs in the deployment.
 All `restore` scripts are invoked before the `post-restore-unlock` scripts on all of the jobs in the deployment.
 
