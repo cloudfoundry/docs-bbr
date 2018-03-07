@@ -106,6 +106,10 @@ acme-release
 During the backup workflow, all `pre-backup-lock` scripts are invoked before the `backup` scripts on all of the jobs in the deployment.
 All `backup` scripts are invoked before the `post-backup-unlock` scripts on all of the jobs in the deployment.
 
+<p class="note">
+  <strong>Important</strong>: Both the <code>pre-backup-lock</code> and <code>post-backup-unlock</code> are called in parallel while respecting the locking order constraints.
+</p>
+
 During the restore workflow, all `pre-restore-lock` scripts are invoked before the `restore` scripts on all of the jobs in the deployment.
 All `restore` scripts are invoked before the `post-restore-unlock` scripts on all of the jobs in the deployment.
 
@@ -187,7 +191,7 @@ See <a href="#metadata">Metadata Script</a> for information about the properties
 
 The release job can have a backup script that dumps the backup of the job's database to the directory specified by `$BBR_ARTIFACT_DIRECTORY`. For example, when backing up MySQL, this script can invoke the `mysqldump` binary for the MySQL adapter.
 
-There must be at least one job in the deployment providing a backup script. If there isn't a backup script, calling `backup` or `pre-backup-check` for the deployment will fail.
+There must be at least one job in the deployment providing a backup script. If there is no backup script, calling `backup` or `pre-backup-check` for the deployment will fail.
 
 #### Job Configuration
 

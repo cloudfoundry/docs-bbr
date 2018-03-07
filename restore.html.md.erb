@@ -21,11 +21,11 @@ The restrictions for a backup artifact to be restorable are the following:
 + **Naming of instance groups and jobs**: For any deployment that implements the backup and restore scripts, the instance groups and jobs must have the same names.
 + **Number of instance groups and jobs**: For instance groups and jobs that have backup and restore scripts, there must be the same number of instances.
 + **Limited validation**: BBR puts the backed up data into the corresponding instance groups and jobs in the restored environment,
-    but can’t validate the restore beyond that.
+    but cannot validate the restore beyond that.
     For example, if the MySQL encryption key is different in the restore environment,
     the BBR restore might succeed although the restored MySQL database is unusable.
 
-<p class="note"><strong>Note</strong>: A change in VM size or underlying hardware should not affect BBR’s ability to restore data,
+<p class="note"><strong>Note</strong>: A change in VM size or underlying hardware should not affect BBR's ability to restore data,
 as long as there is adequate storage space to restore the data. </p>
 
 ## <a id="recreate-vms"></a> Step 1: Recreate VMs
@@ -99,7 +99,7 @@ Perform the following steps to restore a BOSH deployment:
     * `BOSH_CLIENT`, `BOSH_CLIENT_SECRET`: If you have a BOSH Director with User Account and Authentication (UAA) as the authentication provider, use a UAA client as the username and a UAA client secret as the password. If you have a BOSH Director with basic auth configured, use your username and password.
     * `BOSH_TARGET`: This is the FQDN or IP address of your BOSH Director.
     * `DEPLOYMENT-NAME`: This is the name of the deployment you want to restore.
-    * `PATH_TO_BOSH_CA_CERT`: This is the path to the BOSH Director’s Certificate Authority (CA) certificate if the certificate is not verifiable by the local machine’s certificate chain.
+    * `PATH_TO_BOSH_CA_CERT`: This is the path to the BOSH Director's Certificate Authority (CA) certificate if the certificate is not verifiable by the local machine's certificate chain.
 	* `PATH_TO_DEPLOYMENT_BACKUP`: This is the path to the BOSH deployment backup you want to restore.
 
 If the command fails, try [these steps](#recovering-from-failing-command)
