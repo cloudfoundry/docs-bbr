@@ -54,9 +54,9 @@ see the documentation for that storage provider to enable versioning.</p>
 
 ## <a id="enable-replication"></a> Enable Replication on Your External Blobstore
 
-BBR does not download your blobs to the backup artifact when performing a backup. Instead, BBR notes the _current version identifier_ of each blob and store those in the artifact.
+BBR does not download your blobs to the backup artifact when performing a backup. Instead, BBR notes the _current version identifier_ of each blob and stores the identifiers in the artifact.
 
-When restoring, BBR reverts your blobs to the original versions using the version identifiers stored in the artifact. Since the backup artifact contains only identifiers, not blobs, BBR can only restore the blobs if the original bucket containing the blob versions still exists.
+When restoring, BBR reverts your blobs to the original versions using the version identifiers. Since the backup artifact contains only identifiers, not blobs, BBR can only restore the blobs if the original bucket containing the blob versions still exists.
 
 If the bucket is deleted, all its versions are deleted with it, and you cannot restore using it. To prevent this from happening, set up [Cross-Region Replication](https://docs.aws.amazon.com/AmazonS3/latest/dev/crr.html). See the [`put-bucket-replication` command](https://docs.aws.amazon.com/cli/latest/reference/s3api/put-bucket-replication.html) if you prefer to use the AWS CLI.
 
