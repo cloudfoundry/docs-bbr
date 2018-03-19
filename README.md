@@ -73,11 +73,6 @@ This table lists the GitHub locations and URLs for all BBR documentation.
   <td>http://docs.cloudfoundry.org/bbr/bbr-rn.html</td>
 </tr>
 <tr>
-  <td>BBR release notes in PCF</td>
-  <td>https://github.com/cloudfoundry/docs-bbr/blob/master/bbr-rn.html.md.erb</td>
-  <td>https://docs.pivotal.io/pivotalcf/pcf-release-notes/bbr-pcf-rn.html</td>
-</tr>
-<tr>
   <td>PCF Tile Developer Guide subnav</td>
   <td>https://github.com/pivotal-cf/docs-book-tiledev/blob/master/master_middleman/source/subnavs/tiledev_subnav.erb</td>
   <td>https://docs.pivotal.io/tiledev</td>
