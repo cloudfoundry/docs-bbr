@@ -36,7 +36,6 @@ and use them as a guide to customize your deployment manifest directly.
   </ul>
 </div>
 
-
 ## <a id='configure-cf'></a>Supported CF Configurations
 
 Unless otherwise stated, the described functionality is available in `cf-deployment` v1.3.0 and later.
@@ -44,7 +43,7 @@ Unless otherwise stated, the described functionality is available in `cf-deploym
 Your CF deployment is compatible with BBR if the following requirements are met:
 
   + An `enable-backup-restore.yml` ops file is deployed.
-  + An internal MySQL database is present.
+  + An internal MySQL database or a <a href="cf-backup.html#supported-external-databases">supported external database</a> is present.
   + An internal WebDAV/NFS blobstore is present.
   + No optional components, such as a runtime CredHub store or an NFS volume service, are deployed.
 
@@ -58,13 +57,6 @@ and by using a later version of `cf-deployment`.
     <th>To use BBR with…</th>
     <th>Use this ops file…</th>
     <th>And…</th>
-  </tr>
-  <tr>
-    <td>A <a href="cf-backup.html#supported-external-databases">supported external database</a>
-      <code>use-external-dbs.yml</code></td>
-    <td><a href="https://github.com/cloudfoundry/cf-deployment/blob/master/operations/use-external-dbs.yml">
-      <code>use-external-dbs.yml</code></a></td>
-    <td><em>n/a</em></td>
   </tr>
   <tr>
     <td>
