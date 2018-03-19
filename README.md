@@ -11,10 +11,8 @@ This repo is published to the following locations:
 
 ### BBR Release Notes
 
-The BBR release notes are published to the following locations:
+The BBR release notes are published to http://docs.cloudfoundry.org/bbr/bbr-rn.html (OSS CF documentation)
 
-* http://docs.cloudfoundry.org/bbr/bbr-rn.html (OSS CF documentation)
-* https://docs.pivotal.io/pivotalcf/pcf-release-notes/bbr-pcf-rn.html (PCF documentation)
 
 ### The BOSH Backup and Restore Developer's Guide
 
