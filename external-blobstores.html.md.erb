@@ -90,6 +90,11 @@ This procedure describes how to do this if you are using ops files to customize 
      See [Enable Versioning on Your External Blobstore](#enable-versioning) above.
    + S3-compatible buckets with versioning enabled and support for AWS Signature Version 4.
 
+       <p class="note"><strong>Note</strong>: If your S3-compatible blobstore uses
+         a custom CA certificate, please refer to the BOSH documentation on
+         <a href="https://bosh.io/docs/trusted-certs.html">configuring trusted certificates</a>.
+         BBR will automatically make use of your configured trusted certificates.</p>
+
 2. Include the `enable-backup-restore-s3.yml` ops file in your deployment.
 
     <p class="note"><strong>Note</strong>: Apply <code>enable-backup-restore.yml</code> and <code>use-s3-blobstore.yml</code>
