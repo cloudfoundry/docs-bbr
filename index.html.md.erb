@@ -120,7 +120,7 @@ $ bbr director \
   --private-key-path PATH_TO_PRIVATE_KEY \
   --username USER_NAME \
   --host HOST \
-  SUB-COMMAND [--artifact-path PATH_TO_ARTIFACT_TO_RESTORE]
+  SUB-COMMAND [--artifact-path PATH_TO_ARTIFACT]
  ```
 
 The parameters are:
@@ -129,7 +129,7 @@ The parameters are:
 * `--private-key-path`: This is the path to the SSH private key used to connect to the BOSH Director.
 * `--username`: This is the SSH username of the BOSH Director.
 * `--host`: This is the address of the BOSH Director with an optional port that defaults to 22. If the BOSH Director is public, this is a URL, such as `https://my-bosh.xxx.cf-app.com`. Otherwise, this is the BOSH Director IP address.
-* `--artifact-path`: This is the path to the BOSH Director backup artifact you want to restore from.
+* `--artifact-path`: This is the path to the BOSH Director backup artifact you want to backup to or restore from.
 
 ### BOSH Deployment
 
@@ -143,7 +143,7 @@ $ BOSH_CLIENT_SECRET=BOSH_CLIENT_SECRET \
   --username BOSH_CLIENT \
   --deployment DEPLOYMENT_NAME \
   --ca-cert PATH_TO_BOSH_CA_CERTIFICATE \
-    SUB-COMMAND [--artifact-path PATH_TO_ARTIFACT_TO_RESTORE]
+    SUB-COMMAND [--artifact-path PATH_TO_ARTIFACT]
 ```
 
 The arguments are:
@@ -153,7 +153,7 @@ The arguments are:
 * `--target`: This is the FQDN or IP address of your BOSH Director.
 * `--deployment`: This is the name of the deployment you want to back up. For a list of deployments, run `bosh deployments`.
 * `--ca-cert`: This is the path to the BOSH Director's Certificate Authority (CA) certificate if the certificate is not verifiable by the local machine's certificate chain.
-* `--artifact-path`: This is the path to the BOSH deployment backup artifact you want to restore from.
+* `--artifact-path`: This is the path to the BOSH deployment backup artifact you want to backup to or restore from.
 
 ### Subcommands
 
