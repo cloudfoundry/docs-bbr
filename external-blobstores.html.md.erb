@@ -19,8 +19,7 @@ owner: BBR
 }
 </style>
 
-This topic describes how to configure an external blobstore so that it can be backed up
-and restored by BOSH Backup and Restore (BBR). 
+This topic describes configuring an external blobstore so that it can be backed up and restored by BOSH Backup and Restore (BBR). 
 
 If your external blobstore is hosted on Amazon S3 or a compatible storage solution that supports S3 versioning
 and AWS Signature Version 4,
@@ -90,10 +89,8 @@ This procedure describes how to do this if you are using ops files to customize 
      See [Enable Versioning on Your External Blobstore](#enable-versioning) above.
    + S3-compatible buckets with versioning enabled and support for AWS Signature Version 4.
 
-       <p class="note"><strong>Note</strong>: If your S3-compatible blobstore uses
-         a custom CA certificate, please refer to the BOSH documentation on
-         <a href="https://bosh.io/docs/trusted-certs.html">configuring trusted certificates</a>.
-         BBR will automatically make use of your configured trusted certificates.</p>
+       <p class="note"><strong>Note</strong>: If your S3-compatible blobstore uses a custom CA certificate, refer to <a href="https://bosh.io/docs/trusted-certs.html">Configuring Trusted Certificates</a> in the <a href="https://bosh.io/docs">BOSH documentation</a>.
+BBR automatically makes use of your configured trusted certificates.</p>
 
 2. Include the `enable-backup-restore-s3.yml` ops file in your deployment.
 
