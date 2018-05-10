@@ -3,15 +3,14 @@ title: Configuring Cloud Foundry for BOSH Backup and Restore
 owner: BBR
 ---
 
-This topic describes the configuration you need for your Cloud Foundry deployment
-to work with BOSH Backup and Restore (BBR).
+This topic describes the configuration you need for your Cloud Foundry (CF) deployment to work with BOSH Backup and Restore (BBR).
 
-This topic assumes that you are using [cf-deployment](https://github.com/cloudfoundry/cf-deployment)
-with ops files for your Cloud Foundry deployment.
+This topic assumes that you are using 
+[cf-deployment](https://github.com/cloudfoundry/cf-deployment) with ops files 
+for your Cloud Foundry deployment.
 
-If you do not use ops files for customization,
-you can still customize your Cloud Foundry to use BBR.
-Examine the contents of the ops files on this page,
+If you do not use ops files for customization, you can still customize your 
+Cloud Foundry to use BBR. Examine the contents of the ops files on this page,
 and use them as a guide to customize your deployment manifest directly.
 
 <div class="note warning">
@@ -19,7 +18,7 @@ and use them as a guide to customize your deployment manifest directly.
   <ul>
     <li><strong>Backup artifacts can contain secrets.</strong> Secure backup artifacts with encryption or by other means.</li>
     <li><strong>The restore is a destructive operation.</strong> BBR is designed to restore CF after a disaster.
-        If it fails, the environment can be left in an unusable state and require reprovisioning.
+        If it fails, the environment can be left in an unusable state and require re-provisioning.
         For the generic method of restoring a deployment, see <a href="restore.html">Restoring with BOSH Backup and Restore</a>.</li>
     <li><strong>Developers are unable to push apps for a few minutes during backup and restore.</strong>
         This is because the Cloud Controller API (CC API) stops sending and receiving calls
@@ -31,9 +30,11 @@ and use them as a guide to customize your deployment manifest directly.
 
 ## <a id='configure-cf'></a>Supported CF Configurations
 
-To enable backup and restore for your `cf-deployment`, deploy it with the [`enable-backup-restore.yml`](https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/enable-backup-restore.yml) ops file. This will enable BBR backup and restore for all the default CF components.
+To enable backup and restore for your `cf-deployment`, deploy it with the 
+[enable-backup-restore.yml](https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/enable-backup-restore.yml) ops file. This 
+enables BBR backup and restore for default CF components.
 
-To enable BBR backup and restore for different configurations you must in addition use the appropriate backup and restore ops files from this table:
+To enable BBR backup and restore for different configurations you must also use the appropriate backup and restore ops files as shown in this table:
 
 <table class="nice">
   <tr>
@@ -55,7 +56,7 @@ To enable BBR backup and restore for different configurations you must in additi
   </tr>
   <tr>
     <td>
-      An unversioned S3-compatible external blobstore. For instructions, see <a href="external-blobstores.html">Backup and Restore with External Blobstores</a>.
+      An un-versioned S3-compatible external blobstore. For instructions, see <a href="external-blobstores.html">Backup and Restore with External Blobstores</a>.
     </td>
     <td>
       <code>use-s3-blobstore.yml</code>
@@ -90,7 +91,7 @@ To enable BBR backup and restore for different configurations you must in additi
   </tr>
   <tr>
     <td>
-      Use CredHub for service credentials (experimental)<br>
+      Use CredHub for service credentials (Experimental)<br>
     </td>
     <td>
       <code>secure-service-credentials.yml</code>
@@ -103,6 +104,7 @@ To enable BBR backup and restore for different configurations you must in additi
 </table>
 
 ### <a id='supported-external-databases'></a>Supported External Databases
+
 Cloud Foundry components use the backup and restore SDK to interface with databases for backup and restore.
 The backup and restore SDK supports the following database versions:
 
@@ -144,12 +146,8 @@ but do not apply <code>enable-backup-restore.yml</code> <em>before</em> <code>us
 
 ## <a id='process'></a> Next Steps
 
-After Cloud Foundry is configured to be compatible with BBR,
-it can be backed up and restored.
+After you have configured Cloud Foundry to be compatible with BBR, you can back up and restore Cloud Foundry.
 
-Follow the procedures in [Back Up a BOSH Deployment](backup.html#back-up-deployment)
-and [Restore a BOSH Deployment](restore.html#restore-deployment).
+Follow the procedures in the [Back Up a BOSH Deployment](backup.html#back-up-deployment) section of _Backing Up with BOSH Backup and Restore_ and the [Restore a BOSH Deployment](restore.html#restore-deployment) section of _Restoring with BOSH Backup and Restore_.
 
-At minimum, run the pre-backup check against your Cloud Foundry deployment.
-Follow the first two steps of [Back Up a BOSH Deployment](./backup.html#back-up-deployment).
-This lists the scripts that run during a backup and the order that they are applied in.
+At minimum, run the pre-backup check against your Cloud Foundry deployment by following the first two steps of the [Back Up a BOSH Deployment](backup.html#back-up-deployment) section of _Backing Up with BOSH Backup. This lists the scripts that run during a backup and the order in which they are applied.
