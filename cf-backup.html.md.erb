@@ -1,23 +1,16 @@
 ---
-title: Configuring Cloud Foundry for BOSH Backup and Restore (Experimental)
+title: Configuring Cloud Foundry for BOSH Backup and Restore
 owner: BBR
 ---
 
-This topic describes the configuration you need for your Cloud Foundry deployment 
+This topic describes the configuration you need for your Cloud Foundry deployment
 to work with BOSH Backup and Restore (BBR).
 
-This topic assumes that you are using [cf-deployment](https://github.com/cloudfoundry/cf-deployment) 
+This topic assumes that you are using [cf-deployment](https://github.com/cloudfoundry/cf-deployment)
 with ops files for your Cloud Foundry deployment.
 
-<p class="note warning">
-  <strong>WARNING</strong>: The <code>enable-backup-restore.yml</code>, 
-  <code>enable-backup-restore-s3.yml</code>, <code>enable-nfs-broker-backup.yml</code>, 
-  and <code>enable-backup-restore-credhub.yml</code> ops files are currently 
-  experimental and should be used with caution.
-</p>
-
-If you do not use ops files for customization, 
-you can still customize your Cloud Foundry to use BBR. 
+If you do not use ops files for customization,
+you can still customize your Cloud Foundry to use BBR.
 Examine the contents of the ops files on this page,
 and use them as a guide to customize your deployment manifest directly.
 
@@ -38,59 +31,74 @@ and use them as a guide to customize your deployment manifest directly.
 
 ## <a id='configure-cf'></a>Supported CF Configurations
 
-Unless otherwise stated, the described functionality is available in `cf-deployment` v1.3.0 and later.
+To enable backup and restore for your `cf-deployment`, deploy it with the [`enable-backup-restore.yml`](https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/enable-backup-restore.yml) ops file. This will enable BBR backup and restore for all the default CF components.
 
-Your CF deployment is compatible with BBR if the following requirements are met:
-
-  + An `enable-backup-restore.yml` ops file is deployed.
-  + An internal MySQL database or a <a href="cf-backup.html#supported-external-databases">supported external database</a> is present.
-  + An internal WebDAV/NFS blobstore is present.
-  + No optional components, such as a runtime CredHub store or an NFS volume service, are deployed.
-
-If your CF deployment does not fit the above requirements, 
-then you might be able to use BBR by applying additional ops files as described in the table below
-and by using a later version of `cf-deployment`. 
-
+To enable BBR backup and restore for different configurations you must in addition use the appropriate backup and restore ops files from this table:
 
 <table class="nice">
   <tr>
-    <th>To use BBR with…</th>
-    <th>Use this ops file…</th>
-    <th>And…</th>
+    <th>Configuration</th>
+    <th>Configuration Ops File</th>
+    <th>Backup and Restore Ops File</th>
   </tr>
   <tr>
     <td>
-      An external blobstore hosted on Amazon S3 or a compatible storage solution that supports S3 versioning
-      and AWS Signature Version 4<br>
+      A versioned S3-compatible external blobstore. For instructions, see <a href="external-blobstores.html">Backup and Restore with External Blobstores</a>.
+    </td>
+    <td>
       <code>use-s3-blobstore.yml</code>
     </td>
     <td>
-      <a href="https://github.com/cloudfoundry/cf-deployment/blob/master/operations/experimental/enable-backup-restore-s3.yml">
-        <code>enable-backup-restore-s3.yml</code></a>
-    </td>
-    <td>
-      <code>cf-deployment</code> v1.4.0 or later.<br>
-      For instructions, see <a href="external-blobstores.html">Backup and Restore with External Blobstores</a>.
+      <a href="https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/enable-backup-restore-s3-versioned.yml">
+        <code>enable-backup-restore-s3-versioned.yml</code></a>
     </td>
   </tr>
   <tr>
     <td>
-      An NFS volume service component<br>
+      An unversioned S3-compatible external blobstore. For instructions, see <a href="external-blobstores.html">Backup and Restore with External Blobstores</a>.
+    </td>
+    <td>
+      <code>use-s3-blobstore.yml</code>
+    </td>
+    <td>
+      <a href="https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/enable-backup-restore-s3-unversioned.yml">
+        <code>enable-backup-restore-s3-unversioned.yml</code></a>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      A <a href="#supported-external-databases">supported external database</a>
+    </td>
+    <td>
+      <code>use-external-dbs.yml</code>
+    </td>
+    <td>
+      No BBR ops file required
+    </td>
+  </tr>
+  <tr>
+    <td>
+      An NFS broker and volume driver for volume support
+    </td>
+    <td>
       <code>enable-nfs-volume-service.yml</code>
     </td>
     <td>
-      <a href="https://github.com/cloudfoundry/cf-deployment/blob/master/operations/experimental/enable-nfs-broker-backup.yml">
-      <code>enable-nfs-broker-backup.yml</code></a>
+      <a href="https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/enable-backup-restore-nfs-broker.yml">
+      <code>enable-backup-restore-nfs-broker.yml</code></a>
     </td>
-    <td><em>n/a</em></td>
   </tr>
   <tr>
-    <td>CredHub data store component<br> <code>secure-service-credentials.yml</code></td>
     <td>
-      <a href="https://github.com/cloudfoundry/cf-deployment/blob/master/operations/experimental/enable-backup-restore-credhub.yml">
+      Use CredHub for service credentials (experimental)<br>
+    </td>
+    <td>
+      <code>secure-service-credentials.yml</code>
+    </td>
+    <td>
+      <a href="https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/enable-backup-restore-credhub.yml">
       <code>enable-backup-restore-credhub.yml</code></a>
     </td>
-    <td><em>n/a</em></td>
   </tr>
 </table>
 
@@ -121,24 +129,27 @@ but do not apply <code>enable-backup-restore.yml</code> <em>before</em> <code>us
 1. `use-s3-blobstore.yml`
 
 1. `use-external-dbs.yml`
- 
+
+1. `enable-nfs-volume-service.yml`
+
+1. `secure-service-credentials.yml`
+
 1. `enable-backup-restore.yml`
 
-1. `enable-backup-restore-s3.yml`
+1. `enable-backup-restore-s3-versioned.yml` or `enable-backup-restore-s3-unversioned.yml`
 
-1. `enable-nfs-broker-backup.yml`
+1. `enable-backup-restore-nfs-broker.yml`
 
 1. `enable-backup-restore-credhub.yml`
-
 
 ## <a id='process'></a> Next Steps
 
 After Cloud Foundry is configured to be compatible with BBR,
-it can be backed up and restored. 
+it can be backed up and restored.
 
 Follow the procedures in [Back Up a BOSH Deployment](backup.html#back-up-deployment)
 and [Restore a BOSH Deployment](restore.html#restore-deployment).
 
 At minimum, run the pre-backup check against your Cloud Foundry deployment.
-Follow the first two steps of [Back Up a BOSH Deployment](./backup.html#back-up-deployment). 
+Follow the first two steps of [Back Up a BOSH Deployment](./backup.html#back-up-deployment).
 This lists the scripts that run during a backup and the order that they are applied in.
