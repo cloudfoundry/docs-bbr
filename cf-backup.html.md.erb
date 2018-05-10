@@ -65,11 +65,26 @@ and by using a later version of `cf-deployment`.
       <code>use-s3-blobstore.yml</code>
     </td>
     <td>
-      <a href="https://github.com/cloudfoundry/cf-deployment/blob/master/operations/experimental/enable-backup-restore-s3.yml">
-        <code>enable-backup-restore-s3.yml</code></a>
+      <a href="https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/enable-backup-restore-s3-versioned.yml">
+        <code>enable-backup-restore-s3-versioned.yml</code></a>
     </td>
     <td>
       <code>cf-deployment</code> v1.4.0 or later.<br>
+      For instructions, see <a href="external-blobstores.html">Backup and Restore with External Blobstores</a>.
+    </td>
+  </tr>
+  <tr>
+    <td>
+      An external blobstore hosted on Amazon S3 or a compatible storage solution that does not have versioning enabled 
+      and AWS Signature Version 4<br>
+      <code>use-s3-blobstore.yml</code>
+    </td>
+    <td>
+      <a href="https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/enable-backup-restore-s3-unversioned.yml">
+        <code>enable-backup-restore-s3-unversioned.yml</code></a>
+    </td>
+    <td>
+      <code>cf-deployment</code> v1.29.0 or later.<br>
       For instructions, see <a href="external-blobstores.html">Backup and Restore with External Blobstores</a>.
     </td>
   </tr>
@@ -79,7 +94,7 @@ and by using a later version of `cf-deployment`.
       <code>enable-nfs-volume-service.yml</code>
     </td>
     <td>
-      <a href="https://github.com/cloudfoundry/cf-deployment/blob/master/operations/experimental/enable-nfs-broker-backup.yml">
+      <a href="https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/enable-nfs-broker-backup.yml">
       <code>enable-nfs-broker-backup.yml</code></a>
     </td>
     <td><em>n/a</em></td>
@@ -87,7 +102,7 @@ and by using a later version of `cf-deployment`.
   <tr>
     <td>CredHub data store component<br> <code>secure-service-credentials.yml</code></td>
     <td>
-      <a href="https://github.com/cloudfoundry/cf-deployment/blob/master/operations/experimental/enable-backup-restore-credhub.yml">
+      <a href="https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/enable-backup-restore-credhub.yml">
       <code>enable-backup-restore-credhub.yml</code></a>
     </td>
     <td><em>n/a</em></td>
