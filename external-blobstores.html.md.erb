@@ -242,25 +242,26 @@ If a datacenter failure in Azure impacts your container, you won't be able to re
 ### <a id="enable-backup-and-restore-azure"></a> Enable Backup and Restore of Your Azure Blobstore
 
 To back up a Cloud Foundry deployment that uses an Azure external blobstore,
-you must colocate the `azure-blobstore-backup-restorer` job from [`backup-and-restore-sdk-release`](https://github.com/cloudfoundry-incubator/backup-and-restore-sdk-release/tree/master) as part of your deployment.
+you must colocate the `azure-blobstore-backup-restorer` job from <a href="https://github.com/cloudfoundry-incubator/backup-and-restore-sdk-release/tree/master">`backup-and-restore-sdk-release`</a> as part of your deployment.
 
 To do this, include the `enable-backup-restore-azure.yml` ops file in your deployment.
 
 <p class="note"><strong>Note</strong>: Apply <code>enable-backup-restore.yml</code> and <code>use-azure-storage-blobstore.yml</code>
    before <code>enable-backup-restore-azure.yml</code>.
-   See <a href="cf-backup.html#order">Apply Ops Files in the Correct Order</a>.</p>
+   See <a href="cf-backup.html#order">Apply Ops Files in the Correct Order</a>.
+</p>
 
-If you do not use [cf-deployment](https://github.com/cloudfoundry/cf-deployment) and ops files,
+If you do not use <a href="https://github.com/cloudfoundry/cf-deployment">cf-deployment</a> and ops files,
 you can still set up your Cloud Foundry deployment to use BBR.
-You can take the contents of the ops file as an example, and refer to our `backup-and-restore-sdk-release` [documentation](https://github.com/cloudfoundry-incubator/backup-and-restore-sdk-release/blob/master/docs/blobstore-backup-restore.md#azure-blobstores) for more details.
+You can take the contents of the ops file as an example, and refer to our `backup-and-restore-sdk-release` <a href="https://github.com/cloudfoundry-incubator/backup-and-restore-sdk-release/blob/master/docs/blobstore-backup-restore.md#azure-blobstores">documentation</a> for more details.
 
 ### <a id="azure-blobstore-supported-restore-scenarios"></a> Supported Restore Scenarios For Your Azure Blobstore
 
 There are three distinct restore scenarios:
 
-+ [In-Place Restore](#azure-in-place-restore)
-+ [Restore to New Containers](#azure-restore-to-new-containers)
-+ [Restore to New Container in different storage account](#azure-restore-to-different-storage-account)
++ <a href="#azure-in-place-restore">In-Place Restore</a>
++ <a href="#azure-restore-to-new-containers">Restore to New Containers</a>
++ <a href="#azure-restore-to-different-storage-account">Restore to New Container in different storage account</a>
 
 Make sure that you understand which scenario applies to you before beginning a restore.
 
@@ -277,3 +278,15 @@ If your destination Cloud Foundry for a restore uses the original containers of 
 
 If your destination Cloud Foundry for a restore uses different containers, BBR will copy the versions recorded in the backup artifact from the backed up containers to the new containers.
 This means that those backed up containers have to exist during the restore. New containers also have to belong to the same Azure storage account as the backed up containers.
+
+#### <a id="azure-restore-to-different-storage-account"></a> Restore to New Container in different storage account
+
+Your destination Cloud Foundry for a restore can use a different Azure storage account for your Azure blobstore.
+In this case BBR will copy the blobs from the backed up containers from the source Azure storage account to the new containers in the storage account used for restore.
+You need to use `enable-restore-azure-clone.yml` ops file in your deployment.
+
+<p class="note"><strong>Note</strong>: Apply <code>enable-backup-restore.yml</code> and <code>use-azure-storage-blobstore.yml</code>
+   before <code>enable-restore-azure-clone.yml</code>.
+   See <a href="cf-backup.html#order">Apply Ops Files in the Correct Order</a>.</p>
+
+After restoring, replace the `enable-restore-azure-clone.yml` ops file in your deployment with the `enable-backup-restore-azure.yml` opsfile and redeploy.
