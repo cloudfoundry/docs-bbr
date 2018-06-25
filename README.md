@@ -1,13 +1,12 @@
 # BOSH Backup and Restore
 
-This repo contains the documentation for BOSH Backup and Restore (BBR), a framework for backing up and restoring BOSH deployments and BOSH Directors. This is the generic BBR documentation: it describes how to use BBR with any BOSH deployment or BOSH Director.
+This repository contains the documentation for BOSH Backup and Restore (BBR), a framework for backing up and restoring BOSH deployments and BOSH Directors. This is the generic BBR documentation: it describes how to use BBR with any BOSH deployment or BOSH Director.
 
 ## How This Repo Is Published
 
 This repo is published to the following locations:
 
 * https://docs.cloudfoundry.org/bbr/ (OSS CF documentation)
-* https://docs.pivotal.io/bbr/ (PCF documentation)
 
 ### BBR Release Notes
 
