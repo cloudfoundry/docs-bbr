@@ -220,7 +220,7 @@ BBR backs up Azure storage containers by storing the ETags of each blob, not the
 
 ### <a id="enable-soft-delete"></a> Enable Soft Delete in Your Azure Storage Account
 
-BBR requires that you enable soft delete in your Azure storage account.
+BBR requires that you enable soft delete in your Azure storage account. With soft delete, you can recover your data when blobs or blob snapshots are deleted.
 To enable soft delete in your Azure storage account, follow the instructions in the [Azure documentation](https://docs.microsoft.com/en-us/azure/storage/blobs/storage-blob-soft-delete#quickstart).
 You should set a reasonable retention policy to minimize storage costs.
 
