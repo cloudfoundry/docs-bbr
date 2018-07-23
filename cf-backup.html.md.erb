@@ -44,7 +44,7 @@ To enable BBR backup and restore for different configurations you must also use 
   </tr>
   <tr>
     <td>
-      A versioned S3-compatible external blobstore. For instructions, see <a href="external-blobstores.html">Backup and Restore with External Blobstores</a>.
+      A versioned S3-compatible external blobstore. For instructions, see <a href="external-blobstores.html#s3-versioned">Backup and Restore with External Blobstores</a>.
     </td>
     <td>
       <code>use-s3-blobstore.yml</code>
@@ -56,7 +56,7 @@ To enable BBR backup and restore for different configurations you must also use 
   </tr>
   <tr>
     <td>
-      An un-versioned S3-compatible external blobstore. For instructions, see <a href="external-blobstores.html">Backup and Restore with External Blobstores</a>.
+      An un-versioned S3-compatible external blobstore. For instructions, see <a href="external-blobstores.html#s3-unversioned">Backup and Restore with External Blobstores</a>.
     </td>
     <td>
       <code>use-s3-blobstore.yml</code>
@@ -64,6 +64,18 @@ To enable BBR backup and restore for different configurations you must also use 
     <td>
       <a href="https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/enable-backup-restore-s3-unversioned.yml">
         <code>enable-backup-restore-s3-unversioned.yml</code></a>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      An Azure blobstore with soft delete enabled. For instructions, see <a href="external-blobstores.html#azure">Backup and Restore with External Blobstores</a>.
+    </td>
+    <td>
+      <code>use-azure-blobstore.yml</code>
+    </td>
+    <td>
+      <a href="https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/enable-backup-restore-azure.yml">
+        <code>enable-backup-restore-azure.yml</code></a>
     </td>
   </tr>
   <tr>
