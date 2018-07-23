@@ -282,3 +282,41 @@ before <code>enable-restore-azure-clone.yml</code>.
 For more information, see <a href="cf-backup.html#order">Apply Ops Files in the Correct Order</a>.</p>
 
 After restoring, replace the `enable-restore-azure-clone.yml` ops file in your deployment with the `enable-backup-restore-azure.yml` ops file and redeploy.
+
+## <a id="gcs"></a> Google Cloud Storage Blobstores
+
+BBR only supports Google Cloud Storage (GCS) buckets that are versioned. For more details about enabling versioning on your buckets, see [enable versioning](#enable-gcs-versioning).
+
+### <a id="enable-backup-and-restore-gcs"></a> Enable Backup and Restore of Your GCS Blobstore
+
+To back up a Cloud Foundry deployment that uses a GCS external blobstore, you must include the `enable-backup-restore-gcs.yml` ops file in your deployment.
+This colocates the `gcs-blobstore-backup-restorer` job from <a href="https://github.com/cloudfoundry-incubator/backup-and-restore-sdk-release/tree/master">backup-and-restore-sdk-release</a> as part of your deployment.
+
+<p class="note"><strong>Note</strong>: Apply <code>enable-backup-restore.yml</code> and <code>use-gcs-blobstore-service-account.yml</code>
+before <code>enable-backup-restore-gcs.yml</code>.
+For more information, see <a href="cf-backup.html#order">Apply Ops Files in the Correct Order</a>.
+</p>
+
+If you do not use <a href="https://github.com/cloudfoundry/cf-deployment">cf-deployment</a> and ops files,
+you can still back up and restore external blobstores with BBR.
+Refer to the contents of the `enable-backup-restore-gcs.yml` ops file as an example and see the [backup-and-restore-sdk-release](https://github.com/cloudfoundry-incubator/backup-and-restore-sdk-release/blob/master/docs/blobstore-backup-restore.md#gcs-blobstores) documentation in GitHub for details.
+
+### <a id="enable-gcs-versioning"></a> Enable Versioning on Your GCS Blobstore
+
+BBR requires that you enable versioning in your GCS buckets. To enable versioning, follow the instructions in the [GCS documentation](https://cloud.google.com/storage/docs/using-object-versioning#enable).
+
+You should set a reasonable retention policy to minimize storage costs.
+
+<!-- TODO -->
+
+### <a id="enable-gcs-replication"></a> Enable Redundant Storage on Your GCS Blobstore
+
+BBR backs up GCS buckets by storing the generation numbers of each blob, not the actual blobs, which makes backups and restores faster. However, this means that **restores work only if the original buckets and archived blobs still exist.**
+
+If the bucket is deleted, all its blobs and archived blobs are deleted with it and you cannot use the backup artifact to restore them.
+
+A Google data center failure could render your bucket unavailable. To mitigate this threat, you can use multi-regional or regional storage for your bucket. For more information, see [GCS Storage Classes](https://cloud.google.com/storage/docs/storage-classes) in the GCS documentation.
+
+### <a id="gcs-supported-restore-scenarios"></a> Supported Restore Scenarios for Your GCS Blobstore
+
+<!-- TODO -->
