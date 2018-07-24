@@ -129,7 +129,6 @@ To enable versioning of Amazon S3 buckets, follow the instructions in the Amazon
   <strong>WARNING</strong>:
     We strongly recommend setting an expiration policy on your buckets to delete old non-current versions and minimize storage costs. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/lifecycle-configuration-examples.html#lifecycle-config-conceptual-ex6">Example 6: Specifying a Lifecycle Rule for a Versioning-Enabled Bucket</a> in the Amazon Simple Storage Service documentation.
 </div>
-</p>
 
 <p class="note"><strong>Note</strong>: If your blobstore uses S3-compatible buckets not from Amazon,
 see the documentation for that storage provider regarding enabling versioning and setting an expiration policy.
@@ -279,7 +278,8 @@ You must use the `enable-restore-azure-clone.yml` ops file in your deployment.
 
 <p class="note"><strong>Note</strong>: Apply <code>enable-backup-restore.yml</code> and <code>use-azure-storage-blobstore.yml</code>
 before <code>enable-restore-azure-clone.yml</code>.
-For more information, see <a href="cf-backup.html#order">Apply Ops Files in the Correct Order</a>.</p>
+For more information, see <a href="cf-backup.html#order">Apply Ops Files in the Correct Order</a>.
+</p>
 
 After restoring, replace the `enable-restore-azure-clone.yml` ops file in your deployment with the `enable-backup-restore-azure.yml` ops file and redeploy.
 
