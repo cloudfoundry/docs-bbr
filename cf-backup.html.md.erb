@@ -36,96 +36,15 @@ enables BBR backup and restore for default CF components.
 
 To enable BBR backup and restore for different configurations you must also use the appropriate backup and restore ops files as shown in this table:
 
-<table class="nice">
-  <tr>
-    <th>Configuration</th>
-    <th>Configuration Ops File</th>
-    <th>Backup and Restore Ops File</th>
-  </tr>
-  <tr>
-    <td>
-      A versioned S3-compatible external blobstore. For instructions, see <a href="external-blobstores.html#s3-versioned">S3-Compatible Versioned Blobstores</a>.
-    </td>
-    <td>
-      <code>use-s3-blobstore.yml</code>
-    </td>
-    <td>
-      <a href="https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/enable-backup-restore-s3-versioned.yml">
-        <code>enable-backup-restore-s3-versioned.yml</code></a>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      An unversioned S3-compatible external blobstore. For instructions, see <a href="external-blobstores.html#s3-unversioned">S3-Compatible Unversioned Blobstores</a>.
-    </td>
-    <td>
-      <code>use-s3-blobstore.yml</code>
-    </td>
-    <td>
-      <a href="https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/enable-backup-restore-s3-unversioned.yml">
-        <code>enable-backup-restore-s3-unversioned.yml</code></a>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      An Azure blobstore with soft delete enabled. For instructions, see <a href="external-blobstores.html#azure">Azure Blobstores</a>.
-    </td>
-    <td>
-      <code>use-azure-blobstore.yml</code>
-    </td>
-    <td>
-      <a href="https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/enable-backup-restore-azure.yml">
-        <code>enable-backup-restore-azure.yml</code></a>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      A Google Cloud Storage external blobstore with versioning enabled. For instructions, see <a href="external-blobstores.html#gcs">Google Cloud Storage Blobstores</a>.
-    </td>
-    <td>
-      <code>use-gcs-blobstore-service-account.yml</code>
-    </td>
-    <td>
-      <a href="https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/enable-backup-restore-gcs.yml">
-        <code>enable-backup-restore-gcs.yml</code></a>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      A <a href="#supported-external-databases">supported external database</a>
-    </td>
-    <td>
-      <code>use-external-dbs.yml</code>
-    </td>
-    <td>
-      No BBR ops file required
-    </td>
-  </tr>
-  <tr>
-    <td>
-      An NFS broker and volume driver for volume support
-    </td>
-    <td>
-      <code>enable-nfs-volume-service.yml</code>
-    </td>
-    <td>
-      <a href="https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/enable-backup-restore-nfs-broker.yml">
-      <code>enable-backup-restore-nfs-broker.yml</code></a>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      Use CredHub for service credentials (Experimental)<br>
-    </td>
-    <td>
-      <code>secure-service-credentials.yml</code>
-    </td>
-    <td>
-      <a href="https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/enable-backup-restore-credhub.yml">
-      <code>enable-backup-restore-credhub.yml</code></a>
-    </td>
-  </tr>
-</table>
+| Configuration                                                                                                                                             | Configuration Ops File                  | Backup and Restore Ops File                                                                                                                                                    |
+|:----------------------------------------------------------------------------------------------------------------------------------------------------------|:----------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| A versioned S3-compatible external blobstore. For instructions, see [S3-Compatible Versioned Blobstores](external-blobstores.html#s3-versioned).          | `use-s3-blobstore.yml`                  | [`enable-backup-restore-s3-versioned.yml`](https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/enable-backup-restore-s3-versioned.yml)     |
+| An unversioned S3-compatible external blobstore. For instructions, see [S3-Compatible Unversioned Blobstores](external-blobstores.html#s3-unversioned).   | `use-s3-blobstore.yml`                  | [`enable-backup-restore-s3-unversioned.yml`](https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/enable-backup-restore-s3-unversioned.yml) |
+| An Azure blobstore with soft delete enabled. For instructions, see [Azure Blobstores](external-blobstores.html#azure).                                    | `use-azure-blobstore.yml`               | [`enable-backup-restore-azure.yml`](https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/enable-backup-restore-azure.yml)                   |
+| A Google Cloud Storage external blobstore with versioning enabled. For instructions, see [Google Cloud Storage Blobstores](external-blobstores.html#gcs). | `use-gcs-blobstore-service-account.yml` | [`enable-backup-restore-gcs.yml`](https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/enable-backup-restore-gcs.yml)                       |
+| A <a href="#supported-external-databases">supported external database</a>                                                                                 | `use-external-dbs.yml`                  | No BBR ops file required                                                                                                                                                       |
+| An NFS broker and volume driver for volume support                                                                                                        | `enable-nfs-volume-service.yml`         | [`enable-backup-restore-nfs-broker.yml`](https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/enable-backup-restore-nfs-broker.yml)         |
+| Use CredHub for service credentials (Experimental)                                                                                                        | `secure-service-credentials.yml`        | [`enable-backup-restore-credhub.yml`](https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/enable-backup-restore-credhub.yml)               |
 
 BBR can communicate with external blobstores and databases over TLS if they are configured accordingly.
 
