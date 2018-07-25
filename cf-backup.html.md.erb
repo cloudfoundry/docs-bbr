@@ -67,27 +67,14 @@ The backup and restore SDK supports the following database versions:
 
 Select the ops files you need and apply them in the following order:
 
+| Order                            | Ops Files                                                                                                                                                                                                                                      |
+|:---------------------------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| CF Configuration                 | `enable-backup-restore.yml` and any of `use-s3-blobstore.yml`, `use-azure-blobstore.yml`, `use-gcs-blobstore-service-account.yml`, `use-external-dbs.yml`, `enable-nfs-volume-service.yml`, `secure-service-credentials.yml`                   |
+| Backup and Restore Configuration | Any of `enable-backup-restore-s3-versioned.yml` or `enable-backup-restore-s3-unversioned.yml`, `enable-backup-restore-azure.yml`, `enable-backup-restore-gcs.yml`, `enable-backup-restore-nfs-broker.yml`, `enable-backup-restore-credhub.yml` |
+
 <p class="note"><strong>Note</strong>: This is the <em>relative</em> order.
-You do not have to apply all ops files listed below and you can apply other ops files in between.<br>
-For example, you can apply an ops file between <code>use-external-dbs.yml</code> and <code>enable-backup-restore.yml</code>,
-but do not apply <code>enable-backup-restore.yml</code> <em>before</em> <code>use-external-dbs.yml</code>.
+You do not have to apply all the operation files listed above and you can apply other ops files in between.
 </p>
-
-1. `use-s3-blobstore.yml`
-
-1. `use-external-dbs.yml`
-
-1. `enable-nfs-volume-service.yml`
-
-1. `secure-service-credentials.yml`
-
-1. `enable-backup-restore.yml`
-
-1. `enable-backup-restore-s3-versioned.yml` or `enable-backup-restore-s3-unversioned.yml`
-
-1. `enable-backup-restore-nfs-broker.yml`
-
-1. `enable-backup-restore-credhub.yml`
 
 ## <a id='process'></a> Next Steps
 
