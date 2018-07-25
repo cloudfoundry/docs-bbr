@@ -21,7 +21,7 @@ owner: BBR
 
 This topic explains how to back up and restore external blobstores with BOSH Backup and Restore (BBR).
 
-BBR supports Amazon S3 buckets, S3-compatible storage solutions, and Azure storage containers.
+BBR supports Amazon S3 buckets, S3-compatible storage solutions, Azure storage containers, and Google Cloud Storage buckets.
 
 The necessary configuration and supported restore scenarios differ depending on the type of blobstore you use. For details, see the sections below.
 
@@ -221,7 +221,10 @@ BBR backs up Azure storage containers by storing the ETags of each blob, not the
 
 BBR requires that you enable soft delete in your Azure storage account. With soft delete, you can recover your data when blobs or blob snapshots are deleted.
 To enable soft delete in your Azure storage account, follow the instructions in the [Azure documentation](https://docs.microsoft.com/en-us/azure/storage/blobs/storage-blob-soft-delete#quickstart).
-You should set a reasonable retention policy to minimize storage costs.
+
+<div class="note warning">
+  <strong>WARNING</strong>: We strongly recommend you set a reasonable retention policy to minimize storage costs.
+</div>
 
 ### <a id="enable-azure-replication"></a> Enable Replication for Your Azure Blobstore
 
@@ -292,6 +295,8 @@ BBR only supports Google Cloud Storage (GCS) buckets that are versioned. For mor
 To back up a Cloud Foundry deployment that uses a GCS external blobstore, you must include the `enable-backup-restore-gcs.yml` ops file in your deployment.
 This colocates the `gcs-blobstore-backup-restorer` job from <a href="https://github.com/cloudfoundry-incubator/backup-and-restore-sdk-release/tree/master">backup-and-restore-sdk-release</a> as part of your deployment.
 
+BBR only supports backup and restore of GCS Blobstores using a service account key to authenticate. BBR does not support authenticating with access key and secret key.
+
 <p class="note"><strong>Note</strong>: Apply <code>enable-backup-restore.yml</code> and <code>use-gcs-blobstore-service-account.yml</code>
 before <code>enable-backup-restore-gcs.yml</code>.
 For more information, see <a href="cf-backup.html#order">Apply Ops Files in the Correct Order</a>.
@@ -305,9 +310,11 @@ Refer to the contents of the `enable-backup-restore-gcs.yml` ops file as an exam
 
 BBR requires that you enable versioning in your GCS buckets. To enable versioning, follow the instructions in the [GCS documentation](https://cloud.google.com/storage/docs/using-object-versioning#enable).
 
-You should set a reasonable retention policy to minimize storage costs.
+<div class="note warning">
+  <strong>WARNING</strong>: We strongly recommend setting a retention policy by configuring an object lifecycle rule to delete archived objects when they reach a certain age, see the GCS documentation for <a href="https://cloud.google.com/storage/docs/managing-lifecycles#delete_an_object">Managing Object Lifecycles</a>.
+</div>
 
-<!-- TODO -->
+To reduce the cost of storing objects within the retention period you can use an object lifecycle rule to change the storage class of archived objects. Please note, Nearline and Coldline storage have minimum storage durations. See the GCS documentation on [Storage Classes](https://cloud.google.com/storage/docs/storage-classes).
 
 ### <a id="enable-gcs-replication"></a> Enable Redundant Storage on Your GCS Blobstore
 
@@ -319,4 +326,25 @@ A Google data center failure could render your bucket unavailable. To mitigate t
 
 ### <a id="gcs-supported-restore-scenarios"></a> Supported Restore Scenarios for Your GCS Blobstore
 
-<!-- TODO -->
+Determine which of the following scenarios applies to your deployment before restoring it:
+
++ <a href="#gcs-in-place-restore">In-Place Restore</a>
++ <a href="#gcs-restore-to-new-buckets">Restore to New Buckets</a>
+
+<p class="note">
+When restoring to a bucket, BBR modifies only blobs that are recorded in the backup artifact. Other blobs are not affected.
+</p>
+
+#### <a id="gcs-in-place-restore"></a> In-Place Restore
+
+When BBR backs up a GCS blobstore, the backup consists of a list of blobs and their generation numbers.
+
+In an in-place restore, you reuse the same buckets. BBR restores the versions recorded in the backup artifact by copying over the live blobs.
+
+#### <a id="gcs-restore-to-new-buckets"></a> Restore to New Buckets
+
+When you restore to different buckets, BBR copies the versions recorded in the backup artifact from the backed-up buckets to the new buckets. In this scenario, the backed-up buckets must exist during the restore.
+
+<p class="note">
+It is possible to restore to new buckets in a different Google Cloud project by using a service account key that has access to both the backed-up and restore projects, see <a href="https://cloud.google.com/storage/docs/access-control/iam">Identity and Access Management</a> in the GCS documentation.
+</p>
