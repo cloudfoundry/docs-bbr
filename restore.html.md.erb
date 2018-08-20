@@ -54,7 +54,7 @@ If it is encrypted, decrypt it.
    the command in a <code>screen</code> or <code>tmux</code> session.</p>
 
    Use the optional `--debug` flag to enable debug logs.
-   See the [Exit Codes and Logging](logging.html) topic for more information.
+   See the [Logging](logging.html) topic for more information.
 
 #### <a id='restore-director'></a> Restore a BOSH Director
 
@@ -111,7 +111,6 @@ If the command fails, try [these steps](#recovering-from-failing-command)
 1. Ensure the source BOSH deployment is compatible with the target BOSH deployment.
 1. If you see the error message `Directory /var/vcap/store/bbr-backup already exists on instance`,
 run the relevant [cleanup command](#manual-clean)
-1. Consult the [Exit Codes and Logging](logging.html) topic.
 
 ## <a id='cancel-restore'></a>Cancel a Restore
 
@@ -146,30 +145,3 @@ $ BOSH_CLIENT_SECRET=BOSH_CLIENT_SECRET \
     --ca-cert PATH_TO_BOSH_CA_CERT \
     restore-cleanup
 </pre>
-
-If the cleanup script fails, consult the following table to match the exit codes to an error message.
-
-<table>
-<tr>
-<th>Value</th>
-<th>Error</th>
-</tr>
-<tr>
-<td>0</td>
-<td>Success</td>
-</tr>
-<tr>
-<td>1</td>
-<td>General failure</td>
-</tr>
-<tr>
-<td>8</td>
-<td>The post-restore unlock failed. Your BOSH deployment or BOSH Director may be in a bad state and require attention.</td>
-</tr>
-<tr>
-<td>16</td>
-<td>The cleanup failed. This is a non-fatal error indicating that the utility has been unable to clean up open BOSH SSH connections to the deployment VMs. Manual cleanup may be required to clear any hanging BOSH users and connections.</td>
-</tr>
-</table>
-
-For more information about how to interpret the exit code, see the [Exit Codes](#exit-codes) section of the [Exit Codes and Logging](logging.html) topic.
