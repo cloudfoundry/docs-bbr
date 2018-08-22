@@ -59,6 +59,10 @@ you must colocate the `s3-unversioned-blobstore-backup-restorer` job from [backu
     If you do not use [cf-deployment](https://github.com/cloudfoundry/cf-deployment) and ops files, you can still back up and restore external blobstores with BBR.
     Refer to the contents of the `enable-backup-restore-s3-unversioned.yml` ops file as an example and see the [backup-and-restore-sdk-release](https://github.com/cloudfoundry-incubator/backup-and-restore-sdk-release/blob/master/docs/blobstore-backup-restore.md#s3-compatible-unversioned-blobstores) documentation in GitHub for details.
 
+<p class="note warning">
+  <strong>WARNING</strong>: We strongly recommend creating a lifecycle rule on your backup buckets to minimize storage costs by permanently deleting old backups. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/user-guide/create-lifecycle.html">How Do I Create a Lifecycle Policy for an S3 Bucket?</a> in the Amazon S3 documentation.
+</p>
+
 ### <a id="s3-unversioned-supported-restore-scenarios"></a> Supported Restore Scenarios for Your Unversioned S3-Compatible Blobstore
 
 The restore process will copy blobs from a directory in the backup bucket to the live buckets (droplets, packages and buildpacks) in use by the CF deployment you are restoring into.
