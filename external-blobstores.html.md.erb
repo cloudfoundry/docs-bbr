@@ -114,6 +114,14 @@ BBR automatically makes use of your configured trusted certificates.</p>
 BBR only supports the backup and restore of blobstores stored in versioned, Amazon S3 buckets
 and in S3-compatible buckets that are versioned and support AWS Signature Version 4.
 
+Three Cloud Foundry buckets are backed up by BBR, so you only need to enable versioning of:
+
+- `droplets`
+- `packages`
+- `buildpacks`
+
+Enabling versioning of the `resource_pool` bucket is not required.
+
 To enable versioning of Amazon S3 buckets, follow the instructions in the Amazon S3 documentation, [How Do I Enable or Suspend Versioning for an S3 Bucket?](https://docs.aws.amazon.com/AmazonS3/latest/user-guide/enable-versioning.html). If you prefer to use the `aws` CLI, you can make use of the [`put-bucket-versioning` command](https://docs.aws.amazon.com/cli/latest/reference/s3api/put-bucket-versioning.html).
 
 2. If your blobstore buckets are not empty, run the following command on each one of them, using the
