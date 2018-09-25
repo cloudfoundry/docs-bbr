@@ -5,6 +5,34 @@ owner: Release Engineering
 
 ## <a id='releases'></a> Releases
 
+### <a id='1.2'></a> v1.2.8
+
+**Release Date**: September 25, 2018
+
+**Improvement:**
+
+`bbr backup` with `BOSH_ALL_PROXY` was still occasionally failing with `connection reset by peer` errors. We changed approach in how we handle SSH connection which should make `bbr backup` more stable when used with a SOCKS5 proxy. [Pivotal Tracker Story](https://www.pivotaltracker.com/n/projects/1662777/stories/160167687) and [GitHub Issue #21](https://github.com/cloudfoundry-incubator/bosh-backup-and-restore/issues/21)
+
+**Improvement:**
+
+BBR commands now print the job name in drain logs:
+
+```
+OLD
+[bbr] XXXX INFO - Copying backup -- 20K uncompressed -- from backup-prepare/XXXX...
+
+NEW
+[bbr] XXXX INFO - Copying backup -- 2.6M uncompressed -- for job bbr-usage-servicedb on backup-prepare/XXXX...
+```
+
+This should help users understand where backup artifacts are coming from. [Pivotal Tracker Story](https://www.pivotaltracker.com/n/projects/1662777/stories/159265175)
+
+**Fixed:**
+
+Backup metadata were wrongly reporting the job index for backup artifacts. Consider the following example, a multi-master CFCR cluster. The backup artifact is always coming from `master/0` while `master/1` and `master/2` provide no backup artifact. However, previously it was not always reported (in the backup metdatata) that the artifact was coming from `master/0`.
+
+This makes no noticeable difference but it fixes the accuracy of the metadata file. [Pivotal Tracker Story](https://www.pivotaltracker.com/n/projects/1662777/stories/160141669)
+
 ### <a id='1.2'></a> v1.2.7
 
 **Release Date**: August 15, 2018
