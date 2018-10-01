@@ -29,7 +29,7 @@ This should help users understand where backup artifacts are coming from. [Pivot
 
 **Fixed:**
 
-Backup metadata were wrongly reporting the job index for backup artifacts. Consider the following example, a multi-master CFCR cluster. The backup artifact is always coming from `master/0` while `master/1` and `master/2` provide no backup artifact. However, previously it was not always reported (in the backup metdatata) that the artifact was coming from `master/0`.
+Backup metadata were wrongly reporting the job index for backup artifacts. Consider the following example, a multi-master CFCR cluster. The backup artifact is always coming from `master/0` while `master/1` and `master/2` provide no backup artifact. However, previously it was not always reported (in the backup metadata) that the artifact was coming from `master/0`.
 
 This makes no noticeable difference but it fixes the accuracy of the metadata file. [Pivotal Tracker Story](https://www.pivotaltracker.com/n/projects/1662777/stories/160141669)
 

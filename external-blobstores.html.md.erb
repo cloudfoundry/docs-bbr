@@ -70,7 +70,7 @@ The restore process will copy blobs from a directory in the backup bucket to the
 If your original backup buckets are lost but you are restoring from copies, ensure that the variables listed in [vars-enable-backup-restore-s3-unversioned.yml](https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/example-vars-files/vars-enable-backup-restore-s3-unversioned.yml) point to the copies.
 
 <p class="note warning">
-  <strong>WARNING</strong>: Restoring to an unversioned bucket will overwite blobs with the backed up copies of those blobs.
+  <strong>WARNING</strong>: Restoring to an unversioned bucket will overwrite blobs with the backed up copies of those blobs.
   BBR will only modify the blobs that were copied to the backup bucket. Any other blobs will not be affected.
 </p>
 
