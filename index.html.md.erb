@@ -5,8 +5,6 @@ owner: BBR
 
 This guide documents BOSH Backup and Restore (BBR), a framework for backing up and restoring BOSH deployments and BOSH Directors.
 
-<%= vars.bbr_pcf %>
-
 ## <a id='overview'></a>Overview
 
 BBR orchestrates triggering the backup or restore process on the BOSH deployment or BOSH Director,
@@ -38,8 +36,6 @@ This approach has the following advantages:
 
 * The deployment itself encapsulates the knowledge of how to back up and restore the deployment.
 * Because responsibility for writing and maintaining scripts sits with the release author, scripts can change as the deployment changes and do not get out of sync.
-
-<%= vars.bbr_pcf2 %>
 
 ### Backup Scripts
 1. **pre-backup-lock**: The pre-backup lock script locks the job so backups are consistent across the cluster.
