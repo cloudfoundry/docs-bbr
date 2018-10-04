@@ -66,11 +66,11 @@ Perform the following steps to transfer the `bbr` binary to your jumpbox:
 	<pre class="terminal">$ chmod a+x bbr</pre>
 
 1. To securely copy the `bbr` binary file to your jumpbox, run the following command:
-  `scp LOCAL-PATH-TO-BBR/bbr JUMPBOX-USER/JUMPBOX-ADDRESS`
-    <pre class="terminal">$ scp ~/workspace/bbr admin/jumpbox_server</pre>
-	If your jumpbox has access to the internet, you can also SSH into your jumpbox and use `wget`:
-	<pre class="terminal">
-	$ ssh JUMPBOX\_USER/JUMPBOX\_ADDRESS -i YOUR\_CERTIFICATE.pem
-	$ wget BBR\_RELEASE\_URL
-	$ chmod a+x bbr
-	</pre>
+    `scp LOCAL-PATH-TO-BBR/bbr JUMPBOX-USER/JUMPBOX-ADDRESS`
+
+    If your jumpbox has access to the internet, you can also SSH into your jumpbox and use `wget`:
+    <pre class="terminal">
+    $ ssh JUMPBOX-USER/JUMPBOX-ADDRESS -i YOUR-CERTIFICATE.pem
+    $ wget BBR-RELEASE-URL
+    $ chmod a+x bbr
+    </pre>
