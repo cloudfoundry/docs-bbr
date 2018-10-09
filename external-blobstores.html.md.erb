@@ -56,29 +56,31 @@ you must colocate the `s3-unversioned-blobstore-backup-restorer` job from [backu
          See <a href="cf-backup.html#order">Apply Ops Files in the Correct Order</a>.</p>
 
     If you do not use [cf-deployment](https://github.com/cloudfoundry/cf-deployment) and ops files, you can still back up and restore external blobstores with BBR.
-    Refer to the contents of the `enable-backup-restore-s3-unversioned.yml` ops file as an example and see the [backup-and-restore-sdk-release](https://github.com/cloudfoundry-incubator/backup-and-restore-sdk-release/blob/master/docs/blobstore-backup-restore.md#s3-compatible-unversioned-blobstores) documentation in GitHub for details.
+    Refer to the contents of the `enable-backup-restore-s3-unversioned.yml` ops file as an example and see the [backup-and-restore-sdk-release](https://github.com/cloudfoundry-incubator/backup-and-restore-sdk-release/blob/master/docs/blobstore-backup-restore.md#s3-compatible-unversioned-blobstores) documentation in GitHub for further information.
 
 <p class="note warning">
-  <strong>WARNING</strong>: We strongly recommend creating a lifecycle rule on your backup buckets to minimize storage costs by permanently deleting old backups. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/user-guide/create-lifecycle.html">How Do I Create a Lifecycle Policy for an S3 Bucket?</a> in the Amazon S3 documentation.
+  <strong>WARNING</strong>: To minimize storage costs, we recommend creating a lifecycle policy on your backup buckets that permanently expires older backups. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/user-guide/create-lifecycle.html">How Do I Create a Lifecycle Policy for an S3 Bucket?</a> in the Amazon S3 documentation.
 </p>
 
 ### <a id="s3-unversioned-supported-restore-scenarios"></a> Supported Restore Scenarios for Your Unversioned S3-Compatible Blobstore
 
-The restore process will copy blobs from a directory in the backup bucket to the live buckets (droplets, packages and buildpacks) in use by the CF deployment you are restoring into.
+The restore process copies blobs from a directory in the backup bucket to the live buckets in use by the CF deployment you are restoring into.
 
-If your original backup buckets are lost but you are restoring from copies, ensure that the variables listed in [vars-enable-backup-restore-s3-unversioned.yml](https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/example-vars-files/vars-enable-backup-restore-s3-unversioned.yml) point to the copies.
+If your original backup buckets are lost but you are restoring from copies of those original backup buckets, ensure that the variables listed in [vars-enable-backup-restore-s3-unversioned.yml](https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/example-vars-files/vars-enable-backup-restore-s3-unversioned.yml) reference those copies.
 
 <p class="note warning">
-  <strong>WARNING</strong>: Restoring to an unversioned bucket will overwrite blobs with the backed up copies of those blobs.
-  BBR will only modify the blobs that were copied to the backup bucket. Any other blobs will not be affected.
+  <strong>WARNING</strong>: Restoring to an unversioned bucket overwrites blobs with the backed up copies of those blobs.
+  BBR only modifies the blobs that were copied to the backup bucket. Other blobs are not changed during this process.
 </p>
 
 ## <a id="s3-versioned"></a> S3-Compatible Versioned Blobstores
-BBR only supports S3-compatible buckets that are versioned and support AWS Signature Version 4. For more details about enabling versioning on your blobstore, see [enable versioning](#enable-s3-versioning).
+BBR only supports S3-compatible buckets that are versioned and support AWS Signature Version 4. For more details about enabling versioning on your blobstore, see [Enable Versioning on Your S3-Compatible Blobstore](#enable-s3-versioning).
 
-External blobstores are backed up by storing the current version of each blob, not the actual files. Those versions will be set to be the current versions at restore time. This makes backups and restores faster, but also means that **restores only work if the original bucket still exists**.
+External blobstores are backed up by storing the current version of each blob, not the actual files. Those versions are set to be the current versions at restore time. 
 
-If the bucket gets deleted, all its versions are deleted with it and you cannot restore it unless you have a replica. For how to restore from a replica, see [Restore from Replicas](#s3-versioned-restore-from-replicas) below.
+<p class="note warning">
+  <strong>WARNING</strong>: Storing the current version of each blob makes backing up and restoring faster, however as a results restores only work if the original bucket still exists. If the original bucket is deleted, all of that buckets related  versions are deleted as well. If the original bucket is deleted, you can only restore from a replica.  For more information, see [Restore from Replicas](#s3-versioned-restore-from-replicas). 
+</p>
 
 <p class="note warning">
   <strong>WARNING</strong>: The <code>s3-versioned-blobstore-backup-restorer</code> in
@@ -91,13 +93,9 @@ If the bucket gets deleted, all its versions are deleted with it and you cannot 
 To back up a Cloud Foundry deployment that uses an external blobstore,
 you must colocate the `s3-versioned-blobstore-backup-restorer` job from [`backup-and-restore-sdk-release`](https://github.com/cloudfoundry-incubator/backup-and-restore-sdk-release/tree/master) as part of your deployment.
 
-1. Verify that your blobstore is one of the following:
-   + Amazon S3 buckets with versioning enabled.
-     See [Enable Versioning on Your S3-Compatible Blobstore](#enable-s3-versioning) above.
-   + S3-compatible buckets with versioning enabled and support for AWS Signature Version 4.
+1. Verify that your blobstore is either an Amazon S3 buckets with versioning enabled or an S3-compatible bucket with versioning enabled and support for AWS Signature Version 4.
 
-       <p class="note"><strong>Note</strong>: If your S3-compatible blobstore uses a custom CA certificate, refer to <a href="https://bosh.io/docs/trusted-certs.html">Configuring Trusted Certificates</a> in the <a href="https://bosh.io/docs">BOSH documentation</a>.
-BBR automatically makes use of your configured trusted certificates.</p>
+       <p class="note"><strong>Note</strong>: If your S3-compatible blobstore uses a custom CA certificate, refer to <a href="https://bosh.io/docs/trusted-certs.html">Configuring Trusted Certificates</a> in the <a href="https://bosh.io/docs">BOSH documentation</a>. BBR automatically makes use of your configured trusted certificates.</p>
 
 2. Include the `enable-backup-restore-s3-versioned.yml` ops file in your deployment.
 
