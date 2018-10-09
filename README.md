@@ -22,7 +22,7 @@ BBR template variables that contextualize topics for OSS CF live in the `docs-bo
 
 These variables appear in the following topics:
 * [BOSH Backup and Restore](https://github.com/cloudfoundry/docs-bbr/blob/master/index.html.md.erb)
-* [Backing Up with BOSH Backup and Restore](https://github.com/cloudfoundry/docs-bbr/blob/master/backup.html.md.erb)
+* [Backing up with BOSH Backup and Restore](https://github.com/cloudfoundry/docs-bbr/blob/master/backup.html.md.erb)
 * [Installing BOSH Backup and Restore](https://github.com/cloudfoundry/docs-bbr/blob/master/installing.html.md.erb)
 
 ## One Big Table of All BBR Docs

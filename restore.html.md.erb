@@ -5,7 +5,7 @@ owner: BBR
 
 This topic describes how to use BOSH Backup and Restore (BBR) to restore a BOSH deployment or BOSH Director.
 
-To back up a BOSH deployment or BOSH Director with BBR, see the [Backing Up with BOSH Backup and Restore](backup.html) topic.
+To back up a BOSH deployment or BOSH Director with BBR, see the [Backing up with BOSH Backup and Restore](backup.html) topic.
 
 The steps in this topic allow you to restore a BOSH Director, a BOSH deployment, or both.
 
@@ -117,9 +117,9 @@ run the relevant [cleanup command](#manual-clean)
 If you need to cancel a restore, perform the following steps:
 
 1. Terminate the BBR process by pressing Ctrl-C and typing `yes` to confirm.
-1. Stopping a restore can leave the system in an unusable state and prevent future restores. Perform the procedures in the [Clean Up After Failed Restore](#manual-clean) section to enable future restores.
+1. Stopping a restore can leave the system in an unusable state and prevent future restores. Perform the procedures in the [Clean up After Failed Restore](#manual-clean) section to enable future restores.
 
-## <a id="manual-clean"></a>Clean Up After Failed Restore
+## <a id="manual-clean"></a>Clean up After Failed Restore
 
 If your restore process fails, then the process may leave the BBR restore folder on the instance. As a result, any subsequent restore attempts may also fail. In addition, BBR may not have run the post-restore scripts, which can leave the instance in a locked state.
 
