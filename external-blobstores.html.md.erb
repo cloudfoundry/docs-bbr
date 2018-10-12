@@ -48,7 +48,7 @@ you must colocate the `s3-unversioned-blobstore-backup-restorer` job from the [b
 1. Include the `enable-backup-restore-s3-unversioned.yml` ops file in your deployment. The `enable-backup-restore-s3-unversioned.yml` file can be found in the [cf-deployment](https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/enable-backup-restore-s3-unversioned.yml) GitHub repository.
 
 
-    Set the variables specified in [vars-enable-backup-restore-s3-unversioned.yml](https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/example-vars-files/vars-enable-backup-restore-s3-unversioned.yml) to configure your backup bucket locations.
+    Refer to [vars-enable-backup-restore-s3-unversioned.yml](https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/example-vars-files/vars-enable-backup-restore-s3-unversioned.yml) for information on how to configure the variables for your backup bucket locations.
 
 
       <p class="note"><strong>Note</strong>: Apply <code>enable-backup-restore.yml</code> and <code>use-s3-blobstore.yml</code>
@@ -56,7 +56,7 @@ you must colocate the `s3-unversioned-blobstore-backup-restorer` job from the [b
          See <a href="cf-backup.html#order">Apply Ops Files in the Correct Order</a>.</p>
 
     If you do not use [cf-deployment](https://github.com/cloudfoundry/cf-deployment) and ops files, you can still back up and restore external blobstores with BBR.
-    Refer to the contents of the `enable-backup-restore-s3-unversioned.yml` ops file as an example and see the [backup-and-restore-sdk-release](https://github.com/cloudfoundry-incubator/backup-and-restore-sdk-release/blob/master/docs/blobstore-backup-restore.md#s3-compatible-unversioned-blobstores) documentation in GitHub for further information.
+    Refer to the contents of the `enable-backup-restore-s3-unversioned.yml` ops file as an example and review the [backup-and-restore-sdk-release](https://github.com/cloudfoundry-incubator/backup-and-restore-sdk-release/blob/master/docs/blobstore-backup-restore.md#s3-compatible-unversioned-blobstores) documentation in GitHub for further information.
 
 <p class="note warning">
   <strong>WARNING</strong>: To minimize storage costs, we recommend creating a lifecycle policy for your backup buckets that permanently expires your older backups. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/user-guide/create-lifecycle.html">How Do I Create a Lifecycle Policy for an S3 Bucket?</a> in the Amazon S3 documentation.
@@ -152,7 +152,7 @@ When restoring, BBR reverts your blobs to the original versions using the versio
 
 If the bucket is deleted, all of that bucket's versions are also deleted and you cannot restore using that bucket. To prevent this from happening, set up [Cross-Region Replication](https://docs.aws.amazon.com/AmazonS3/latest/dev/crr.html). See the [`put-bucket-replication` command](https://docs.aws.amazon.com/cli/latest/reference/s3api/put-bucket-replication.html) if you prefer to use the AWS CLI.
 
-Replication results in buckets that are identical to the original ones, including their version identifiers. This allows you to perform restores from the replicas, in case your original buckets are lost. To restore from a replica, see [Restore from Replicas](#s3-versioned-restore-from-replicas) below.
+Replication results in buckets that are identical to the original ones, including their version identifiers. This allows you to perform restores from the replicas, in case your original buckets are lost. To restore from a replica, see [Restore from Replicas](#s3-versioned-restore-from-replicas).
 
 ### <a id="s3-versioned-supported-restore-scenarios"></a> Supported Restore Scenarios for Your Versioned S3-Compatible Blobstore
 
@@ -194,7 +194,7 @@ before beginning a restore.
 
 To modify the backup artifacts, do the following:
 
-1. Change into the backup artifact directory.
+1. In your terminal, change into the directory for your backup artifact.
 
 2. Run the following command to extract the blobstore backup archive:
 
