@@ -79,7 +79,7 @@ BBR only supports S3-compatible buckets that are versioned and support AWS Signa
 External blobstores are backed up by storing the current version of each blob, not the actual files. Those versions are set to be the current versions at restore time. 
 
 <p class="note warning">
-  <strong>WARNING</strong>: Storing the current version of each blob makes backing up and restoring faster, however as a result, restores only work if the original bucket still exists. If the original bucket is deleted, all of that bucket's related versions are also deleted. If the original bucket is deleted, you can only restore from a replica.  For more information, see [Restore from Replicas](#s3-versioned-restore-from-replicas). 
+  <strong>WARNING</strong>: Storing the current version of each blob makes backing up and restoring faster, however as a result, restores only work if the original bucket still exists. If the original bucket is deleted, all of that bucket's related versions are also deleted. If the original bucket is deleted, you can only restore from a replica.  For more information, see <a href="https://docs-cloudfoundry-staging.cfapps.io/bbr/external-blobstores.html#s3-versioned-restore-from-replicas">Restore from Replicas</a>. 
 </p>
 
 <p class="note warning">
@@ -119,7 +119,9 @@ Three Cloud Foundry buckets are backed up by BBR, so you only need to enable ver
 
 Enabling versioning of the `resource_pool` bucket is not required.
 
-To enable versioning of Amazon S3 buckets, see [How Do I Enable or Suspend Versioning for an S3 Bucket?](https://docs.aws.amazon.com/AmazonS3/latest/user-guide/enable-versioning.html) in the Amazon S3 documentation. If you prefer to use the AWS CLI, use the [`put-bucket-versioning` command](https://docs.aws.amazon.com/cli/latest/reference/s3api/put-bucket-versioning.html).
+To enable versioning of Amazon S3 buckets, see [How Do I Enable or Suspend Versioning for an S3 Bucket?](https://docs.aws.amazon.com/AmazonS3/latest/user-guide/enable-versioning.html) in the Amazon S3 documentation. 
+
+If you prefer to use the AWS CLI, use the [`put-bucket-versioning` command](https://docs.aws.amazon.com/cli/latest/reference/s3api/put-bucket-versioning.html).
 
 2. If your blobstore buckets are not empty, run the following command on each one of them, using the
 [AWS CLI](https://aws.amazon.com/cli/):
@@ -141,7 +143,7 @@ To enable versioning of Amazon S3 buckets, see [How Do I Enable or Suspend Versi
 </p>
 
 <p class="note"><strong>Note</strong>: If your blobstore uses S3-compatible buckets that are not from Amazon,
-see the documentation for that storage provider regarding enabling versioning and setting an expiration policy.
+see the documentation for your storage provider regarding enabling versioning and setting an expiration policy.
 </p>
 
 ### <a id="enable-s3-versioned-replication"></a> Enable Replication on Your Versioned S3-Compatible Blobstore
@@ -150,20 +152,20 @@ BBR does not download your blobs to the backup artifact when performing a backup
 
 When restoring, BBR reverts your blobs to the original versions using the version identifiers. Since the backup artifact contains only identifiers, not blobs, BBR can only restore the blobs if the original bucket containing the blob versions still exists.
 
-If the bucket is deleted, all of that bucket's versions are also deleted and you cannot restore using that bucket. To prevent this from happening, set up [Cross-Region Replication](https://docs.aws.amazon.com/AmazonS3/latest/dev/crr.html). See the [`put-bucket-replication` command](https://docs.aws.amazon.com/cli/latest/reference/s3api/put-bucket-replication.html) if you prefer to use the AWS CLI.
+If a bucket is deleted, all of that bucket's versions are also deleted and you cannot restore using that bucket. To prevent this from happening, set up [Cross-Region Replication](https://docs.aws.amazon.com/AmazonS3/latest/dev/crr.html). See the [`put-bucket-replication` command](https://docs.aws.amazon.com/cli/latest/reference/s3api/put-bucket-replication.html) if you prefer to use the AWS CLI.
 
-Replication results in buckets that are identical to the original ones, including their version identifiers. This allows you to perform restores from the replicas, in case your original buckets are lost. To restore from a replica, see [Restore from Replicas](#s3-versioned-restore-from-replicas).
+If your original buckets are lost, you can restore from a replica. Replication results in buckets that are identical to the original buckets, including the original version identifiers. To restore from a replica, see [Restore from Replicas](#s3-versioned-restore-from-replicas).
 
 ### <a id="s3-versioned-supported-restore-scenarios"></a> Supported Restore Scenarios for Your Versioned S3-Compatible Blobstore
 
-Determine which of the following scenarios applies to your deployment before restoring it:
+Determine which of the following scenarios applies to your deployment before restoring:
 
-+ [In-Place Restore](#s3-versioned-in-place-restore)
 + [Restore to New Buckets](#s3-versioned-restore-to-new-buckets)
 + [Restore from Replicas](#s3-versioned-restore-from-replicas)
++ [In-Place Restore](#s3-versioned-in-place-restore)
 
 <p class="note">
-  When restoring to a bucket, BBR will only modify blobs that are recorded in the backup artifact. Any other blobs will not be affected.
+  When restoring to a bucket, BBR only modifies blobs that are recorded in the backup artifact. Other blobs are not be affected.
 </p>
 
 #### <a id="s3-versioned-in-place-restore"></a> In-Place Restore
@@ -176,18 +178,18 @@ then, during a restore, those versions are retrieved and set to be the current v
 #### <a id="s3-versioned-restore-to-new-buckets"></a> Restore to New Buckets
 
 If your destination Cloud Foundry for a restore uses different buckets,
-then you can also restore into those buckets, if the original buckets still exist.
+then you can also restore into those new buckets, if the original buckets still exist.
 During restore, the original versions are copied from the original buckets to the destination buckets.
 
-The destination buckets must be versioned.
-For how to version an Amazon S3 blobstore, see [Enable Versioning on Your S3-Compatible Blobstore](#enable-s3-versioning) above.
+In order to restore to new buckets, those new buckets must be versioned.
+For more information on versioning an Amazon S3 blobstore, see [Enable Versioning on Your S3-Compatible Blobstore](#enable-s3-versioning).
 
-Before restoring, ensure that the `s3-versioned-blobstore-backup-restorer` job is configured to point to the
+Before restoring, ensure that the `s3-versioned-blobstore-backup-restorer` job in the `backup-and-restore-sdk` is configured to point to the
 destination buckets.
 
 #### <a id="s3-versioned-restore-from-replicas"></a> Restore from Replicas
 
-To protect yourself from losing your blobstore buckets, you should [enable replication](#enable-s3-versioned-replication). This will allow you to perform restores from the replicas, in case your original buckets are lost.
+To protect yourself from losing your blobstore buckets, you should [enable replication](#enable-s3-versioned-replication). This allows you to perform restores from the replicas, in case your original buckets are lost.
 
 If you need to restore from replicas, you must modify the backup artifacts to point to the replicas
 before beginning a restore.
