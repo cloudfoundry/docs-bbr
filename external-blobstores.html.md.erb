@@ -121,17 +121,22 @@ Enabling versioning of the `resource_pool` bucket is not required.
 
 To enable versioning of Amazon S3 buckets, see [How Do I Enable or Suspend Versioning for an S3 Bucket?](https://docs.aws.amazon.com/AmazonS3/latest/user-guide/enable-versioning.html) in the Amazon Simple Storage Service documentation. 
 
-If you prefer to use the AWS CLI, use the [`put-bucket-versioning` command](https://docs.aws.amazon.com/cli/latest/reference/s3api/put-bucket-versioning.html).
+If you prefer to use the [AWS CLI](https://aws.amazon.com/cli/), use the [`put-bucket-versioning` command](https://docs.aws.amazon.com/cli/latest/reference/s3api/put-bucket-versioning.html).
 
-2. If your blobstore buckets are not empty, run the following command on each one of them, using the
-[AWS CLI](https://aws.amazon.com/cli/):
+2. If your blobstore buckets are not empty, run the following command on each one of them, using the AWS CLI:
 
     <code>aws s3 cp s3://BUCKET-NAME/ s3://BUCKET-NAME/ --recursive --metadata bump=true</code><br>
 
-    For example,
+    Where:
+
+    + `BUCKET-NAME` is the name of your bucket.
+
+    For example:
     <pre class="terminal">
     $ aws s3 cp s3://my-bucket/ s3://my-bucket/ --recursive --metadata bump=true
     </pre>
+
+
 
     This ensures that each file in your buckets has a valid version ID.
 
@@ -200,7 +205,11 @@ To modify the backup artifacts, do the following:
 
     <code>tar xvf BLOBSTORE-ARTIFACT.tar</code>
 
-    For example,
+    Where:
+
+    + `BLOBSTORE-ARTIFACT` is the name of your blobstore artifact. 
+
+    For example:
 
     <pre class="terminal">$ tar xvf backup-restore-0-s3-versioned-blobstore-backup-restorer.tar</pre>
 
@@ -217,7 +226,11 @@ To modify the backup artifacts, do the following:
 
     <code>tar cvf BLOBSTORE-ARTIFACT.tar ./blobstore.json</code>
 
-    For example,
+    Where:
+
+    + `BLOBSTORE-ARTIFACT` is the name of your blobstore artifact. 
+
+    For example:
 
     <pre class="terminal">$ tar cvf backup-restore-0-s3-versioned-blobstore-backup-restorer.tar ./blobstore.json</pre>
 
