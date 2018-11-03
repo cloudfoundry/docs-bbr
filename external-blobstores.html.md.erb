@@ -126,10 +126,11 @@ If you prefer to use the [AWS CLI](https://aws.amazon.com/cli/), use the [`put-b
 2. If your blobstore buckets are not empty, run the following command on each one of them, using the AWS CLI:
 
     <code>aws s3 cp s3://BUCKET-NAME/ s3://BUCKET-NAME/ --recursive --metadata bump=true</code><br>
-
+    </br>
     Where:
-
-    + `BUCKET-NAME` is the name of your bucket.
+    <ul>
+    <li> <code>BUCKET-NAME</code> is the name of your bucket.
+    </ul>
 
     For example:
     <pre class="terminal">
@@ -204,10 +205,12 @@ To modify the backup artifacts, do the following:
 2. Run the following command to extract the blobstore backup archive:
 
     <code>tar xvf BLOBSTORE-ARTIFACT.tar</code>
-
+    </br>
+    </br>
     Where:
-
-    + `BLOBSTORE-ARTIFACT` is the name of your blobstore artifact. 
+    <ul>
+    <li><code>BLOBSTORE-ARTIFACT</code> is the name of your blobstore artifact. 
+    </ul>
 
     For example:
 
@@ -223,13 +226,14 @@ To modify the backup artifacts, do the following:
 5. Update the metadata file entry for that `blobstore.json` with the new checksum.
 
 6. Run the following command to recreate the archive:
-
+    </br>
     <code>tar cvf BLOBSTORE-ARTIFACT.tar ./blobstore.json</code>
-
+    </br>
+    </br>
     Where:
-
-    + `BLOBSTORE-ARTIFACT` is the name of your blobstore artifact. 
-
+    <ul>
+    <li> <code>BLOBSTORE-ARTIFACT</code> is the name of your blobstore artifact. 
+    </ul>
     For example:
 
     <pre class="terminal">$ tar cvf backup-restore-0-s3-versioned-blobstore-backup-restorer.tar ./blobstore.json</pre>
