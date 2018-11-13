@@ -300,7 +300,8 @@ You must use the `enable-restore-azure-clone.yml` ops file in your deployment.
 <p class="note">
   <strong>Note</strong>: Apply <code>enable-backup-restore.yml</code> and <code>use-azure-storage-blobstore.yml</code>
   before <code>enable-restore-azure-clone.yml</code>.
-  For more information, see <a href="cf-backup.html#order">Apply Ops Files in the Correct Order</a>.
+  For more information, see <a href="cf-backup.html#order">Apply Ops Files in the Correct Order</a>
+in <em>Configuring Cloud Foundry for BOSH Backup and Restore</em>.
 </p>
 
 After restoring, replace the `enable-restore-azure-clone.yml` ops file in your deployment with the `enable-backup-restore-azure.yml` ops file and redeploy.
@@ -308,7 +309,8 @@ After restoring, replace the `enable-restore-azure-clone.yml` ops file in your d
 ## <a id="gcs"></a> Google Cloud Storage Blobstores
 
 BBR backs up GCS blobstores by copying blobs from live buckets to specified backup buckets.
-BBR uses the native copy functionality of your blobstore to transfer blobs between the live and backup buckets, without transferring the blobs to your BBR instance.
+BBR uses the native copy functionality of your blobstore to transfer blobs between the live and
+backup buckets, without transferring the blobs to your BBR instance.
 
 ### <a id="enable-backup-and-restore-gcs"></a> Enable Backup and Restore of your GCS Blobstore
 
@@ -320,12 +322,13 @@ you must colocate the `gcs-blobstore-backup-restorer` job from the [backup-and-r
 1. Include the `enable-backup-restore-gcs.yml` ops file in your deployment. The `enable-backup-restore-gcs.yml` file can be found in the [cf-deployment](https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/enable-backup-restore-gcs.yml) GitHub repository.
 
 
-    Refer to [vars-enable-backup-restore-gcs.yml](https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/example-vars-files/vars-enable-backup-restore-gcs.yml) for information on how to configure the variables for your backup bucket locations.
+    Refer to [vars-enable-backup-restore-gcs.yml](https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/example-vars-files/vars-enable-backup-restore-gcs.yml) for information about how to configure the variables for your backup bucket locations.
 
 
       <p class="note"><strong>Note</strong>: Apply <code>enable-backup-restore.yml</code> and <code>use-gcs-blobstore-service-account.yml</code>
          before <code>enable-backup-restore-gcs.yml</code>.
-         See <a href="cf-backup.html#order">Apply Ops Files in the Correct Order</a>.</p>
+         See <a href="cf-backup.html#order">Apply Ops Files in the Correct Order</a> in
+<em>Configuring Cloud Foundry for BOSH Backup and Restore</em>.</p>
 
     If you do not use [cf-deployment](https://github.com/cloudfoundry/cf-deployment) and ops files, you can still back up and restore external blobstores with BBR.
     Refer to the contents of the `enable-backup-restore-gcs.yml` ops file as an example and review the [backup-and-restore-sdk-release](https://github.com/cloudfoundry-incubator/backup-and-restore-sdk-release/blob/master/docs/blobstore-backup-restore.md#google-cloud-storage-blobstores) documentation in GitHub for further information.
