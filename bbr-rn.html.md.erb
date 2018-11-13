@@ -5,6 +5,27 @@ owner: Release Engineering
 
 ## <a id='releases'></a> Releases
 
+### <a id='1.3'></a> v1.3.0
+
+**Release Date**: November 13, 2018
+
+**New:**
+
+Introduces parallel multi-deployment backup capabilities
+* `bbr` will apply the relevant action to all the BOSH deployments that can be accessed using the provided BOSH credentials
+* The following actions are supported:
+
+```
+$> bbr deployment --all-deployments pre-backup-check
+$> bbr deployment --all-deployments backup
+$> bbr deployment --all-deployments backup-cleanup
+```
+
+**Improvement:**
+
+Improves support for tunnelling (`BOSH_ALL_PROXY` -- https://bosh.io/docs/cli-tunnel/) for the interaction between `bbr` and a BOSH director
+* Adds tunnelling support for the `bbr director` commands
+
 ### <a id='1.2'></a> v1.2.8
 
 **Release Date**: September 25, 2018
