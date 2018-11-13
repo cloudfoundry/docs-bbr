@@ -79,7 +79,7 @@ BBR only supports S3-compatible buckets that are versioned and support AWS Signa
 External blobstores are backed up by storing the current version of each blob, not the actual files. Those versions are set to be the current versions at restore time. 
 
 <p class="note warning">
-  <strong>WARNING</strong>: Storing the current version of each blob makes backing up and restoring faster. However, this means that you can only restore if the original bucket still exists. If the original bucket is deleted, all of that bucket's related versions are also deleted. If the original bucket is deleted, you can only restore from a replica.  For more information, see <a href="https://docs-cloudfoundry-staging.cfapps.io/bbr/external-blobstores.html#s3-versioned-restore-from-replicas">Restore from Replicas</a>. 
+  <strong>WARNING</strong>: Storing the current version of each blob makes backing up and restoring faster. However, this means that you can only restore if the original bucket still exists. If the original bucket is deleted, all of that bucket's related versions are also deleted. If the original bucket is deleted, you can only restore from a replica.  For more information, see <a href="external-blobstores.html#s3-versioned-restore-from-replicas">Restore from Replicas</a>. 
 </p>
 
 <p class="note warning">
@@ -121,7 +121,7 @@ Enabling versioning of the `resource_pool` bucket is not required.
 
 To enable versioning of Amazon S3 buckets, see [How Do I Enable or Suspend Versioning for an S3 Bucket?](https://docs.aws.amazon.com/AmazonS3/latest/user-guide/enable-versioning.html) in the Amazon Simple Storage Service documentation. 
 
-If you prefer to use the [AWS CLI](https://aws.amazon.com/cli/), use the [`put-bucket-versioning` command](https://docs.aws.amazon.com/cli/latest/reference/s3api/put-bucket-versioning.html).
+If you prefer to use the [AWS CLI](https://aws.amazon.com/cli/), use the `put-bucket-versioning` command. For more information, see [put-bucket-versioning](https://docs.aws.amazon.com/cli/latest/reference/s3api/put-bucket-versioning.html) in the AWS CLI Command Reference.
 
 2. If your blobstore buckets are not empty, run the following command on each one of them, using the AWS CLI:
 
