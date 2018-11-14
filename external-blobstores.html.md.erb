@@ -46,16 +46,14 @@ you must colocate the `s3-unversioned-blobstore-backup-restorer` job from the [b
 1. Create backup buckets for droplets, packages, and buildpacks. We recommend that either the backup buckets or copies of them be in a different region than the live buckets.
 
 1. Include the `enable-backup-restore-s3-unversioned.yml` ops file in your deployment. The `enable-backup-restore-s3-unversioned.yml` file can be found in the [cf-deployment](https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/enable-backup-restore-s3-unversioned.yml) GitHub repository.
-
-
-    Refer to [vars-enable-backup-restore-s3-unversioned.yml](https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/example-vars-files/vars-enable-backup-restore-s3-unversioned.yml) for information on how to configure the variables for your backup bucket locations.
-
-
-      <p class="note"><strong>Note</strong>: Apply <code>enable-backup-restore.yml</code> and <code>use-s3-blobstore.yml</code>
-         before <code>enable-backup-restore-s3-unversioned.yml</code>.
-         See <a href="cf-backup.html#order">Apply Ops Files in the Correct Order</a>.</p>
-
+  <br><br>
+  Refer to [vars-enable-backup-restore-s3-unversioned.yml](https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/example-vars-files/vars-enable-backup-restore-s3-unversioned.yml) for information on how to configure the variables for your backup bucket locations.
+    <p class="note"><strong>Note</strong>: Apply <code>enable-backup-restore.yml</code> and <code>use-s3-blobstore.yml</code>
+    before <code>enable-backup-restore-s3-unversioned.yml</code>.
+    See <a href="cf-backup.html#order">Apply Ops Files in the Correct Order</a>.</p>
+    <br><br>
     If you do not use [cf-deployment](https://github.com/cloudfoundry/cf-deployment) and ops files, you can still back up and restore external blobstores with BBR.
+    <br><br>
     Refer to the contents of the `enable-backup-restore-s3-unversioned.yml` ops file as an example and review the [backup-and-restore-sdk-release](https://github.com/cloudfoundry-incubator/backup-and-restore-sdk-release/blob/master/docs/blobstore-backup-restore.md#s3-compatible-unversioned-blobstores) documentation in GitHub for further information.
 
 <p class="note warning">
@@ -320,18 +318,16 @@ you must colocate the `gcs-blobstore-backup-restorer` job from the [backup-and-r
 1. Create backup buckets for droplets, packages, and buildpacks. We recommend that either the backup buckets or copies of them be in a different region than the live buckets.
 
 1. Include the `enable-backup-restore-gcs.yml` ops file in your deployment. The `enable-backup-restore-gcs.yml` file can be found in the [cf-deployment](https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/enable-backup-restore-gcs.yml) GitHub repository.
-
-
-    Refer to [vars-enable-backup-restore-gcs.yml](https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/example-vars-files/vars-enable-backup-restore-gcs.yml) for information about how to configure the variables for your backup bucket locations.
-
-
-      <p class="note"><strong>Note</strong>: Apply <code>enable-backup-restore.yml</code> and <code>use-gcs-blobstore-service-account.yml</code>
-         before <code>enable-backup-restore-gcs.yml</code>.
-         See <a href="cf-backup.html#order">Apply Ops Files in the Correct Order</a> in
-<em>Configuring Cloud Foundry for BOSH Backup and Restore</em>.</p>
-
-    If you do not use [cf-deployment](https://github.com/cloudfoundry/cf-deployment) and ops files, you can still back up and restore external blobstores with BBR.
-    Refer to the contents of the `enable-backup-restore-gcs.yml` ops file as an example and review the [backup-and-restore-sdk-release](https://github.com/cloudfoundry-incubator/backup-and-restore-sdk-release/blob/master/docs/blobstore-backup-restore.md#google-cloud-storage-blobstores) documentation in GitHub for further information.
+  <br><br>
+  Refer to [vars-enable-backup-restore-gcs.yml](https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/example-vars-files/vars-enable-backup-restore-gcs.yml) for information about how to configure the variables for your backup bucket locations.
+  <br><br>
+    <p class="note"><strong>Note</strong>: Apply <code>enable-backup-restore.yml</code> and <code>use-gcs-blobstore-service-account.yml</code>
+    before <code>enable-backup-restore-gcs.yml</code>.
+    See <a href="cf-backup.html#order">Apply Ops Files in the Correct Order</a> in
+    <em>Configuring Cloud Foundry for BOSH Backup and Restore</em>.</p>
+  <br>
+  If you do not use [cf-deployment](https://github.com/cloudfoundry/cf-deployment) and ops files, you can still back up and restore external blobstores with BBR.
+  Refer to the contents of the `enable-backup-restore-gcs.yml` ops file as an example and review the [backup-and-restore-sdk-release](https://github.com/cloudfoundry-incubator/backup-and-restore-sdk-release/blob/master/docs/blobstore-backup-restore.md#google-cloud-storage-blobstores) documentation in GitHub for further information.
 
 <p class="note warning">
   <strong>WARNING</strong>: To minimize storage costs, we recommend creating a lifecycle policy for your backup buckets that permanently expires your older backups. For more information, see <a href="https://cloud.google.com/storage/docs/lifecycle">Object Lifecycle Management</a> in the Google Cloud Storage documentation.
