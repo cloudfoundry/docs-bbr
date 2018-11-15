@@ -9,50 +9,53 @@ owner: Release Engineering
 
 **Release Date**: November 13, 2018
 
-**New:**
+#### Features
 
-Introduces parallel multi-deployment backup capabilities
-* `bbr` will apply the relevant action to all the BOSH deployments that can be accessed using the provided BOSH credentials
+* Introduces parallel multi-deployment backup capabilities.
+* `bbr` will apply the relevant action to all the BOSH deployments that can be accessed using the provided BOSH credentials.
 * The following actions are supported:
 
-```
-$> bbr deployment --all-deployments pre-backup-check
-$> bbr deployment --all-deployments backup
-$> bbr deployment --all-deployments backup-cleanup
-```
+	```
+	bbr deployment --all-deployments pre-backup-check
+	bbr deployment --all-deployments backup
+	bbr deployment --all-deployments backup-cleanup
+	```
 
-**Improvement:**
+#### Improvements
 
-Improves support for tunnelling (`BOSH_ALL_PROXY` -- https://bosh.io/docs/cli-tunnel/) for the interaction between `bbr` and a BOSH director
-* Adds tunnelling support for the `bbr director` commands
+* Improves support for tunneling using `BOSH_ALL_PROXY` for the interaction between `bbr` and a BOSH Director. For more information, see [Tunneling](https://bosh.io/docs/cli-tunnel/) in the BOSH documentation.
+* Adds tunneling support for the `bbr director` commands.
 
 ### <a id='1.2'></a> v1.2.8
 
 **Release Date**: September 25, 2018
 
-**Improvement:**
+#### Improvements
 
-`bbr backup` with `BOSH_ALL_PROXY` was still occasionally failing with `connection reset by peer` errors. We changed approach in how we handle SSH connection which should make `bbr backup` more stable when used with a SOCKS5 proxy. [Pivotal Tracker Story](https://www.pivotaltracker.com/n/projects/1662777/stories/160167687) and [GitHub Issue #21](https://github.com/cloudfoundry-incubator/bosh-backup-and-restore/issues/21)
+* `bbr backup` with `BOSH_ALL_PROXY` was still occasionally failing with `connection reset by peer` errors. This release changes how BBR handles SSH connections, which should make `bbr backup` more stable when used with a SOCKS5 proxy. See the [Pivotal Tracker Story](https://www.pivotaltracker.com/n/projects/1662777/stories/160167687) and [GitHub Issue #21](https://github.com/cloudfoundry-incubator/bosh-backup-and-restore/issues/21).
 
-**Improvement:**
+* BBR commands now print the job name in the drain logs.
+	<br><br>
+	The old version of the drain logs appeared in the following format: 
 
-BBR commands now print the job name in drain logs:
+	```
+	[bbr] XXXX INFO - Copying backup -- 2.6M uncompressed -- from backup-prepare/XXXX...
+	```
 
-```
-OLD
-[bbr] XXXX INFO - Copying backup -- 2.6M uncompressed -- from backup-prepare/XXXX...
+	The new version of the drain logs appear in the following format:
 
-NEW
-[bbr] XXXX INFO - Copying backup -- 2.6M uncompressed -- for job bbr-usage-servicedb on backup-prepare/XXXX...
-```
+	```
+	[bbr] XXXX INFO - Copying backup -- 2.6M uncompressed -- for job bbr-usage-servicedb on backup-prepare/XXXX...
+	```
+	<br>
+	This should help users understand where backup artifacts are coming from. See the [Pivotal Tracker Story](https://www.pivotaltracker.com/n/projects/1662777/stories/159265175).
 
-This should help users understand where backup artifacts are coming from. [Pivotal Tracker Story](https://www.pivotaltracker.com/n/projects/1662777/stories/159265175)
+#### Bug Fixes
 
-**Fixed:**
-
-Backup metadata were wrongly reporting the job index for backup artifacts. Consider the following example, a multi-master CFCR cluster. The backup artifact is always coming from `master/0` while `master/1` and `master/2` provide no backup artifact. However, previously it was not always reported (in the backup metadata) that the artifact was coming from `master/0`.
-
-This makes no noticeable difference but it fixes the accuracy of the metadata file. [Pivotal Tracker Story](https://www.pivotaltracker.com/n/projects/1662777/stories/160141669)
+* Backup metadata were wrongly reporting the job index for backup artifacts. 
+	<br>
+	Consider the example of a multi-master CFCR cluster. The backup artifact is always coming from `master/0` while `master/1` and `master/2` provide no backup artifact. However, previously it was not always reported (in the backup metadata) that the artifact was coming from `master/0`.
+* This makes no noticeable difference but it fixes the accuracy of the metadata file. See the [Pivotal Tracker Story](https://www.pivotaltracker.com/n/projects/1662777/stories/160141669).
 
 ### <a id='1.2'></a> v1.2.7
 
