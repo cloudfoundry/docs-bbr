@@ -5,6 +5,22 @@ owner: Release Engineering
 
 ## <a id='releases'></a> Releases
 
+### <a id='1.3'></a> v1.3.2
+
+**Release Date**: January 2, 2019
+
+#### Improvements
+
+* Log files created when using BBR to do a multi-deployment backup can now be read while BBR is running:
+
+	```
+	# run BBR in the background
+	bbr deployment --all-deployments backup &
+
+	# monitor BBR's progress by reading the log files while BBR is running
+	tail *.log
+	```
+
 ### <a id='1.3'></a> v1.3.1
 
 **Release Date**: November 30, 2018
