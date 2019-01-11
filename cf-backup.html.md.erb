@@ -32,7 +32,7 @@ and use them as a guide to customize your deployment manifest directly.
 
 To enable backup and restore for your `cf-deployment`, deploy it with the
 [enable-backup-restore.yml](https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/enable-backup-restore.yml) ops file. This
-enables BBR backup and restore for default CF components.
+enables BBR backup and restore for default CF components, including the internal blobstore.
 
 To enable BBR backup and restore for different configurations you must also use the appropriate backup and restore ops files as shown in this table:
 
@@ -132,8 +132,33 @@ The backup and restore SDK supports the following database versions:
 | Postgres | 9.6.x   |
 
 
-### <a id='supported-blobstore-backup-configurations'></a>Supported Blobstore Backup Configurations
+### <a id='supported-blobstore-backup-configurations'></a>Selective Backups Configurations for Blobstores
+When configuring your blobstore you can choose to use an external blobstore instead of the default internal blobstore. See <a href="external-blobstores.html">Backup and Restore for External Blobstores
+</a> for our list of supported external blobstores.
 
+When backing up your blobstores by default it backups droplets, buildpacks, and packages. When an external blobstore is configured, you can choose what content you want to omit from your backup using the following ops files:
+
+| Selective Backup Ops File                                                                                                                                                                                            | Backup only includes |
+|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:---------------------|
+| <a href="https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/skip-backup-restore-droplets.yml">`skip-backup-restore-droplets.yml`</a>                           | Buildpacks, Packages |
+| <a href="https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/skip-backup-restore-droplets-and-packages.yml">`skip-backup-restore-droplets-and-packages.yml`</a> | Buildpacks           |
+
+<p class="note warning">
+When utilising selective backup ops files, you should take into a account the <a href="#selective-backup-restore-steps">extra steps needed</a> to get your applications into a running state after a restore, as they will increase your overall recovery time compared to the default configuration.
+<p>
+
+#### <a id='selective-backup-restore-steps'></a>Restoring Applications when using Selective Backups
+When using the default configuration, all applications will return to a running state after a restore.
+
+When using the `skip-backup-restore-droplets.yml` ops file, you must do the following to get your applications running after a restore:
+
+1. `cf restage` your user-pushed applications.
+1. For any applications pushed via a BOSH errand you can either manually `cf restage` them or re-run their errand.
+
+When using the `skip-backup-restore-droplets-and-packages.yml` ops file, you must do the following to get your applications running after a restore:
+
+1. `cf push` your user-pushed applications.
+1. For any applications pushed via a BOSH errand you will have to re-run their errand.
 
 ### <a id="order"></a> Apply Ops Files in the Correct Order
 When enabling backup and restore for a component of `cf-deployment` you must ensure that you have the ops file for enabling backup and restore applied after you have applied the feature. For example if you configured your `cf-deployment` to use an S3 blobstore you would need to make sure that you apply the ops files in the following order:
