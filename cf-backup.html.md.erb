@@ -80,6 +80,18 @@ To enable BBR backup and restore for different configurations you must also use 
   </tr>
   <tr>
     <td>
+      A GCS external blobstore. For instructions, see <a href="external-blobstores.html#gcs">Backup and Restore with External Blobstores</a>.
+    </td>
+    <td>
+      <code>use-gcs-blobstore.yml</code>
+    </td>
+    <td>
+      <a href="https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/enable-backup-restore-gcs.yml">
+        <code>enable-backup-restore-gcs.yml</code></a>
+    </td>
+  </tr>
+  <tr>
+    <td>
       A <a href="#supported-external-databases">supported external database</a>
     </td>
     <td>
@@ -120,7 +132,10 @@ The backup and restore SDK supports the following database versions:
 | Postgres | 9.6.x   |
 
 
-## <a id="order"></a> Apply Ops Files in the Correct Order
+### <a id='supported-blobstore-backup-configurations'></a>Supported Blobstore Backup Configurations
+
+
+### <a id="order"></a> Apply Ops Files in the Correct Order
 When enabling backup and restore for a component of `cf-deployment` you must ensure that you have the ops file for enabling backup and restore applied after you have applied the feature. For example if you configured your `cf-deployment` to use an S3 blobstore you would need to make sure that you apply the ops files in the following order:
 
 1. `use-s3-blobstore.yml`
