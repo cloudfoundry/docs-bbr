@@ -5,11 +5,11 @@ owner: BBR
 
 This topic describes the configuration you need for your Cloud Foundry (CF) deployment to work with BOSH Backup and Restore (BBR).
 
-This topic assumes that you are using 
-[cf-deployment](https://github.com/cloudfoundry/cf-deployment) with ops files 
+This topic assumes that you are using
+[cf-deployment](https://github.com/cloudfoundry/cf-deployment) with ops files
 for your Cloud Foundry deployment.
 
-If you do not use ops files for customization, you can still customize your 
+If you do not use ops files for customization, you can still customize your
 Cloud Foundry to use BBR. Examine the contents of the ops files on this page,
 and use them as a guide to customize your deployment manifest directly.
 
@@ -30,8 +30,8 @@ and use them as a guide to customize your deployment manifest directly.
 
 ## <a id='configure-cf'></a>Supported CF Configurations
 
-To enable backup and restore for your `cf-deployment`, deploy it with the 
-[enable-backup-restore.yml](https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/enable-backup-restore.yml) ops file. This 
+To enable backup and restore for your `cf-deployment`, deploy it with the
+[enable-backup-restore.yml](https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/enable-backup-restore.yml) ops file. This
 enables BBR backup and restore for default CF components.
 
 To enable BBR backup and restore for different configurations you must also use the appropriate backup and restore ops files as shown in this table:
@@ -101,18 +101,6 @@ To enable BBR backup and restore for different configurations you must also use 
       <code>enable-backup-restore-nfs-broker.yml</code></a>
     </td>
   </tr>
-  <tr>
-    <td>
-      Use CredHub for service credentials (Experimental)<br>
-    </td>
-    <td>
-      <code>secure-service-credentials.yml</code>
-    </td>
-    <td>
-      <a href="https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/enable-backup-restore-credhub.yml">
-      <code>enable-backup-restore-credhub.yml</code></a>
-    </td>
-  </tr>
 </table>
 
 BBR can communicate with external blobstores and databases over TLS if they are configured accordingly.
@@ -133,30 +121,21 @@ The backup and restore SDK supports the following database versions:
 
 
 ## <a id="order"></a> Apply Ops Files in the Correct Order
-
-Select the ops files you need and apply them in the following order:
-
-<p class="note"><strong>Note</strong>: This is the <em>relative</em> order.
-You do not have to apply all ops files listed below and you can apply other ops files in between.<br>
-For example, you can apply an ops file between <code>use-external-dbs.yml</code> and <code>enable-backup-restore.yml</code>,
-but do not apply <code>enable-backup-restore.yml</code> <em>before</em> <code>use-external-dbs.yml</code>.
-</p>
+When enabling backup and restore for a component of `cf-deployment` you must ensure that you have the ops file for enabling backup and restore applied after you have applied the feature. For example if you configured your `cf-deployment` to use an S3 blobstore you would need to make sure that you apply the ops files in the following order:
 
 1. `use-s3-blobstore.yml`
+1. `enable-backup-restore-s3-unversioned.yml`
 
-1. `use-external-dbs.yml`
+Another example would be configuring your `cf-deployment` to use an external database and enabling backup restore for it.  In this case the relative is order is the following:
 
-1. `enable-nfs-volume-service.yml`
-
-1. `secure-service-credentials.yml`
-
+1. `use-external-db.yml`
 1. `enable-backup-restore.yml`
 
-1. `enable-backup-restore-s3-versioned.yml` or `enable-backup-restore-s3-unversioned.yml`
-
-1. `enable-backup-restore-nfs-broker.yml`
-
-1. `enable-backup-restore-credhub.yml`
+<p class="note">
+This is the <em>relative</em> order. You can apply other ops files in between.<br>
+For example, you can apply an ops file between <code>use-s3-blobstore.yml</code> and <code>enable-backup-restore-s3-unversioned.yml</code>,
+but do not apply <code>enable-backup-restore-s3-unversioned.yml</code> <em>before</em> <code>use-s3-blobstore.yml</code>.
+<p>
 
 ## <a id='process'></a> Next Steps
 
