@@ -163,7 +163,7 @@ When using the `skip-backup-restore-droplets.yml` ops file, do the following to 
 
 When using the `skip-backup-restore-droplets-and-packages.yml` ops file, do the following to get your applications running after a restore:
 
-1. For each user-pushed application, run `cf restage`.
+1. For each user-pushed application, run `cf push`.
 1. For each application pushed using a BOSH errand, re-run the BOSH errand.
 
 ### <a id="order"></a> Apply Ops Files in the Correct Order
