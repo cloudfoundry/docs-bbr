@@ -5,6 +5,38 @@ owner: Release Engineering
 
 ## <a id='releases'></a> Releases
 
+### <a id='1.4'></a> v1.4.0
+
+**Release Date**: February 21, 2019
+
+#### Features
+
+* Release authors are now able to check the BBR version by testing the `$BBR_VERSION` variable in `metadata`:
+
+  ```
+  #!/usr/bin/env bash
+  if [ -z "$BBR_VERSION" ]; then
+    # This message will be printed if using BBR 1.3.x or earlier
+    >&2 echo "BBR_VERSION is not set, unsupported bbr cli, I am out of here"
+    exit 1
+  fi
+
+  # This message will be printed if using BBR 1.4+
+  echo "I am ok"
+  ```
+
+* Job dependencies are now supported for `bbr director backup` and `bbr director restore`.
+  - Earlier versions of BBR will fail if a director job declares a dependency.
+
+#### Improvements
+
+* A reminder to run `bbr backup-cleanup` will be printed when the pre-backup check fails.
+  - This can happen if you try to run backup, it fails, and then try to run backup again without cleaning up.
+  - Before this change, the reminder to run `bbr backup-cleanup` would only be printed once, after the first failed backup.
+
+* The size of backup artifacts that are transferred to the BOSH deployment will now be printed during restore.
+  - Prior to this change, the artifact size was only printed during backup.
+
 ### <a id='1.3'></a> v1.3.2
 
 **Release Date**: January 2, 2019
