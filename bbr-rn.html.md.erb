@@ -5,6 +5,30 @@ owner: Release Engineering
 
 ## <a id='releases'></a> Releases
 
+### <a id='1.5'></a> v1.5.0
+
+**Release Date**: March 27, 2019
+
+#### Features
+
+* Release authors can now specify job dependencies for BOSH director jobs using the `metadata` hook. For example:
+
+	  ```
+	  #!/usr/bin/env bash
+	  
+	  echo "---
+	  restore_should_be_locked_before:
+	  - job_name: uaa
+	    release: uaa"
+	  ```
+
+* Release authors can now tell BBR to backup from one instance of a job (bootstrap node) and restore to all instances by using the BOSH property `bbr.backup_one_restore_all`.
+
+### Deprecation
+
+* **Backwards incompatible:** Dropped support for `backup_name` and `restore_name` properties in the `metadata` hook.
+  - **Action required:** if you are using these properties, see if the `bbr.backup_one_restore_all` BOSH property can be used to replace this functionality (see https://github.com/cloudfoundry-incubator/cfcr-etcd-release/pull/11 as an example).
+
 ### <a id='1.4'></a> v1.4.0
 
 **Release Date**: February 21, 2019
