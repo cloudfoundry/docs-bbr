@@ -17,7 +17,7 @@ For information, see [Compatibility of Restore](./restore.html#compatibility).
 
 ## <a id='connect-to-jumpbox'></a> Connect to Your Jumpbox
 
-In order to take a director or deployment backup using BBR, you need to establish a connection to your jumpbox in one of the following ways:
+To back up a BOSH Director or BOSH deployment using BBR, you need to establish a connection to your jumpbox in one of the following ways:
 
 * [Connect with SSH](#ssh)
 * [Connect with BOSH_ALL_PROXY](#bosh-all-proxy)
@@ -73,7 +73,7 @@ through the proxy, moving backup artifacts can be significantly slower.</p>
     * `PATH-TO-PRIVATE-KEY` is the path to the SSH private key used to connect to the BOSH Director.
     * `USER-NAME` is the SSH username of the BOSH Director.
     * `HOST` is the address of the BOSH Director with an optional SSH port. This port defaults to the standard SSH port, `22`.
-       If the BOSH Director is public, this is a URL or public IP, such as `https://my-bosh.xxx.cf-app.com`.  Otherwise, this will be the internal IP of the BOSH Director.
+       If the BOSH Director is public, `HOST` is a URL or public IP, such as `https://my-bosh.xxx.cf-app.com`.  Otherwise, `HOST` is the internal IP of the BOSH Director.
 
     For example:
 
@@ -104,7 +104,7 @@ through the proxy, moving backup artifacts can be significantly slower.</p>
     * `PATH-TO-PRIVATE-KEY` is the path to the SSH private key used to connect to the BOSH Director.
     * `USER-NAME` is the SSH username of the BOSH Director.
     * `HOST` is the address of the BOSH Director with an optional SSH port. This port defaults to the standard SSH port, `22`.
-       If the BOSH Director is public, this is a URL or public IP, such as `https://my-bosh.xxx.cf-app.com`.  Otherwise, this will be the internal IP of the BOSH Director.
+       If the BOSH Director is public, `HOST` is a URL or public IP, such as `https://my-bosh.xxx.cf-app.com`.  Otherwise, `HOST` is the internal IP of the BOSH Director.
 
     For example:
 
@@ -147,9 +147,8 @@ through the proxy, moving backup artifacts can be significantly slower.</p>
     * `DEPLOYMENT-NAME`: The name of the deployment you want to back up. For a list of deployments, 
     run `bosh deployments`.
     * `PATH-TO-BOSH-CA-CERTIFICATE`: The path to the BOSH Director's Certificate Authority (CA)
-    certificate, if the certificate is not verifiable by the local machine's certificate chain.
-      * If you manually deployed, then the certificate may be stored in a `secrets.yml` or similar 
-      file.
+    certificate, if the certificate is not verifiable by the local machine's certificate chain. If you manually deployed,
+    then the certificate may be stored in a `secrets.yml` or similar file.
 
     For example:
 
@@ -190,12 +189,11 @@ through the proxy, moving backup artifacts can be significantly slower.</p>
     * `BOSH-CLIENT`: If you have a BOSH Director with User Account and Authentication (UAA) as the 
     authentication provider, this is a UAA client as the username.
     If you have a BOSH Director with basic auth configured, this is your username.
-    * `DEPLOYMENT-NAME`: The name of the deployment you want to back up. For a list of deployments, 
+    * `DEPLOYMENT-NAME`: The name of the deployment you want to back up. For a list of deployments,
     run `bosh deployments`.
     * `PATH-TO-BOSH-CA-CERTIFICATE`: The path to the BOSH Director's Certificate Authority (CA)
-    certificate, if the certificate is not verifiable by the local machine's certificate chain.
-      * If you manually deployed, then the certificate may be stored in a `secrets.yml` or similar 
-      file.
+    certificate, if the certificate is not verifiable by the local machine's certificate chain. If you manually deployed,
+    then the certificate may be stored in a `secrets.yml` or similar file.
     <p class="note"><strong>Note</strong>: If you want to include the manifest in the backup artifact, add the  <code>--with-manifest</code> flag. However, be aware that the backup artifact then includes credentials that you need to keep secret.</p>
 
     For example:
