@@ -17,7 +17,7 @@ For information, see [Compatibility of Restore](./restore.html#compatibility).
 
 ## <a id='connect-to-jumpbox'></a> Connect to Your Jumpbox
 
-You can establish a connection to your jumpbox in one of the following ways.
+In order to take a director or deployment backup using BBR, you need to establish a connection to your jumpbox in one of the following ways:
 
 * [Connect with SSH](#ssh)
 * [Connect with BOSH_ALL_PROXY](#bosh-all-proxy)
@@ -26,11 +26,11 @@ For general information about the jumpbox, see [Installing BOSH Backup and Resto
 
 ### <a id='ssh'></a> Connect with SSH
 
-SSH into your jumpbox. If you connect to your jumpbox with SSH, you must run the BBR commands in the following sections from within your jumpbox.
+SSH into your jumpbox. If you connect to your jumpbox with SSH, you must run the BBR commands within your jumpbox.
 
 ### <a id='bosh-all-proxy'></a> Connect with BOSH_ALL_PROXY
 
-Set and use `BOSH_ALL_PROXY`. Using `BOSH_ALL_PROXY` opens an SSH tunnel with SOCKS5 to the jumpbox. This tunnel allows you to forward requests to the BOSH Director through the jumpbox from your local machine.
+Set and use `BOSH_ALL_PROXY`. Using `BOSH_ALL_PROXY` opens an SSH tunnel with a SOCKS5 proxy to the jumpbox. This tunnel forwards requests to the BOSH Director through the jumpbox from your local machine.
 
 Use one of the following methods to create the tunnel:
 
@@ -72,16 +72,15 @@ through the proxy, moving backup artifacts can be significantly slower.</p>
     Where:
     * `PATH-TO-PRIVATE-KEY` is the path to the SSH private key used to connect to the BOSH Director.
     * `USER-NAME` is the SSH username of the BOSH Director.
-    * `HOST` is the address of the BOSH Director with an optional port. This port defaults to `22`.
-       If the BOSH Director is public, this is a URL, such as `https://my-bosh.xxx.cf-app.com`.
-       Otherwise, this is the BOSH Director IP address.
+    * `HOST` is the address of the BOSH Director with an optional SSH port. This port defaults to the standard SSH port, `22`.
+       If the BOSH Director is public, this is a URL or public IP, such as `https://my-bosh.xxx.cf-app.com`.  Otherwise, this will be the internal IP of the BOSH Director.
 
     For example:
 
     <pre class="terminal">
     $ bbr director \
     --private-key-path bosh.pem \
-    --username vcap \
+    --username bosh \
     --host bosh.example.com \
     pre-backup-check
     </pre>
@@ -104,16 +103,15 @@ through the proxy, moving backup artifacts can be significantly slower.</p>
     Where:
     * `PATH-TO-PRIVATE-KEY` is the path to the SSH private key used to connect to the BOSH Director.
     * `USER-NAME` is the SSH username of the BOSH Director.
-    * `HOST` is the address of the BOSH Director with an optional port. This port defaults to `22`.
-       If the BOSH Director is public, this is a URL, such as `https://my-bosh.xxx.cf-app.com`.
-       Otherwise, this is the BOSH Director IP address.
+    * `HOST` is the address of the BOSH Director with an optional SSH port. This port defaults to the standard SSH port, `22`.
+       If the BOSH Director is public, this is a URL or public IP, such as `https://my-bosh.xxx.cf-app.com`.  Otherwise, this will be the internal IP of the BOSH Director.
 
     For example:
 
     <pre class="terminal">
     $ bbr director \
     --private-key-path bosh.pem \
-    --username vcap \
+    --username bosh \
     --host bosh.example.com \
     backup
     </pre>
@@ -150,8 +148,6 @@ through the proxy, moving backup artifacts can be significantly slower.</p>
     run `bosh deployments`.
     * `PATH-TO-BOSH-CA-CERTIFICATE`: The path to the BOSH Director's Certificate Authority (CA)
     certificate, if the certificate is not verifiable by the local machine's certificate chain.
-      * If you used [bbl](https://github.com/cloudfoundry/bosh-bootloader), spin up your director 
-      to retrieve the CA certificate with `bbl director-ca-cert`.
       * If you manually deployed, then the certificate may be stored in a `secrets.yml` or similar 
       file.
 
@@ -161,7 +157,7 @@ through the proxy, moving backup artifacts can be significantly slower.</p>
     $ BOSH_CLIENT_SECRET=p455w0rd \
     bbr deployment \
     --target bosh.example.com \
-    --username admin \
+    --username jumpbox \
     --deployment cf-acceptance-0 \
     --ca-cert bosh.ca.cert \
     pre-backup-check
@@ -198,8 +194,6 @@ through the proxy, moving backup artifacts can be significantly slower.</p>
     run `bosh deployments`.
     * `PATH-TO-BOSH-CA-CERTIFICATE`: The path to the BOSH Director's Certificate Authority (CA)
     certificate, if the certificate is not verifiable by the local machine's certificate chain.
-      * If you used [bbl](https://github.com/cloudfoundry/bosh-bootloader), spin up your Director 
-      to retrieve the CA certificate with `bbl director-ca-cert`.
       * If you manually deployed, then the certificate may be stored in a `secrets.yml` or similar 
       file.
     <p class="note"><strong>Note</strong>: If you want to include the manifest in the backup artifact, add the  <code>--with-manifest</code> flag. However, be aware that the backup artifact then includes credentials that you need to keep secret.</p>
@@ -210,7 +204,7 @@ through the proxy, moving backup artifacts can be significantly slower.</p>
     $ BOSH_CLIENT_SECRET=p455w0rd \
     nohup bbr deployment \
     --target bosh.example.com \
-    --username admin \
+    --username jumpbox \
     --deployment cf-acceptance-0 \
     --ca-cert bosh.ca.cert \
     backup</pre>
@@ -271,7 +265,7 @@ Follow the steps below to use the BBR cleanup script after a failed backup attem
     <pre class="terminal">
     $ bbr director \
     --private-key-path bosh.pem \
-    --username vcap \
+    --username bosh \
     --host bosh.example.com \
     backup-cleanup
     </pre>
@@ -294,7 +288,7 @@ Follow the steps below to use the BBR cleanup script after a failed backup attem
     $ BOSH_CLIENT_SECRET=p455w0rd \
     bbr deployment \
     --target bosh.example.com \
-    --username admin \
+    --username jumpbox \
     --deployment cf-acceptance-0 \
     --ca-cert bosh.ca.crt \
     backup-cleanup
