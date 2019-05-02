@@ -5,6 +5,27 @@ owner: Release Engineering
 
 ## <a id='releases'></a> Releases
 
+### <a id='1.5'></a> v1.5.1
+
+**Release Date**: May 3, 2018
+
+#### Features
+
+* Added the ability to gracefully skip BOSH jobs. In order to use this feature, add the following property to the `<job-dir>/bbr/bin/metadata` file:
+
+```yaml
+skip_bbr_scripts: true
+```
+
+#### Improvements
+
+* Improved error messages when BBR fails while processing a `metadata` file.
+  - Error messages used to, unnecessarily, be repeated.
+
+#### Bug Fixes
+
+* `bbr` will not hang if the SSH key passed via the `BOSH_ALL_PROXY` is invalid.
+
 ### <a id='1.5'></a> v1.5.0
 
 **Release Date**: March 27, 2019
