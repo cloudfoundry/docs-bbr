@@ -11,7 +11,7 @@ owner: Release Engineering
 
 #### Features
 
-* Added the ability to gracefully skip BOSH jobs. In order to use this feature, add the following property to the `<job-dir>/bbr/bin/metadata` file:
+Added the ability to gracefully skip BOSH jobs. To use this feature, add the following property to the `YOUR-JOB-DIRECTORY/bbr/bin/metadata` file:
 
 ```yaml
 skip_bbr_scripts: true
@@ -19,12 +19,12 @@ skip_bbr_scripts: true
 
 #### Improvements
 
-* Improved error messages when BBR fails while processing a `metadata` file.
-  - Error messages used to, unnecessarily, be repeated.
+Improved error messages when BBR fails while processing a `metadata` file.
+Previously, error messages were unnecessarily repeated.
 
 #### Bug Fixes
 
-* `bbr` will not hang if the SSH key passed via the `BOSH_ALL_PROXY` is invalid.
+If the SSH key passed through `BOSH_ALL_PROXY` is invalid, `bbr` does not hang.
 
 ### <a id='1.5'></a> v1.5.0
 
