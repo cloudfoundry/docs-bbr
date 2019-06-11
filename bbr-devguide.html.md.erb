@@ -30,17 +30,18 @@ To ensure that backup and restore scripts do not get out of sync with the releas
 
 ###  <a id='script-implementation'></a>Script Organization
 
-BBR sets out a contract with release authors to call designated backup and restore scripts under the `/var/vcap/jobs/<JOB-NAME>/bin/bbr/` directory:
+BBR sets out a contract with release authors to call designated backup and restore
+scripts under the `/var/vcap/jobs/JOB-NAME/bin/bbr/` directory:
 
-* Backup Scripts
+* Backup scripts
   * pre-backup-lock
   * backup
   * post-backup-unlock
-* Restore Scripts
+* Restore scripts
   * pre-restore-lock
   * restore
   * post-restore-unlock
-* Metadata Script (if needed)
+* Metadata script (if needed)
   * metadata
 
 Release authors must implement scripts as part of the BBR contract.
@@ -469,13 +470,25 @@ If your release requires that you stop your component's processes during backup 
 
 ### Naming Conventions
 
-Multiple backup and restore scripts will be collocated on the `backup-restore` instance, separated by job name. For this reason, each release should name the jobs containing their `backup` and `restore` scripts following the pattern `bbr-[RELEASE_NAME]db`. For example, in the scenario shown in [Example](#bbr-cf-example), the job containing the backup and restore scripts is `bbr-acmedb`.
+Multiple backup and restore scripts will be collocated on the `backup-restore` instance,
+separated by job name.
+For this reason, each release should name the jobs containing their `backup` and
+`restore` scripts following the pattern `bbr-RELEASE-NAMEdb`.
+For example, in the scenario shown in [Example](#bbr-cf-example) below, the job containing
+the backup and restore scripts is `bbr-acmedb`.
 
 ### <a id="bbr-cf-example"></a>Example
 
-Acme Release is a Cloud Foundry component that has no persistent disk on its component VM. The release is an API that stores its data in a MySQL database deployed on a different instance group in this CF deployment.
+Acme Release is a Cloud Foundry component that has no persistent disk on its component VM.
+The release is an API that stores its data in a MySQL database deployed on a different
+instance group in this CF deployment.
 
-The release authors have chosen to create two new jobs to be incorporated into their existing release;  one job includes the `backup` and `restore` scripts in its templates directory, and the other job includes the `pre-backup-lock` and `post-backup-unlock` scripts. This is because the operator will collocate the former job on the `backup-restore` VM and the latter job on the Acme Release VM.
+The release authors have chosen to create two new jobs to be incorporated into
+their existing release;  one job includes the `backup` and `restore` scripts in
+its templates directory, and the other job includes the `pre-backup-lock` and
+`post-backup-unlock` scripts.
+This is because the operator will collocate the former job on the `backup-restore`
+VM and the latter job on the Acme Release VM.
 
 Here is how the backup and restore job should be placed:
 
