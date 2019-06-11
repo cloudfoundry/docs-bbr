@@ -30,17 +30,17 @@ To ensure that backup and restore scripts do not get out of sync with the releas
 
 ###  <a id='script-implementation'></a>Script Organization
 
-BBR sets out a contract with release authors to call designated backup and restore scripts:
+BBR sets out a contract with release authors to call designated backup and restore scripts under the `/var/vcap/jobs/<JOB-NAME>/bin/bbr/` directory:
 
-* Backup
+* Backup Scripts
   * pre-backup-lock
   * backup
   * post-backup-unlock
-* Restore
+* Restore Scripts
   * pre-restore-lock
   * restore
   * post-restore-unlock
-* Metadata script (if needed)
+* Metadata Script (if needed)
   * metadata
 
 Release authors must implement scripts as part of the BBR contract.
@@ -467,6 +467,10 @@ A Cloud Foundry operator adds a `backup-restore` instance to their Cloud Foundry
 
 If your release requires that you stop your component's processes during backup and restore, you also need to provide [`unlock`](#post-backup-unlock) and [`lock`](#pre-backup-lock) scripts. You may collocate these scripts on either the `backup-restore` instance or your component's instance. You should collocate these scripts on the component's instance if you want to interact directly with `monit` or your running job.
 
+### Naming Conventions
+
+Multiple backup and restore scripts will be collocated on the `backup-restore` instance, separated by job name. For this reason, each release should name the jobs containing their `backup` and `restore` scripts following the pattern `bbr-[RELEASE_NAME]db`. For example, in the scenario shown in [Example](#bbr-cf-example), the job containing the backup and restore scripts is `bbr-acmedb`.
+
 ### <a id="bbr-cf-example"></a>Example
 
 Acme Release is a Cloud Foundry component that has no persistent disk on its component VM. The release is an API that stores its data in a MySQL database deployed on a different instance group in this CF deployment.
@@ -501,10 +505,6 @@ class jobs/bbr-lock-unlock-acme lavender
 class jobs/bbr-acmedb lavender
 class jobs/database-backup-restorer turquoise
 <% end %>
-
-#### Naming Conventions
-
-Multiple backup and restore scripts will be collocated on the `backup-restore` instance, separated by job name. For this reason, each release should name the jobs containing their `backup` and `restore` scripts following the pattern `bbr-[RELEASE_NAME]db`. For example, in the scenario above, the job containing the backup and restore scripts is `bbr-acmedb`.
 
 ## <a id='drats'></a>Acceptance Tests
 
