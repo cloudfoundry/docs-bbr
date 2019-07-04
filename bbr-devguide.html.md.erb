@@ -31,18 +31,23 @@ To ensure that backup and restore scripts do not get out of sync with the releas
 ###  <a id='script-implementation'></a>Script Organization
 
 BBR sets out a contract with release authors to call designated backup and restore
-scripts under the `/var/vcap/jobs/JOB-NAME/bin/bbr/` directory:
+scripts under the `/var/vcap/jobs/JOB-NAME/bin/bbr/SCRIPT-NAME` directory:
 
-* Backup scripts
-  * pre-backup-lock
-  * backup
-  * post-backup-unlock
-* Restore scripts
-  * pre-restore-lock
-  * restore
-  * post-restore-unlock
-* Metadata script (if needed)
-  * metadata
+* Backup script names
+  * `pre-backup-lock`
+  * `backup`
+  * `post-backup-unlock`
+* Restore script names
+  * `pre-restore-lock`
+  * `restore`
+  * `post-restore-unlock`
+* Metadata script name (if needed)
+  * `metadata`
+
+For example, a full directory structure of a templated bbr job would like:
+
+* `/var/vcap/jobs/bbr-uaadb/bin/bbr/backup`
+* `/var/vcap/jobs/bbr-uaadb/bin/bbr/post-restore-unlock`
 
 Release authors must implement scripts as part of the BBR contract.
 Package and distribute the scripts as part of your BOSH release.
@@ -76,27 +81,20 @@ acme-release
 │   ├── blobs.yml
 │   └── final.yml
 ├── jobs
-│   ├── backup-restore-acme
+│   ├── bbr-acmedb
 │   │   ├── monit
 │   │   ├── spec
 │   │   └── templates
 │   │       ├── backup.sh.erb
 │   │       ├── config.json.erb
 │   │       └── restore.sh.erb
-│   ├── lock-unlock-acme
-│   │   ├── monit
-│   │   ├── spec
-│   │   └── templates
-│   │       ├── post-backup-unlock.sh.erb
-│   │       ├── pre-backup-lock.sh.erb
-│   │       └── metadata.sh.erb (optional)
-│   ├── lock-unlock-acme-interferer
-│   │   ├── monit
-│   │   ├── spec
-│   │   └── templates
-│   │       ├── post-backup-unlock.sh.erb
-│   │       ├── pre-backup-lock.sh.erb
-│   │       └── metadata.sh.erb (optional)
+│   └── bbr-lock-unlock-acme
+│       ├── monit
+│       ├── spec
+│       └── templates
+│           ├── post-backup-unlock.sh.erb
+│           ├── pre-backup-lock.sh.erb
+│           └── metadata.sh.erb (optional)
 ├── packages
 └── src
 ```
@@ -356,7 +354,7 @@ A normal workflow for restoring a deployment does the following:
 
 ## <a id='metadata'></a>Metadata Script
 
-The `metadata` script is a optional script that would be executed by `bbr` before any other scripts are executed to get more information about the jobs, for example locking dependencies. The script is expected to print a `yaml` on standard out with more information about the job for backup and restore.
+The `metadata` script is a optional script that would be executed by `bbr` before any other scripts are executed to get more information about the jobs, for example locking dependencies and whether the bbr job is enabled or not. The script is expected to print a `yaml` on standard out with more information about the job for backup and restore.
 
 ### Job Configuration
 
@@ -372,7 +370,7 @@ To add a `metadata` script to a release job:
       metadata.erb: bin/bbr/metadata
     ```
 
-### Properties
+### Properties (Optional)
 
 * `backup_should_be_locked_before`
 This property can be use to specify locking dependencies of the current job during backup. The jobs are specified as an array with their release names.
@@ -394,8 +392,13 @@ restore_should_be_locked_before:
 - job_name: lock-unlock-acme
   release: acme-release" </pre>
 
+* `skip_bbr_scripts`
+This property can be used to disable a bbr job. When the metadata script is templated with this property set to true, the bbr cli will not run the bbr scripts in this job.
 
-
+<pre class="terminal">
+#!/usr/bin/env bash
+echo "---
+skip_bbr_scripts: true" </pre>
 
 ## <a id='testing'></a>Testing
 The functional testing pattern recommended for BBR scripts is:
@@ -468,14 +471,20 @@ A Cloud Foundry operator adds a `backup-restore` instance to their Cloud Foundry
 
 If your release requires that you stop your component's processes during backup and restore, you also need to provide [`unlock`](#post-backup-unlock) and [`lock`](#pre-backup-lock) scripts. You may collocate these scripts on either the `backup-restore` instance or your component's instance. You should collocate these scripts on the component's instance if you want to interact directly with `monit` or your running job.
 
-### Naming Conventions
+### Naming Recommendations
 
 Multiple backup and restore scripts will be collocated on the `backup-restore` instance,
 separated by job name.
-For this reason, each release should name the jobs containing their `backup` and
-`restore` scripts following the pattern `bbr-RELEASE-NAMEdb`.
-For example, in the scenario shown in [Example](#bbr-cf-example) below, the job containing
-the backup and restore scripts is `bbr-acmedb`.
+For this reason, each release should name the jobs in a way that it's self-documenting, so there is no confusion between bbr jobs.
+
+To this effect, here are some naming recommendations:
+
+* Using the prefix `bbr-` to show that the job is bbr-related
+* Including the name of the component that is being backed up
+
+For example, if you have a release called `acme-release` and this release has a database (db) that need to be backed up,
+a good bbr job name for this database would look like `bbr-acmedb` which follows the format `bbr-RELEASE-NAMEdb`.
+The acme release is used in the below [Example](#bbr-cf-example).
 
 ### <a id="bbr-cf-example"></a>Example
 
@@ -521,29 +530,6 @@ class jobs/database-backup-restorer turquoise
 
 ## <a id='drats'></a>Acceptance Tests
 
-The **Disaster Recovery Acceptance Test Suite** (DRATS) runs against a Cloud Foundry deployment to ensure that backup and restore works as expected. Specifically, DRATS adds state to a Cloud Foundry deployment by testing backup and restore during a CF operation such as pushing an app. DRATS backs up the deployment, restores from the backup, and asserts that the state is present after restore.
+The **Disaster Recovery Acceptance Test Suite** (DRATs) runs against a Cloud Foundry deployment to ensure that backup and restore works as expected.
 
-To add extra test cases, create a new TestCase that implements the [TestCase interface](https://github.com/cloudfoundry-incubator/disaster-recovery-acceptance-tests/tree/master/testcases).
-
-You must implement the following methods:
-
-* `PopulateState()` must create some state in the Cloud Foundry deployment to be backed up. This deployment's name must be set to environment variable `DEPLOYMENT_TO_BACKUP`.
-* `CheckState()` must assert that the state in the restored Cloud Foundry deployment matches that created by `PopulateState()`. The restored Cloud Foundry deployment's name must be set to `DEPLOYMENT_TO_RESTORE`.
-* `Cleanup()` must clean up the state created in the Cloud Foundry deployment to be backed up.
-
-You can find further instructions and examples [here](https://github.com/cloudfoundry-incubator/disaster-recovery-acceptance-tests).
-
-### <a id='running-drats'></a>Running Acceptance Tests
-
-Run acceptance tests as follows:
-
-1. Deploy Cloud Foundry.
-1. From the [DRATS](https://github.com/cloudfoundry-incubator/disaster-recovery-acceptance-tests) GitHub repository,
-   run `scripts/run_acceptance_tests.sh` with the following environment variables set:
-  * `DEPLOYMENT_TO_BACKUP` — name of the Cloud Foundry deployment
-  * `DEPLOYMENT_TO_RESTORE` — name of the Cloud Foundry deployment
-  * `BOSH_URL` — URL of BOSH Director that has deployed the above Cloud Foundry deployments
-  * `BOSH_CLIENT` — BOSH Director username
-  * `BOSH_CLIENT_SECRET` — BOSH Director password
-  * `BOSH_CERT_PATH` — path to BOSH Director CA certificate
-  * `BBR_BUILD_PATH` — path to BBR binary
+You can find further instructions to run DRATS, contribute and more examples [here](https://github.com/cloudfoundry-incubator/disaster-recovery-acceptance-tests).
