@@ -81,14 +81,14 @@ acme-release
 │   ├── blobs.yml
 │   └── final.yml
 ├── jobs
-│   ├── backup-restore-acme
+│   ├── bbr-acmedb
 │   │   ├── monit
 │   │   ├── spec
 │   │   └── templates
 │   │       ├── backup.sh.erb
 │   │       ├── config.json.erb
 │   │       └── restore.sh.erb
-│   └── lock-unlock-acme
+│   └── bbr-lock-unlock-acme
 │       ├── monit
 │       ├── spec
 │       └── templates
@@ -466,14 +466,20 @@ A Cloud Foundry operator adds a `backup-restore` instance to their Cloud Foundry
 
 If your release requires that you stop your component's processes during backup and restore, you also need to provide [`unlock`](#post-backup-unlock) and [`lock`](#pre-backup-lock) scripts. You may collocate these scripts on either the `backup-restore` instance or your component's instance. You should collocate these scripts on the component's instance if you want to interact directly with `monit` or your running job.
 
-### Naming Conventions
+### Naming Recommendations
 
 Multiple backup and restore scripts will be collocated on the `backup-restore` instance,
 separated by job name.
-For this reason, each release should name the jobs containing their `backup` and
-`restore` scripts following the pattern `bbr-RELEASE-NAMEdb`.
-For example, in the scenario shown in [Example](#bbr-cf-example) below, the job containing
-the backup and restore scripts is `bbr-acmedb`.
+For this reason, each release should name the jobs in a way that it's self-documenting, so there is no confusion between bbr jobs.
+
+To this effect, here are some naming recommendations:
+
+* Using the prefix `bbr-` to show that the job is bbr-related
+* Including the name of the component that is being backed up
+
+For example, if you have a release called `acme-release` and this release has a database (db) that need to be backed up,
+a good bbr job name for this database would look like `bbr-acmedb` which follows the format `bbr-RELEASE-NAMEdb`.
+The acme release is used in the below [Example](#bbr-cf-example).
 
 ### <a id="bbr-cf-example"></a>Example
 
