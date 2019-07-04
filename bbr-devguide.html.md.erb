@@ -354,7 +354,7 @@ A normal workflow for restoring a deployment does the following:
 
 ## <a id='metadata'></a>Metadata Script
 
-The `metadata` script is a optional script that would be executed by `bbr` before any other scripts are executed to get more information about the jobs, for example locking dependencies. The script is expected to print a `yaml` on standard out with more information about the job for backup and restore.
+The `metadata` script is a optional script that would be executed by `bbr` before any other scripts are executed to get more information about the jobs, for example locking dependencies and whether the bbr job is enabled or not. The script is expected to print a `yaml` on standard out with more information about the job for backup and restore.
 
 ### Job Configuration
 
@@ -370,7 +370,7 @@ To add a `metadata` script to a release job:
       metadata.erb: bin/bbr/metadata
     ```
 
-### Properties
+### Properties (Optional)
 
 * `backup_should_be_locked_before`
 This property can be use to specify locking dependencies of the current job during backup. The jobs are specified as an array with their release names.
@@ -392,8 +392,13 @@ restore_should_be_locked_before:
 - job_name: lock-unlock-acme
   release: acme-release" </pre>
 
+* `skip_bbr_scripts`
+This property can be used to disable a bbr job. When the metadata script is templated with this property set to true, the bbr cli will not run the bbr scripts in this job.
 
-
+<pre class="terminal">
+#!/usr/bin/env bash
+echo "---
+skip_bbr_scripts: true" </pre>
 
 ## <a id='testing'></a>Testing
 The functional testing pattern recommended for BBR scripts is:
