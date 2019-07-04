@@ -31,18 +31,23 @@ To ensure that backup and restore scripts do not get out of sync with the releas
 ###  <a id='script-implementation'></a>Script Organization
 
 BBR sets out a contract with release authors to call designated backup and restore
-scripts under the `/var/vcap/jobs/JOB-NAME/bin/bbr/` directory:
+scripts under the `/var/vcap/jobs/JOB-NAME/bin/bbr/SCRIPT-NAME` directory:
 
-* Backup scripts
-  * pre-backup-lock
-  * backup
-  * post-backup-unlock
-* Restore scripts
-  * pre-restore-lock
-  * restore
-  * post-restore-unlock
-* Metadata script (if needed)
-  * metadata
+* Backup script names
+  * `pre-backup-lock`
+  * `backup`
+  * `post-backup-unlock`
+* Restore script names
+  * `pre-restore-lock`
+  * `restore`
+  * `post-restore-unlock`
+* Metadata script name (if needed)
+  * `metadata`
+
+For example, a full directory structure of a templated bbr job would like:
+
+* `/var/vcap/jobs/bbr-uaadb/bin/bbr/backup`
+* `/var/vcap/jobs/bbr-uaadb/bin/bbr/post-restore-unlock`
 
 Release authors must implement scripts as part of the BBR contract.
 Package and distribute the scripts as part of your BOSH release.
