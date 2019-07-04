@@ -514,29 +514,6 @@ class jobs/database-backup-restorer turquoise
 
 ## <a id='drats'></a>Acceptance Tests
 
-The **Disaster Recovery Acceptance Test Suite** (DRATS) runs against a Cloud Foundry deployment to ensure that backup and restore works as expected. Specifically, DRATS adds state to a Cloud Foundry deployment by testing backup and restore during a CF operation such as pushing an app. DRATS backs up the deployment, restores from the backup, and asserts that the state is present after restore.
+The **Disaster Recovery Acceptance Test Suite** (DRATs) runs against a Cloud Foundry deployment to ensure that backup and restore works as expected.
 
-To add extra test cases, create a new TestCase that implements the [TestCase interface](https://github.com/cloudfoundry-incubator/disaster-recovery-acceptance-tests/tree/master/testcases).
-
-You must implement the following methods:
-
-* `PopulateState()` must create some state in the Cloud Foundry deployment to be backed up. This deployment's name must be set to environment variable `DEPLOYMENT_TO_BACKUP`.
-* `CheckState()` must assert that the state in the restored Cloud Foundry deployment matches that created by `PopulateState()`. The restored Cloud Foundry deployment's name must be set to `DEPLOYMENT_TO_RESTORE`.
-* `Cleanup()` must clean up the state created in the Cloud Foundry deployment to be backed up.
-
-You can find further instructions and examples [here](https://github.com/cloudfoundry-incubator/disaster-recovery-acceptance-tests).
-
-### <a id='running-drats'></a>Running Acceptance Tests
-
-Run acceptance tests as follows:
-
-1. Deploy Cloud Foundry.
-1. From the [DRATS](https://github.com/cloudfoundry-incubator/disaster-recovery-acceptance-tests) GitHub repository,
-   run `scripts/run_acceptance_tests.sh` with the following environment variables set:
-  * `DEPLOYMENT_TO_BACKUP` — name of the Cloud Foundry deployment
-  * `DEPLOYMENT_TO_RESTORE` — name of the Cloud Foundry deployment
-  * `BOSH_URL` — URL of BOSH Director that has deployed the above Cloud Foundry deployments
-  * `BOSH_CLIENT` — BOSH Director username
-  * `BOSH_CLIENT_SECRET` — BOSH Director password
-  * `BOSH_CERT_PATH` — path to BOSH Director CA certificate
-  * `BBR_BUILD_PATH` — path to BBR binary
+You can find further instructions to run DRATS, contribute and more examples [here](https://github.com/cloudfoundry-incubator/disaster-recovery-acceptance-tests).
