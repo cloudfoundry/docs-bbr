@@ -44,7 +44,7 @@ scripts under the `/var/vcap/jobs/JOB-NAME/bin/bbr/SCRIPT-NAME` directory:
 * Metadata script name (if needed)
   * `metadata`
 
-For example, a full directory structure of a templated bbr job would like:
+For example, the directory structure of a templated BBR job looks like the following:
 
 * `/var/vcap/jobs/bbr-uaadb/bin/bbr/backup`
 * `/var/vcap/jobs/bbr-uaadb/bin/bbr/post-restore-unlock`
@@ -352,9 +352,13 @@ A normal workflow for restoring a deployment does the following:
     cleanup --> exit
 <% end %>
 
-## <a id='metadata'></a>Metadata Script
+## <a id='metadata'></a>(Optional) Metadata Script
 
-The `metadata` script is a optional script that would be executed by `bbr` before any other scripts are executed to get more information about the jobs, for example locking dependencies and whether the bbr job is enabled or not. The script is expected to print a `yaml` on standard out with more information about the job for backup and restore.
+The `metadata` script is an optional script that `bbr` executes before
+any other scripts to get more information about the jobs, for example,
+locking dependencies and whether the BBR job is enabled or not.
+The script is expected to print a `yaml` on standard out with more information
+about the job for backup and restore.
 
 ### Job Configuration
 
@@ -370,20 +374,29 @@ To add a `metadata` script to a release job:
       metadata.erb: bin/bbr/metadata
     ```
 
-### Properties (Optional)
+### (Optional) Properties
 
-* `backup_should_be_locked_before`
-This property can be use to specify locking dependencies of the current job during backup. The jobs are specified as an array with their release names.
+#### backup\_should\_be\_locked\_before
 
-  <pre class="terminal">
-  #!/usr/bin/env bash
-  echo "---
-  backup\_should\_be\_locked\_before:
-  - job_name: lock-unlock-acme
-    release: acme-release" </pre>
+Use this property to specify the locking dependencies for the current job during backup.
+The jobs are specified as an array with their release names.
 
-* `restore_should_be_locked_before`
-If you want your <code>bin/bbr/pre-restore-lock</code> scripts to run in a specific order, define that order using the optional metadata script as in the above step, but with the `restore_should_be_locked_before` key. For example:
+For example:
+
+<pre class="terminal">
+#!/usr/bin/env bash
+echo "---
+backup_should_be_locked_before:
+- job_name: lock-unlock-acme
+  release: acme-release" </pre>
+
+#### restore\_should\_be\_locked\_before
+
+If you want your <code>bin/bbr/pre-restore-lock</code> scripts to run in a
+specific order, define that order using the metadata script, as above, but with
+the `restore_should_be_locked_before` key.
+
+For example:
 
 <pre class="terminal">
 #!/usr/bin/env bash
@@ -392,8 +405,13 @@ restore_should_be_locked_before:
 - job_name: lock-unlock-acme
   release: acme-release" </pre>
 
-* `skip_bbr_scripts`
-This property can be used to disable a bbr job. When the metadata script is templated with this property set to true, the bbr cli will not run the bbr scripts in this job.
+#### skip\_bbr\_scripts
+
+Use this property to disable a BBR job.
+When the metadata script is templated with this property set to true, the BBR CLI
+does not run the BBR scripts in this job.
+
+For example:
 
 <pre class="terminal">
 #!/usr/bin/env bash
@@ -473,18 +491,20 @@ If your release requires that you stop your component's processes during backup 
 
 ### Naming Recommendations
 
-Multiple backup and restore scripts will be collocated on the `backup-restore` instance,
-separated by job name.
-For this reason, each release should name the jobs in a way that it's self-documenting, so there is no confusion between bbr jobs.
+When Cloud Foundry is deployed, multiple backup and restore scripts are collocated on the
+`backup-restore` instance, separated by job name.
+For this reason, the job names for each release should have a consistent format
+so that there is no confusion between BBR jobs.
 
-To this effect, here are some naming recommendations:
+The recommendations for job names are as follows:
 
-* Using the prefix `bbr-` to show that the job is bbr-related
-* Including the name of the component that is being backed up
+* Use the prefix `bbr-` to show that the job is bbr-related
+* Include the name of the component that is being backed up
 
-For example, if you have a release called `acme-release` and this release has a database (db) that need to be backed up,
-a good bbr job name for this database would look like `bbr-acmedb` which follows the format `bbr-RELEASE-NAMEdb`.
-The acme release is used in the below [Example](#bbr-cf-example).
+For example, you have a release named `acme-release` that has a
+database (db) that must be backed up.
+The recommended BBR job name for this database is `bbr-acmedb`.
+This follows the format `bbr-RELEASE-NAMEdb`.
 
 ### <a id="bbr-cf-example"></a>Example
 
