@@ -122,7 +122,9 @@ BBR can communicate with external blobstores and databases over TLS if they are 
 ### <a id='supported-external-databases'></a>Supported External Databases
 
 Cloud Foundry components use the backup and restore SDK to interface with databases for backup and restore.
-For supported databases and versions, please see [backup and restore SDK github repo](https://github.com/cloudfoundry-incubator/backup-and-restore-sdk-release#database-backup-and-restore).
+For supported databases and versions, see
+[backup-and-restore-sdk-release](https://github.com/cloudfoundry-incubator/backup-and-restore-sdk-release#database-backup-and-restore)
+in GitHub.
 
 ### <a id='supported-blobstore-backup-configurations'></a>Selective Backup and Restore Configurations for Blobstores
 
@@ -131,8 +133,9 @@ of the default internal blobstore. For more information about supported external
 blobstores, see [Backup and Restore for External Blobstores](external-blobstores.html).
 
 When BBR backs up and restores your Cloud Foundry blobstore, it includes droplets, buildpacks, and packages
-by default. For your blobstore, you can choose to omit content
-from your backup and restore using the following ops files:
+by default.
+You can choose to omit content in your blobstore from your backup and restore
+using the following ops files:
 
 | Selective Backup Ops File                                                                                                                                                                                            | Content Included in Backup |
 |:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:---------------------|
