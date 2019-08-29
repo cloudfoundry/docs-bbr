@@ -11,12 +11,12 @@ owner: Release Engineering
 
 #### Features
 
-* Add short version of the `--artifact-path` flag: `-a`.
+* Added short version of the `--artifact-path` flag: `-a`
 
 #### Improvements
 
-* BBR will not log that the backup was successful if it draining fails
-* Bump Golang Crypto and Golang Sys libraries
+* BBR does not log the backup as successful if draining fails
+* Updated golang crypto and golang sys libraries
 
 ### <a id='1.5'></a> v1.5.1
 
@@ -45,11 +45,11 @@ If the SSH key passed through `BOSH_ALL_PROXY` is invalid, `bbr` does not hang.
 
 #### Features
 
-* Release authors can now specify job dependencies for BOSH director jobs using the `metadata` hook. For example:
+* Release authors can now specify job dependencies for BOSH Director jobs using the `metadata` hook. For example:
 
 	  ```
 	  #!/usr/bin/env bash
-	  
+
 	  echo "---
 	  restore_should_be_locked_before:
 	  - job_name: uaa
@@ -61,7 +61,7 @@ If the SSH key passed through `BOSH_ALL_PROXY` is invalid, `bbr` does not hang.
 ### Deprecation
 
 * **Backwards incompatible:** Dropped support for `backup_name` and `restore_name` properties in the `metadata` hook.
-  - **Action required:** if you are using these properties, see if the `bbr.backup_one_restore_all` BOSH property can be used to replace this functionality (see https://github.com/cloudfoundry-incubator/cfcr-etcd-release/pull/11 as an example).
+  - **Action required:** if you use these properties, see if the `bbr.backup_one_restore_all` BOSH property can be used to replace this functionality (see https://github.com/cloudfoundry-incubator/cfcr-etcd-release/pull/11 as an example).
 
 ### <a id='1.4'></a> v1.4.0
 
@@ -79,21 +79,21 @@ If the SSH key passed through `BOSH_ALL_PROXY` is invalid, `bbr` does not hang.
 	    exit 1
 	  fi
 
-	  # This message will be printed if using BBR v1.4+
+	  # This message prints if using BBR v1.4 or later.
 	  echo "I am ok"
 	  ```
 
-* Job dependencies are now supported for `bbr director backup` and `bbr director restore`. Earlier versions of BBR will fail if a BOSH Director job declares a dependency.
+* Job dependencies are now supported for `bbr director backup` and `bbr director restore`. Earlier versions of BBR fail when a BOSH Director job declares a dependency.
 
 #### Improvements
 
-* A reminder to run `bbr backup-cleanup` will be printed if the pre-backup check fails.
+* A reminder to run `bbr backup-cleanup` prints if the pre-backup check fails.
 	<br><br>
 	This can happen if you try to run `bbr backup`, it fails, and then you try to run the command again without cleaning up.
 	<br><br>
-	Before this change, the reminder to run `bbr backup-cleanup` would only be printed once, after the first failed backup.
+	Before this change, the reminder to run `bbr backup-cleanup` only printed once, after the first failed backup.
 
-* The size of backup artifacts that are transferred to the BOSH deployment will now be printed during restore. Prior to this change, the artifact size was only printed during backup.
+* The size of backup artifacts that are transferred to the BOSH deployment now print during restore. Prior to this change, the artifact size was only printed during backup.
 
 ### <a id='1.3'></a> v1.3.2
 
@@ -101,14 +101,14 @@ If the SSH key passed through `BOSH_ALL_PROXY` is invalid, `bbr` does not hang.
 
 #### Improvements
 
-* Log files created when using BBR to do a multi-deployment backup can now be read while BBR is running. Perform the following steps: 
+* Log files created when using BBR to do a multi-deployment backup can now be read while BBR is running. Perform the following steps:
 	1. Run the following command to run BBR in the background:
 
 		```
 		bbr deployment --all-deployments backup &
 		```
 	1. Run the following command to monitor BBR's progress by reading the log files while BBR is running:
-	
+
 		```
 		tail *.log
 		```
@@ -126,7 +126,7 @@ If the SSH key passed through `BOSH_ALL_PROXY` is invalid, `bbr` does not hang.
 
 #### Improvements
 
-* Bumped Golang dependency to the latest patch
+* Updated golang dependency to the latest patch
 
 ### <a id='1.3'></a> v1.3.0
 
@@ -135,7 +135,7 @@ If the SSH key passed through `BOSH_ALL_PROXY` is invalid, `bbr` does not hang.
 #### Features
 
 * Introduces parallel multi-deployment backup capabilities.
-* `bbr` will apply the relevant action to all the BOSH deployments that can be accessed using the provided BOSH credentials.
+* `bbr` applies the relevant action to all the BOSH deployments that can be accessed using the provided BOSH credentials.
 * The following actions are supported:
 
 	```
@@ -159,7 +159,7 @@ If the SSH key passed through `BOSH_ALL_PROXY` is invalid, `bbr` does not hang.
 
 * BBR commands now print the job name in the drain logs.
 	<br><br>
-	The old version of the drain logs appeared in the following format: 
+	The old version of the drain logs appeared in the following format:
 
 	```
 	[bbr] XXXX INFO - Copying backup -- 2.6M uncompressed -- from backup-prepare/XXXX...
@@ -175,7 +175,7 @@ If the SSH key passed through `BOSH_ALL_PROXY` is invalid, `bbr` does not hang.
 
 #### Bug Fixes
 
-* Backup metadata were wrongly reporting the job index for backup artifacts. 
+* Backup metadata were wrongly reporting the job index for backup artifacts.
 	<br>
 	Consider the example of a multi-master CFCR cluster. The backup artifact is always coming from `master/0` while `master/1` and `master/2` provide no backup artifact. However, previously it was not always reported (in the backup metadata) that the artifact was coming from `master/0`.
 * This makes no noticeable difference but it fixes the accuracy of the metadata file. See the [Pivotal Tracker Story](https://www.pivotaltracker.com/n/projects/1662777/stories/160141669).
@@ -208,7 +208,7 @@ None
 
 #### Bug Fixes
 
-* `bbr` is now able to talk to BOSH via a SOCKS5 proxy -- [story](https://www.pivotaltracker.com/n/projects/1662777/stories/157779432)
+* `bbr` is now able to talk to BOSH through a SOCKS5 proxy -- [story](https://www.pivotaltracker.com/n/projects/1662777/stories/157779432)
 
 ### <a id='1.2'></a> v1.2.4
 
@@ -265,7 +265,7 @@ None
 
 #### Features
 
-* Adds `--artifact-path` for backup to enable specifying where the backup artifacts should go 
+* Adds `--artifact-path` for backup to enable specifying where the backup artifacts should go
 
 #### Bug Fixes
 
@@ -280,7 +280,7 @@ None
 **Release Date**: February 22, 2018
 
 #### Features
-* Call lock and unlock scripts in parallel to reduce API downtime 
+* Call lock and unlock scripts in parallel to reduce API downtime
 
 #### Bug Fixes
 
@@ -300,7 +300,7 @@ None
 
 #### Security Fix
 
-* Bump to Golang 1.10
+* Updates to golang v1.10
 
 #### Bug Fixes
 
@@ -317,7 +317,7 @@ None
 
 #### Features
 * To enable BOSH add-ons to work, BOSH Backup and Restore (BBR) no longer fails when the release name for a job cannot be found
-* Move 'keep-alive' warnings to debug mode
+* Move 'keepalive' warnings to debug mode
 
 #### Bug Fixes
 
@@ -334,7 +334,7 @@ None
 
 #### Features
 * Improve stdout output
-* Ensure that BBR works with scripts added via BOSH add-on
+* Ensure that BBR works with scripts added through BOSH add-on
 
 #### Bug Fixes
 
@@ -381,7 +381,7 @@ None
 
 #### Features
 * Adds `restore-cleanup`, which can be run after a failed restore to remove artifacts and unlock the deployments being restored.
-* Adds support for BOSH Deployments and Directors to lock deployments during the restore process 
+* Adds support for BOSH Deployments and Directors to lock deployments during the restore process
 and to declare the order that locking is done.
 
 #### Bug Fixes
@@ -393,14 +393,14 @@ None
 None
 
 
-### <a id='1.0'></a> v1.0 
+### <a id='1.0'></a> v1.0
 
 **Release Date**: August 7, 2017
 
 #### Features
 
-* Enables backup and restore of BOSH Deployments and BOSH Directors. 
-BBR uses backup and restore functionality that is packaged in the BOSH Deployment or Director. 
+* Enables backup and restore of BOSH Deployments and BOSH Directors.
+BBR uses backup and restore functionality that is packaged in the BOSH Deployment or Director.
 
 #### Bug Fixes
 
