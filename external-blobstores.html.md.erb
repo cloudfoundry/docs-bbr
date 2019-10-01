@@ -72,7 +72,7 @@ If your original backup buckets are lost but you are restoring from copies of th
 </p>
 
 ## <a id="s3-versioned"></a> S3-Compatible Versioned Blobstores
-BBR only supports S3-compatible buckets that are versioned and support AWS Signature Version 4. For more details about enabling versioning on your blobstore, see [Enable Versioning on Your S3-Compatible Blobstore](#enable-s3-versioning).
+BBR supports S3-compatible buckets that are versioned and support AWS Signature Version 4. For more details about enabling versioning on your blobstore, see [Enable Versioning on Your S3-Compatible Blobstore](#enable-s3-versioning).
 
 External blobstores are backed up by storing the current version of each blob, not the actual files. Those versions are set to be the current versions at restore time. 
 
