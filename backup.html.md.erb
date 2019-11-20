@@ -1,5 +1,5 @@
 ---
-title: Backing up with BOSH Backup and Restore
+title: Backing Up with BOSH Backup and Restore
 owner: BBR
 ---
 
@@ -114,7 +114,7 @@ To connect with `BOSH_ALL_PROXY`, do one of the following:
   on GitHub.
 </div>
 
-## <a id='back-up-director'></a> Back up a BOSH Director
+## <a id='back-up-director'></a> Back Up a BOSH Director
 
 1. Run the BBR pre-backup check to confirm that your BOSH Director is reachable and can be backed up with BBR:
 
@@ -195,7 +195,7 @@ To connect with `BOSH_ALL_PROXY`, do one of the following:
      For more information, see [BBR Logging](logging.html).
    * Follow the steps in [Recover from a Failing Command](#recovering-from-failing-command).
 
-## <a id='back-up-deployment'></a> Back up a BOSH Deployment
+## <a id='back-up-deployment'></a> Back Up a BOSH Deployment
 
 1. Run the BBR pre-backup check to confirm that your BOSH Director is reachable and has a deployment that you can back up with BBR:
 
@@ -301,7 +301,7 @@ If the backup fails for the BOSH Director or deployment, follow these steps:
 1. Ensure that the jumpbox can reach the BOSH Director.
 1. See [BBR Logging](logging.html).
 1. If you see the error message `Directory /var/vcap/store/bbr-backup already exists on instance`,
-   run the appropriate cleanup command. See [Clean up after a Failed Backup](#manual-clean) below.
+   run the appropriate cleanup command. See [Clean Up after a Failed Backup](#manual-clean) below.
 1. If the backup artifact is corrupted, discard the failing artifacts and rerun the backup.
 
 ## <a id='cancel-backup'></a>Cancel a Backup
@@ -311,9 +311,10 @@ If you need to cancel a backup, for example if you realize that the backup is go
 or that your developers need to push an app in a hurry, follow these steps:
 
 1. Terminate the BBR process by pressing Ctrl-C and typing `yes` to confirm.
-1. Because stopping a backup can leave the system in an unusable state and prevent additional backups, follow the procedures in [Clean up after a Failed Backup](#manual-clean) below.
+1. Because stopping a backup can leave the system in an unusable state and prevent additional backups,
+   follow the procedures in [Clean Up after a Failed Backup](#manual-clean) below.
 
-## <a id="manual-clean"></a>Clean up after a Failed Backup
+## <a id="manual-clean"></a>Clean Up after a Failed Backup
 
 If your backup process fails, it might leave the BBR backup folder on the instance, causing any
 subsequent attempts to backup to fail. In addition, BBR might not have run the post-backup scripts, leaving the instance in a locked state.
