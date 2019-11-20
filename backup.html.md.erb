@@ -146,23 +146,23 @@ To connect with `BOSH_ALL_PROXY`, do one of the following:
      For more information, see [BBR Logging](logging.html).
    * Make the fix suggested in the output and run the pre-backup check again.<br>
      For example, the command fails if the BOSH Director selected did not have the correct backup scripts or if the connection to the BOSH Director failed.
-     
+
 1. If you are using BOSH v270.0 or later, you can prune the BOSH blobstore by running:
 
     ```
     bosh clean-up --all
     ```
-    
-    The above command removes all unused resources, including packages complied against older stemcells. If a lot of unused 
-    resources have accumulated over time, this results in a smaller, faster backup of BOSH Director. 
-    For more information see [Clean-Up](https://bosh.io/docs/cli-v2/#clean-up) in BOSH documentation.
-    
+
+    The above command removes all unused resources, including packages complied against older stemcells. If a
+    lot of unused resources have accumulated over time, this results in a smaller, faster backup of BOSH Director.
+    For more information see [Clean-Up](https://bosh.io/docs/cli-v2/#clean-up) in the BOSH documentation.
+
     <p class="note warning">
-	    <strong>Note:</strong> The above command is destructive and can remove resources that are unused 
-	    but necessary. For example, if an on-demand service broker is deployed and no service instances have been created, 
-	    the releases needed to create a service instance are categorized as unused and are removed.
+	    <strong>Note:</strong> The above command is destructive and can remove resources that are unused
+	    but necessary. For example, if an on-demand service broker is deployed and no service instances have been
+      created, the releases needed to create a service instance are categorized as unused and are removed.
     </p>
-  
+
 1. Run the BBR backup command to back up your BOSH Director:
 
     ```
