@@ -4,13 +4,13 @@ owner: BBR
 ---
 
 This topic describes how to use BOSH Backup and Restore (BBR) to back up a BOSH deployment or BOSH Director.
-Perform the steps below to back up a [BOSH Director](#back-up-director), a [BOSH deployment](#back-up-deployment), or both.
+Perform the steps below to back up a BOSH Director, a BOSH deployment, or both.
 
 To perform a restore, see [Restoring with BOSH Backup and Restore](restore.html).
 
 ## <a id='prereqs'></a> Prerequisites
 
-If you want to use the result of the backup to restore to a destination environment,
+Before using the result of the backup to restore to a destination environment,
 verify that the current environment and the destination environment are compatible.
 For information, see [Compatibility of Restore](./restore.html#compatibility).
 [//]: # (Need a link to the steps to perform to check the compatibility.)
@@ -27,7 +27,7 @@ For more information about the jumpbox, see [Installing BOSH Backup and Restore]
 
 ### <a id='ssh'></a> Option 1: Connect with SSH
 
-To connect to your jumpbox using the command line, run the following command:
+To connect to your jumpbox using the command line interface (CLI), run:
 
 ```
 ssh -i PATH-TO-KEY  JUMPBOX-USERNAME@JUMPBOX-ADDRESS
@@ -39,7 +39,7 @@ Where:
   * `JUMPBOX-USERNAME` is your jumpbox username.
   * `JUMPBOX-ADDRESS` is the IP address or hostname of the jumpbox.
 
-<p class="note"><strong>Note</strong>: If you connect to your jumpbox with SSH,
+<p class="note"><strong>Note:</strong> If you connect to your jumpbox with SSH,
    you must run the BBR commands in this topic from within your jumpbox.
 </p>
 
@@ -211,16 +211,16 @@ To connect with `BOSH_ALL_PROXY`, do one of the following:
     Replace the placeholder text as follows:
     * `BOSH-CLIENT-SECRET`: If you have a BOSH Director with User Account and Authentication (UAA)
     as the authentication provider, this is a UAA client secret as the password.
-    If you have a BOSH Director with basic auth configured, this is your password.
+    If you have a BOSH Director with basic authentication configured, this is your password.
     * `BOSH-TARGET`: The FQDN or IP address of your BOSH Director.
     * `BOSH-CLIENT`: If you have a BOSH Director with User Account and Authentication (UAA) as the
     authentication provider, this is a UAA client as the username.
-    If you have a BOSH Director with basic auth configured, this is your username.
+    If you have a BOSH Director with basic authentication configured, this is your username.
     * `DEPLOYMENT-NAME`: The name of the deployment you want to back up. For a list of deployments,
     run `bosh deployments`.
     * `PATH-TO-BOSH-CA-CERTIFICATE`: The path to the BOSH Director's Certificate Authority (CA)
     certificate, if the certificate is not verifiable by the local machine's certificate chain. If you manually deployed,
-    then the certificate may be stored in a `secrets.yml` or similar file.
+    then the certificate might be stored in a `secrets.yml` or similar file.
 
     For example:
 
@@ -256,17 +256,17 @@ To connect with `BOSH_ALL_PROXY`, do one of the following:
     previous command.
     * `BOSH-CLIENT-SECRET`: If you have a BOSH Director with User Account and Authentication (UAA)
     as the authentication provider, this is a UAA client secret as the password.
-    If you have a BOSH Director with basic auth configured, this is your password.
+    If you have a BOSH Director with basic authentication configured, this is your password.
     * `BOSH-TARGET`: The FQDN or IP address of your BOSH Director.
     * `BOSH-CLIENT`: If you have a BOSH Director with User Account and Authentication (UAA) as the
     authentication provider, this is a UAA client as the username.
-    If you have a BOSH Director with basic auth configured, this is your username.
+    If you have a BOSH Director with basic authentication configured, this is your username.
     * `DEPLOYMENT-NAME`: The name of the deployment you want to back up. For a list of deployments,
     run `bosh deployments`.
     * `PATH-TO-BOSH-CA-CERTIFICATE`: The path to the BOSH Director's Certificate Authority (CA)
     certificate, if the certificate is not verifiable by the local machine's certificate chain. If you manually deployed,
-    then the certificate may be stored in a `secrets.yml` or similar file.
-    <p class="note"><strong>Note</strong>: If you want to include the manifest in the backup artifact, add the  <code>--with-manifest</code> flag. However, be aware that the backup artifact then includes credentials that you need to keep secret.</p>
+    then the certificate might be stored in a `secrets.yml` or similar file.
+    <p class="note"><strong>Note:</strong> To include the manifest in the backup artifact, add the  <code>--with-manifest</code> flag. However, be aware that the backup artifact then includes credentials that you need to keep secret.</p>
 
     For example:
 
@@ -279,7 +279,7 @@ To connect with `BOSH_ALL_PROXY`, do one of the following:
     --ca-cert bosh.ca.cert \
     backup</pre>
 
-    <p class="note"><strong>Note</strong>: The BBR backup command can take a long time to complete.
+    <p class="note"><strong>Note:</strong> The BBR backup command can take a long time to complete.
     You can run it independently of the SSH session so that the process can continue running even
     if your connection to the jumpbox fails. The command above uses <code>nohup</code>, but you can
     run the command in a <code>screen</code> or <code>tmux</code> session instead.</p>
@@ -307,21 +307,25 @@ If the backup fails for the BOSH Director or deployment, follow these steps:
 ## <a id='cancel-backup'></a>Cancel a Backup
 
 Backups can take a long time.
-If you need to cancel a backup, for example if you realize that the backup is going to fail
-or that your developers need to push an app in a hurry, follow these steps:
+You might want to cancel a backup if you learn it is going to fail that your developers urgently need to push an app.
+To cancel a backup:
 
 1. Terminate the BBR process by pressing Ctrl-C and typing `yes` to confirm.
-1. Because stopping a backup can leave the system in an unusable state and prevent additional backups,
-   follow the procedures in [Clean Up after a Failed Backup](#manual-clean) below.
+
+<p class="note warning">
+  <strong>Warning:</strong> Cancelling a backup can leave the system in an unusable state and prevent additional
+  backups. Follow the steps in <a href="#manual-clean">Clean Up after a Failed Backup</a> below to fix these
+  issues.
+</p>
 
 ## <a id="manual-clean"></a>Clean Up after a Failed Backup
 
-If your backup process fails, it might leave the BBR backup folder on the instance, causing any
+If your backup process fails, it might leave the BBR backup directory on the instance, causing any
 subsequent attempts to backup to fail. In addition, BBR might not have run the post-backup scripts, leaving the instance in a locked state.
 
 Follow the steps below to use the BBR cleanup script after a failed backup attempt.
 
-1. If the BOSH Director backup failed, run the following command:
+1. If the BOSH Director backup failed, run:
 
     ````
     bbr director \
@@ -341,7 +345,7 @@ Follow the steps below to use the BBR cleanup script after a failed backup attem
     backup-cleanup
     </pre>
 
-1. If the BOSH deployment backup failed, run the following command:
+1. If the BOSH deployment backup failed, run:
 
     ```
     BOSH_CLIENT_SECRET=BOSH-CLIENT-SECRET \
@@ -367,9 +371,9 @@ Follow the steps below to use the BBR cleanup script after a failed backup attem
 
 ## <a id="good-practices"></a>Manage Your Backup Artifact
 
-Keep your backup artifact safe by following these steps:
+To keep your backup artifact safe:
 
-1. Move the backup artifact off the jumpbox to your storage space. BBR stores each backup in a subdirectory named `DEPLOYMENT-TIMESTAMP` within the current working directory. The backup created by BBR consists of a folder with the backup artifacts and metadata files.
+1. Move the backup artifact off the jumpbox to your storage space. BBR stores each backup in a subdirectory named `DEPLOYMENT-TIMESTAMP` within the current working directory. The backup created by BBR consists of a directory with the backup artifacts and metadata files.
 
 1. Compress and encrypt the backup artifacts when storing them.
 
@@ -377,4 +381,4 @@ Keep your backup artifact safe by following these steps:
 
 1. Each time you redeploy Cloud Foundry, test your backup artifact by following the procedures in [Restoring with BOSH Backup and Restore](restore.html).
 
-<p class="note"><strong>Note</strong>: Backup artifacts may contain data covered by the European Union's <em>General Data Protection Regulation (GDPR)</em>. Please be mindful that any backup artifacts may contain personal data. For example, a backup of a BOSH deployment could contain user email addresses. As such, backup artifacts should be handled in accordance with organizational policies and applicable laws as they pertain to security, confidentiality, and privacy.</p>
+<p class="note"><strong>Note:</strong> Backup artifacts might contain data covered by the European Union's <em>General Data Protection Regulation (GDPR)</em>. Be mindful that any backup artifacts might contain personal data. For example, a backup of a BOSH deployment could contain user email addresses. As such, backup artifacts should be handled in accordance with organizational policies and applicable laws as they pertain to security, confidentiality, and privacy.</p>
