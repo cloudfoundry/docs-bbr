@@ -45,15 +45,14 @@ you must co-locate the `s3-unversioned-blobstore-backup-restorer` job from the [
 
 1. Create backup buckets for droplets, packages, and buildpacks. Cloud Foundry recommends that either the backup buckets or copies of them be in a different region than the live buckets.
 
-1. Include the `enable-backup-restore-s3-unversioned.yml` ops file in your deployment. The `enable-backup-restore-s3-unversioned.yml` file can be found in the [cf-deployment](https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/enable-backup-restore-s3-unversioned.yml) GitHub repository.
+1. Include the `enable-backup-restore-s3-unversioned.yml` ops file in your deployment. The `enable-backup-restore-s3-unversioned.yml` file is in the [cf-deployment](https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/enable-backup-restore-s3-unversioned.yml) GitHub repository.
   <br><br>
-  See [vars-enable-backup-restore-s3-unversioned.yml](https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/example-vars-files/vars-enable-backup-restore-s3-unversioned.yml) for information about how to configure the variables for your backup bucket locations.
-    <p class="note"><strong>Note</strong>: Apply <code>enable-backup-restore.yml</code> and <code>use-s3-blobstore.yml</code>
+  See [vars-enable-backup-restore-s3-unversioned.yml](https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/example-vars-files/vars-enable-backup-restore-s3-unversioned.yml) in GitHub for information about how to configure the variables for your backup bucket locations.
+    <p class="note"><strong>Note:</strong> Apply <code>enable-backup-restore.yml</code> and <code>use-s3-blobstore.yml</code>
     before <code>enable-backup-restore-s3-unversioned.yml</code>.
     See <a href="cf-backup.html#order">Apply Ops Files in the Correct Order</a>.</p>
     <br><br>
     If you do not use [cf-deployment](https://github.com/cloudfoundry/cf-deployment) and ops files, you can still back up and restore external blobstores with BBR.
-    <br><br>
     See the contents of the `enable-backup-restore-s3-unversioned.yml` ops file as an example and review the [backup-and-restore-sdk-release](https://github.com/cloudfoundry-incubator/backup-and-restore-sdk-release/blob/master/docs/blobstore-backup-restore.md#s3-compatible-unversioned-blobstores) documentation in GitHub for further information.
 
 <p class="note warning">
@@ -97,14 +96,14 @@ you must co-locate the `s3-versioned-blobstore-backup-restorer` job from [`backu
 
        <p class="note"><strong>Note:</strong> If your S3-compatible blobstore uses a custom CA certificate, see <a href="https://bosh.io/docs/trusted-certs.html">Configuring Trusted Certificates</a> in the <a href="https://bosh.io/docs">BOSH documentation</a>. BBR automatically makes use of your configured trusted certificates.</p>
 
-2. Include the `enable-backup-restore-s3-versioned.yml` ops file in your deployment.  The `enable-backup-restore-s3-unversioned.yml` file can be found in the [cf-deployment](https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/enable-backup-restore-s3-unversioned.yml) GitHub repository.
+2. Include the `enable-backup-restore-s3-versioned.yml` ops file in your deployment.  The `enable-backup-restore-s3-unversioned.yml` file is in the [cf-deployment](https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/enable-backup-restore-s3-unversioned.yml) GitHub repository.
 
     <p class="note"><strong>Note:</strong> Apply <code>enable-backup-restore.yml</code> and <code>use-s3-blobstore.yml</code>
        before <code>enable-backup-restore-s3-versioned.yml</code>.
        See <a href="cf-backup.html#order">Apply Ops Files in the Correct Order</a>.</p>
 
     If you do not use [cf-deployment](https://github.com/cloudfoundry/cf-deployment) and ops files, you can still back up and restore external blobstores with BBR.
-    See the contents of the `enable-backup-restore-s3-versioned.yml` ops file as an example and see the [S3-Compatible Versioned Blobstores](https://github.com/cloudfoundry-incubator/backup-and-restore-sdk-release/blob/master/docs/blobstore-backup-restore.md#s3-compatible-versioned-blobstores) in the Blobstore Backup and Restore documentation.
+    See the contents of the `enable-backup-restore-s3-versioned.yml` ops file as an example and see the [S3-Compatible Versioned Blobstores](https://github.com/cloudfoundry-incubator/backup-and-restore-sdk-release/blob/master/docs/blobstore-backup-restore.md#s3-compatible-versioned-blobstores) in the Blobstore Backup and Restore documentation in GitHub.
 
 ### <a id="enable-s3-versioning"></a> Enable Versioning on Your S3-Compatible Blobstore
 
@@ -193,14 +192,14 @@ destination buckets.
 
 To protect yourself from losing your blobstore buckets, you should [enable replication](#enable-s3-versioned-replication), as described below. This allows you to perform restores from the replicas, in case your original buckets are lost.
 
-If you need to restore from replicas, you must modify the backup artifacts to point to the replicas
+To restore from replicas, you must modify the backup artifacts to point to the replicas
 before beginning a restore.
 
 To modify the backup artifacts:
 
 1. In your terminal, change into the directory for your backup artifact.
 
-2. Run the following command to extract the blobstore backup archive:
+2. Extract the blobstore backup archive by running:
 
     ```
     tar xvf BLOBSTORE-ARTIFACT.tar
@@ -213,7 +212,7 @@ To modify the backup artifacts:
 
 3. Modify the `blobstore.json` to point to the replicated buckets.
 
-4. Run the following command to recalculate the shasum of `blobstore.json`:
+4. Recalculate the shasum of `blobstore.json` by running:
 
     ```
     shasum -a 256 blobstore.json
@@ -221,7 +220,7 @@ To modify the backup artifacts:
 
 5. Update the metadata file entry for that `blobstore.json` with the new checksum.
 
-6. Run the following command to re-create the archive:
+6. Re-create the archive by running:
 
     ```
     tar cvf BLOBSTORE-ARTIFACT.tar ./blobstore.json
@@ -256,7 +255,7 @@ An Azure data center failure can render your original container unavailable. To 
 ### <a id="enable-backup-and-restore-azure"></a> Enable Backup and Restore of Your Azure Blobstore
 
 To back up a Cloud Foundry deployment that uses an Azure external blobstore, you must include the `enable-backup-restore-azure.yml` ops file in your deployment.
-This colocates the `azure-blobstore-backup-restorer` job from <a href="https://github.com/cloudfoundry-incubator/backup-and-restore-sdk-release/tree/master">backup-and-restore-sdk-release</a> as part of your deployment.
+This co-locates the `azure-blobstore-backup-restorer` job from <a href="https://github.com/cloudfoundry-incubator/backup-and-restore-sdk-release/tree/master">backup-and-restore-sdk-release</a> as part of your deployment.
 
 <p class="note"><strong>Note</strong>: Apply <code>enable-backup-restore.yml</code> and <code>use-azure-storage-blobstore.yml</code>
 before <code>enable-backup-restore-azure.yml</code>.
@@ -314,16 +313,16 @@ backup buckets, without transferring the blobs to your BBR instance.
 
 ### <a id="enable-backup-and-restore-gcs"></a> Enable Backup and Restore of your GCS Blobstore
 
-To back up a Cloud Foundry deployment that uses an GCS external blobstore,
+To back up a Cloud Foundry deployment that uses a GCS external blobstore,
 you must co-locate the `gcs-blobstore-backup-restorer` job from the [backup-and-restore-sdk-release](https://github.com/cloudfoundry-incubator/backup-and-restore-sdk-release/tree/master) as part of your deployment.
 
 1. Create backup buckets for droplets, packages, and buildpacks. Cloud Foundry recommends that either the backup buckets or copies of them be in a different region than the live buckets.
 
-1. Include the `enable-backup-restore-gcs.yml` ops file in your deployment. The `enable-backup-restore-gcs.yml` file can be found in the [cf-deployment](https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/enable-backup-restore-gcs.yml) GitHub repository.
+1. Include the `enable-backup-restore-gcs.yml` ops file in your deployment. The `enable-backup-restore-gcs.yml` file is in the [cf-deployment](https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/enable-backup-restore-gcs.yml) GitHub repository.
   <br><br>
   See [vars-enable-backup-restore-gcs.yml](https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/example-vars-files/vars-enable-backup-restore-gcs.yml) for information about how to configure the variables for your backup bucket locations.
   <br><br>
-    <p class="note"><strong>Note</strong>: Apply <code>enable-backup-restore.yml</code> and <code>use-gcs-blobstore-service-account.yml</code>
+    <p class="note"><strong>Note:</strong> Apply <code>enable-backup-restore.yml</code> and <code>use-gcs-blobstore-service-account.yml</code>
     before <code>enable-backup-restore-gcs.yml</code>.
     See <a href="cf-backup.html#order">Apply Ops Files in the Correct Order</a> in
     <em>Configuring Cloud Foundry for BOSH Backup and Restore</em>.</p>
