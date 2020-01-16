@@ -35,7 +35,7 @@ skip_bbr_scripts: true
 Improved error messages when BBR fails while processing a `metadata` file.
 Previously, error messages were unnecessarily repeated.
 
-#### Bug Fixes
+#### Resolved Issues
 
 If the SSH key passed through `BOSH_ALL_PROXY` is invalid, `bbr` does not hang.
 
@@ -61,7 +61,7 @@ If the SSH key passed through `BOSH_ALL_PROXY` is invalid, `bbr` does not hang.
 ### Deprecation
 
 * **Backwards incompatible:** Dropped support for `backup_name` and `restore_name` properties in the `metadata` hook.
-  - **Action required:** if you use these properties, see if the `bbr.backup_one_restore_all` BOSH property can be used to replace this functionality (see https://github.com/cloudfoundry-incubator/cfcr-etcd-release/pull/11 as an example).
+  - **Action required:** if you use these properties, see if you can use the `bbr.backup_one_restore_all` BOSH property to replace this functionality (see https://github.com/cloudfoundry-incubator/cfcr-etcd-release/pull/11 as an example).
 
 ### <a id='1.4'></a> v1.4.0
 
@@ -101,13 +101,13 @@ If the SSH key passed through `BOSH_ALL_PROXY` is invalid, `bbr` does not hang.
 
 #### Improvements
 
-* Log files created when using BBR to do a multi-deployment backup can now be read while BBR is running. Perform the following steps:
-	1. Run the following command to run BBR in the background:
+* Log files created when using BBR to do a multi-deployment backup can now be read while BBR is running. To do so:
+	1. To run BBR in the background, run:
 
 		```
 		bbr deployment --all-deployments backup &
 		```
-	1. Run the following command to monitor BBR's progress by reading the log files while BBR is running:
+	1. To monitor BBR's progress by reading the log files while BBR is running, run:
 
 		```
 		tail *.log
@@ -173,7 +173,7 @@ If the SSH key passed through `BOSH_ALL_PROXY` is invalid, `bbr` does not hang.
 	<br>
 	This should help users understand where backup artifacts are coming from. See the [Pivotal Tracker Story](https://www.pivotaltracker.com/n/projects/1662777/stories/159265175).
 
-#### Bug Fixes
+#### Resolved Issues
 
 * Backup metadata were wrongly reporting the job index for backup artifacts.
 	<br>
@@ -188,7 +188,7 @@ If the SSH key passed through `BOSH_ALL_PROXY` is invalid, `bbr` does not hang.
 
 None
 
-#### Bug Fixes
+#### Resolved Issues
 
 * **Fixed** support for SSH+SOCKS5 proxy (`BOSH_ALL_PROXY`) to make it more robust -- [story](https://www.pivotaltracker.com/story/show/159619865).
 * **Improved** the help text for `bbr deployment` -- [story](https://www.pivotaltracker.com/n/projects/1662777/stories/159111218).
@@ -206,7 +206,7 @@ None
 
 None
 
-#### Bug Fixes
+#### Resolved Issues
 
 * `bbr` is now able to talk to BOSH through a SOCKS5 proxy -- [story](https://www.pivotaltracker.com/n/projects/1662777/stories/157779432)
 
@@ -218,7 +218,7 @@ None
 
 None
 
-#### Bug Fixes
+#### Resolved Issues
 
 * Ability to run against deployments with Windows VMs
 * Built with Go 1.10.3
@@ -235,7 +235,7 @@ None
 
 None
 
-#### Bug Fixes
+#### Resolved Issues
 
 Fix issue where BBR fails if a locking dependency is specified but missing.
 
@@ -251,9 +251,9 @@ None
 
 None
 
-#### Bug Fixes
+#### Resolved Issues
 
-Fix ssh issue introduced by calling backup scripts in parallel.
+Fix SSH issue introduced by calling backup scripts in parallel.
 
 #### Known Issues
 
@@ -267,7 +267,7 @@ None
 
 * Adds `--artifact-path` for backup to enable specifying where the backup artifacts should go
 
-#### Bug Fixes
+#### Resolved Issues
 
 None
 
@@ -282,7 +282,7 @@ None
 #### Features
 * Call lock and unlock scripts in parallel to reduce API downtime
 
-#### Bug Fixes
+#### Resolved Issues
 
 None
 
@@ -302,7 +302,7 @@ None
 
 * Updates to golang v1.10
 
-#### Bug Fixes
+#### Resolved Issues
 
 None
 
@@ -317,9 +317,9 @@ None
 
 #### Features
 * To enable BOSH add-ons to work, BOSH Backup and Restore (BBR) no longer fails when the release name for a job cannot be found
-* Move 'keepalive' warnings to debug mode
+* Move `keepalive` warnings to debug mode
 
-#### Bug Fixes
+#### Resolved Issues
 
 * Fix issue on machines with unusual permissions set on `/var/vcap/store`
 
@@ -336,7 +336,7 @@ None
 * Improve stdout output
 * Ensure that BBR works with scripts added through BOSH add-on
 
-#### Bug Fixes
+#### Resolved Issues
 
 None
 
@@ -351,7 +351,7 @@ None
 #### Features
 * Improve stdout output
 
-#### Bug Fixes
+#### Resolved Issues
 
 None
 
@@ -366,7 +366,7 @@ None
 #### Features
 * Improve stdout output
 
-#### Bug Fixes
+#### Resolved Issues
 
 None
 
@@ -384,7 +384,7 @@ None
 * Adds support for BOSH Deployments and Directors to lock deployments during the restore process
 and to declare the order that locking is done.
 
-#### Bug Fixes
+#### Resolved Issues
 
 None
 
@@ -402,7 +402,7 @@ None
 * Enables backup and restore of BOSH Deployments and BOSH Directors.
 BBR uses backup and restore functionality that is packaged in the BOSH Deployment or Director.
 
-#### Bug Fixes
+#### Resolved Issues
 
 None
 
