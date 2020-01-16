@@ -25,7 +25,7 @@ Release authors can choose to back up their release how they like, as long as th
 
 To ensure that backup and restore scripts do not get out of sync with the releases themselves, release authors are responsible for naming, creating, testing, and troubleshooting their own backup and restore scripts.
 
-<p class="note"><strong>Important</strong>: For all releases, be aware of the possibility that these backup and restore jobs may be collocated with those of other releases. Therefore, release authors must give these jobs unique and descriptive names to avoid name collisions.
+<p class="note"><strong>Note:</strong> For all releases, these backup and restore jobs might be co-located with those of other releases. Therefore, release authors must give these jobs unique and descriptive names to avoid name collisions.
 </p>
 
 ###  <a id='script-implementation'></a>Script Organization
@@ -44,14 +44,14 @@ scripts under the `/var/vcap/jobs/JOB-NAME/bin/bbr/SCRIPT-NAME` directory:
 * Metadata script name (if needed)
   * `metadata`
 
-For example, the directory structure of a templated BBR job looks like the following:
+For example, the directory structure of a templated BBR job looks like the below:
 
 * `/var/vcap/jobs/bbr-uaadb/bin/bbr/backup`
 * `/var/vcap/jobs/bbr-uaadb/bin/bbr/post-restore-unlock`
 
 Release authors must implement scripts as part of the BBR contract.
 Package and distribute the scripts as part of your BOSH release.
-The [Exemplar Backup and Restore Release](https://github.com/cloudfoundry-incubator/exemplar-backup-and-restore-release) provides examples
+The [Exemplar Backup and Restore Release](https://github.com/cloudfoundry-incubator/exemplar-backup-and-restore-release) in GitHub provides examples
 of how release authors can structure their jobs to implement the contract with BBR.
 
 The BBR CLI can remotely locate and run the scripts, even if they are located on different VMs.
@@ -63,7 +63,7 @@ For the backup workflow, the order is `pre-backup-lock`, `backup`, and then `pos
 For the restore workflow, the order is `pre-restore-lock`, `restore`, and then `post-restore-unlock`.
 
 All scripts should be executable scripts.
-ERB tags may be used for templating.
+ERB tags can be used for templating.
 
 These scripts are executed similarly to other release job scripts, such as `start`, `stop`, or `drain`, and you can use the job's package dependencies.
 
@@ -113,22 +113,22 @@ During the restore workflow, all `pre-restore-lock` scripts are invoked before t
 All `restore` scripts are invoked before the `post-restore-unlock` scripts on all of the jobs in the deployment.
 
 By default `pre-backup-lock` and `pre-restore-lock` scripts from different jobs are invoked in an arbitrary order.
-If you want to specify an order for lock scripts from specific jobs you can do so in the metadata script.
+You can specify an order for lock scripts from specific jobs in the metadata script.
 
 The `post-backup-unlock` and `post-restore-unlock` scripts from different jobs are invoked in an arbitrary order
 when no locking dependency is specified, or the opposite order of lock scripts as stated in metadata scripts.
 When a job specifies locking dependency to a job that does not exist in the current deployment, BBR ignores that dependency.
 
-For more information, see [Metadata Script](#metadata).
+For more information, see [Metadata Script](#metadata) below.
 
 ### <a id='logs'></a> Logs
 
 The `stdout` and `stderr` streams are captured and sent to the operator who invokes the backup and restore.
 
 <p class="note">
-  <strong>Important</strong>: Release authors should avoid printing sensitive information to <code>stdout</code> or <code>stderr</code>.
-  BBR prints any output from the scripts in case of failure. Make sure your script does not print any sensitive data, such as credentials.
-  In particular, if you are using <code>set -x</code> in your script, be sure to add <code>set +x</code> before you use any credentials.
+  <strong>Note:</strong> Release authors should avoid printing sensitive information to <code>stdout</code> or <code>stderr</code>.
+  BBR prints any output from the scripts in case of failure. Ensure your script does not print any sensitive data, such as credentials.
+  In particular, if you are using <code>set -x</code> in your script, add <code>set +x</code> before you use any credentials.
 </p>
 
 ## <a id='backup-workflow'></a>Backup Workflow
@@ -139,11 +139,11 @@ The release job can have a `pre-backup-lock` script that stops any processes tha
 This script must allow the job to lock so that backups are consistent across a cluster.
 
 For example, in a Cloud Foundry deployment, the `pre-backup-lock` script stops Cloud Controller processes
-that may make changes to its blobstore and database thus ensuring the blobstore and the Cloud Controller database are consistent with each other.
+that might make changes to its blobstore and database. This ensures the blobstore and the Cloud Controller database are consistent with each other.
 
 #### Job Configuration
 
-To add a `pre-backup-lock` script to a job, do the following:
+To add a `pre-backup-lock` script to a job:
 
 <ol>
 <li>
@@ -181,7 +181,7 @@ templates:
 </li>
 
 </pre>
-See <a href="#metadata">Metadata Script</a> for information about the properties you can use in this script.
+See <a href="#metadata">Metadata Script</a> below for information about the properties you can use in this script.
 
 </ol>
 
@@ -190,7 +190,7 @@ See <a href="#metadata">Metadata Script</a> for information about the properties
 
 The release job can have a backup script that dumps the backup of the job's database to the directory specified by `$BBR_ARTIFACT_DIRECTORY`. For example, when backing up MySQL, this script can invoke the `mysqldump` binary for the MySQL adapter.
 
-There must be at least one job in the deployment providing a backup script. If there is no backup script, calling `backup` or `pre-backup-check` for the deployment will fail.
+There must be at least one job in the deployment providing a backup script. If there is no backup script, calling `backup` or `pre-backup-check` for the deployment fails.
 
 #### Job Configuration
 
@@ -208,7 +208,7 @@ To add a `backup` script to a release job:
 
 ### <a id='post-backup-unlock'></a>Post-Backup-Unlock
 
-The backup and restore job can have a `post-backup-unlock` script that will undo the operations done by `pre-backup-lock`.
+The backup and restore job can have a `post-backup-unlock` script that undoes the operations performed by `pre-backup-lock`.
 
 #### Job Configuration
 
@@ -228,7 +228,7 @@ To add a `post-backup-unlock` script to a release job:
 
 If errors occur during the backup workflow, clean-up tasks are executed to put the system back in a working state.
 
-A normal workflow for backing up a deployment does the following:
+A normal workflow for backing up a deployment does the below:
 
 
 <% mermaid_diagram do %>
@@ -255,7 +255,7 @@ The release job can have a `pre-restore-lock` script that stops any processes th
 
 #### Job Configuration
 
-To add a `pre-restore-lock` script to a job, do the following:
+To add a `pre-restore-lock` script to a job:
 
 1. Create a script with any name in the templates directory of your job.
 
@@ -288,7 +288,7 @@ To add a `pre-restore-lock` script to a job, do the following:
       ...
       metadata.sh.erb: bin/bbr/metadata
     ```
-    See <a href="#metadata">Metadata Script</a> for information about the properties you can use in this script.
+    See <a href="#metadata">Metadata Script</a> below for information about the properties you can use in this script.
 
 ### <a id='restore'></a>Restore
 
@@ -312,11 +312,11 @@ To add a `restore` script to a release job:
 
 ### <a id='post-restore-unlock'></a>Post-Restore-Unlock
 
-The release job can have a `post-restore-unlock` script that resumes normal service operation. `post-restore-unlock` should be idempotent since it can be called multiple times even if `pre-restore-lock` has not been not called.
+The release job can have a `post-restore-unlock` script that resumes normal service operation. `post-restore-unlock` should be idempotent because it can be called multiple times even if `pre-restore-lock` has not been not called.
 
 #### Job Configuration
 
-To add a `post-restore-unlock` script to a release, do the following:
+To add a `post-restore-unlock` script to a release:
 
 1. Create a script with any name in the templates directory of your job.
 2. In the templates section of the release job spec file, add the script name and <code>bin/bbr/post-restore-unlock</code> as a key-value pair. For example:
@@ -332,7 +332,7 @@ To add a `post-restore-unlock` script to a release, do the following:
 
 If errors occur during the restore workflow, clean-up tasks are executed to put the system back in a working state.
 
-A normal workflow for restoring a deployment does the following:
+A normal workflow for restoring a deployment does the below:
 
 
 <% mermaid_diagram do %>
@@ -485,13 +485,14 @@ cp $ARTIFACT_DIRECTORY <output_file>
 
 BBR provides a pattern for Cloud Foundry release authors that ensures their scripts abide by the BBR Framework contract.
 
-A Cloud Foundry operator adds a `backup-restore` instance to their Cloud Foundry deployment. By default, release-specific database `backup` and `restore` job scripts are collocated on this instance along with the `database-backup-restorer` job from the [backup-and-restore-sdk-release](https://github.com/cloudfoundry-incubator/backup-and-restore-sdk-release) GitHub repository.
+A Cloud Foundry operator adds a `backup-restore` instance to their Cloud Foundry deployment. By default, release-specific database `backup` and `restore` job scripts are co-located on this instance along with the `database-backup-restorer` job from the [backup-and-restore-sdk-release](https://github.com/cloudfoundry-incubator/backup-and-restore-sdk-release) GitHub repository.
 
-If your release requires that you stop your component's processes during backup and restore, you also need to provide [`unlock`](#post-backup-unlock) and [`lock`](#pre-backup-lock) scripts. You may collocate these scripts on either the `backup-restore` instance or your component's instance. You should collocate these scripts on the component's instance if you want to interact directly with `monit` or your running job.
+If your release requires that you stop your component's processes during backup and restore, you also need to provide `unlock` and `lock` scripts. You can co-locate these scripts on either the `backup-restore` instance or your component's instance. You should co-locate these scripts on the component's instance if you want to interact directly with `monit` or your running job.
+More information about [`unlock`](#post-backup-unlock) and [`lock`](#pre-backup-lock) scripts are below.
 
 ### Naming Recommendations
 
-When Cloud Foundry is deployed, multiple backup and restore scripts are collocated on the
+When Cloud Foundry is deployed, multiple backup and restore scripts are co-located on the
 `backup-restore` instance, separated by job name.
 For this reason, the job names for each release should have a consistent format
 so that there is no confusion between BBR jobs.
@@ -513,10 +514,10 @@ The release is an API that stores its data in a MySQL database deployed on a dif
 instance group in this CF deployment.
 
 The release authors have chosen to create two new jobs to be incorporated into
-their existing release;  one job includes the `backup` and `restore` scripts in
+their existing release; one job includes the `backup` and `restore` scripts in
 its templates directory, and the other job includes the `pre-backup-lock` and
 `post-backup-unlock` scripts.
-This is because the operator will collocate the former job on the `backup-restore`
+This is because the operator co-locates the former job on the `backup-restore`
 VM and the latter job on the Acme Release VM.
 
 Here is how the backup and restore job should be placed:
@@ -556,4 +557,3 @@ Foundry deployment to ensure that backup and restore works as expected.
 For more information and instructions for how to run DRATs, see
 [disaster-recovery-acceptance-tests](https://github.com/cloudfoundry-incubator/disaster-recovery-acceptance-tests)
 in GitHub.
- 
