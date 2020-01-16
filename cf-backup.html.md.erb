@@ -18,10 +18,10 @@ and use them as a guide to customize your deployment manifest directly.
   <ul>
     <li><strong>Backup artifacts can contain secrets.</strong> Secure backup artifacts with encryption or by other means.</li>
     <li><strong>The restore is a destructive operation.</strong> BBR is designed to restore CF after a disaster.
-        If it fails, the environment can be left in an unusable state and require re-provisioning.
+        If it fails, the environment could be left in an unusable state and require re-provisioning.
         For the generic method of restoring a deployment, see <a href="restore.html">Restoring with BOSH Backup and Restore</a>.</li>
     <li><strong>Developers are unable to push apps for a few minutes during backup and restore.</strong>
-        This is because the Cloud Controller API (CC API) stops sending and receiving calls
+        This is because the Cloud Foundry API (CAPI) stops sending and receiving calls
         between the <code>pre-backup-lock</code> and <code>post-backup-unlock</code> stages of the process.</li>
     <li><strong>BBR does not back up any service data.</strong>
         Back up Service data, such as Redis or RabbitMQ data, separately.</li>
@@ -66,9 +66,9 @@ using the following ops files:
 <p class="note warning"><strong>Warning:</strong> Selective backups increase
 your overall recovery time. When you use selective backup ops files, apps
 require extra steps to return to a running state after a restore. For more
-information, see the <a href="#selective-backup-restore-steps">Restoring Applications when Using Selective Backups</a> section below.<p>
+information, see the <a href="#selective-backup-restore-steps">Restoring Apps When Using Selective Backups</a> section below.<p>
 
-#### <a id='selective-backup-restore-steps'></a>Restoring Applications when Using Selective Backups
+#### <a id='selective-backup-restore-steps'></a>Restoring Apps When Using Selective Backups
 
 When using the `skip-backup-restore-droplets.yml` ops file, do the following to get your apps running after a restore:
 
