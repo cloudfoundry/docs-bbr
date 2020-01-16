@@ -55,19 +55,19 @@ This approach has the following advantages:
 When a BBR `backup` command is run the following things happen:
 
 BBR connects to instances in the deployment/director that was specified in the BBR command invocation.
-Using these connections, BBR gathers information on which scripts it should run for each stage in the backup.
+Using these connections, BBR gathers information about which scripts it should run for each stage in the backup.
 
 BBR then runs the `pre-backup-lock`, `backup`, and `post-backup-unlock` scripts in stages.
 
 Scripts in the same stage all finish before the next stage starts. For instance, BBR triggers and waits for completion of all `pre-backup-lock` scripts before it triggers any `backup` scripts.
-Scripts within the `backup` stage may happen in any order. A release author can configure ordering for scripts in in the `locking` and `unlocking` stages, but any scripts that are unconstrained by that ordering
+Scripts within the `backup` stage can happen in any order. A release author can configure ordering for scripts in in the `locking` and `unlocking` stages, but any scripts that are unconstrained by that ordering
 can also happen in any order within their stage.
 
 BBR drains and tars the backup artifacts to the jumpbox from where the operator can transfer the resulting artifact to storage and use it to restore the BOSH deployment or BOSH Director.
 
 The following diagram shows a sample backup flow.
 
-<%= image_tag('backup-flow.png') %>
+<%= image_tag("backup-flow.png", :alt => "Backup Workflow") %>
 
 
 ## <a id='workflow-restore'></a>What happens when you run a BBR restore?
@@ -77,14 +77,14 @@ The following diagram shows a sample backup flow.
 When a BBR `restore` command is run for that artifact the following things happen:
 
 BBR connects to instances in the deployment/director that was specified in the command invocation.
-Using these connections, BBR gathers information on which scripts it should run for each stage in the restore.
+Using these connections, BBR gathers information about which scripts it should run for each stage in the restore.
 
 BBR uploads the each part of the artifact to the instance it belongs to.
 
 BBR then runs the `pre-restore-lock`, `restore`, and `post-restore-unlock` scripts in stages.
 
 Scripts in the same stage all finish before the next stage starts. For instance, BBR triggers and waits for completion of all `pre-restore-lock` scripts before it triggers any `restore` scripts.
-Scripts within the `restore` stage may happen in any order. A release author can configure ordering for scripts in in the `locking` and `unlocking` stages, but any scripts that are unconstrained by that ordering
+Scripts within the `restore` stage can happen in any order. A release author can configure ordering for scripts in in the `locking` and `unlocking` stages, but any scripts that are unconstrained by that ordering
 can also happen in any order within their stage.
 
 
@@ -146,7 +146,7 @@ $ BOSH_CLIENT_SECRET=BOSH_CLIENT_SECRET \
 The arguments are:
 
 * `--debug`: This is an optional flag to display debug output.
-* `BOSH_CLIENT`, `BOSH_CLIENT_SECRET`: If you have a BOSH Director with User Account and Authentication (UAA) as the authentication provider, use a UAA client as the username and a UAA client secret as the password. If you have a BOSH Director with basic auth configured, use your username and password.
+* `BOSH_CLIENT`, `BOSH_CLIENT_SECRET`: If you have a BOSH Director with User Account and Authentication (UAA) as the authentication provider, use a UAA client as the username and a UAA client secret as the password. If you have a BOSH Director with basic authentication configured, use your username and password.
 * `--target`: This is the FQDN or IP address of your BOSH Director.
 * `--deployment`: This is the name of the deployment you want to back up. For a list of deployments, run `bosh deployments`.
 * `--ca-cert`: This is the path to the BOSH Director's Certificate Authority (CA) certificate if the certificate is not verifiable by the local machine's certificate chain.
