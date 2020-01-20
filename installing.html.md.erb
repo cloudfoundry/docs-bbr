@@ -7,12 +7,12 @@ This topic describes how to install BOSH Backup and Restore (BBR).
 
 To use BBR, you must be able to connect to a VM on the BOSH internal network so
 that BBR can access your BOSH deployment or BOSH Director.
-Usually, this VM is a jumpbox deployment, from which you can run BBR commands.
+Usually, this VM is a jumpbox deployment from which you can run BBR commands.
 
 For more information, see [Backing up with BOSH Backup and Restore](backup.html)
 and [Restoring with BOSH Backup and Restore](restore.html).
 
-##<a id="prerequisites"></a> Prerequisite
+## <a id="prerequisites"></a> Prerequisite
 
 A jumpbox is a separate, hardened VM on your network that provides a controlled
 means of access to the VMs other computers on your network.
@@ -20,7 +20,7 @@ means of access to the VMs other computers on your network.
 For an example jumpbox deployment, see the
 [jumpbox-deployment](https://github.com/cloudfoundry/jumpbox-deployment) GitHub repository.
 
-##<a id="jumpbox-setup"></a> Step 1: Configure Your Jumpbox
+## <a id="jumpbox-setup"></a> Step 1: Configure Your Jumpbox
 
 Configure your jumpbox to meet the following requirements:
 
@@ -67,7 +67,7 @@ steps to transfer the `bbr` binary to your jumpbox:
 1. To add executable permissions to the `bbr` binary file, run `chmod a+x bbr`:
 	<pre class="terminal">$ chmod a+x bbr</pre>
 
-1. To securely copy the `bbr` binary file to your jumpbox, run the following command:
+1. To securely copy the `bbr` binary file to your jumpbox, run:
 
     ```
     scp LOCAL-PATH-TO-BBR/bbr JUMPBOX-USER/JUMPBOX-ADDRESS
