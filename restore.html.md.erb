@@ -28,7 +28,7 @@ jobs in the restored environment, but cannot validate the restore beyond that.
 For example, if the MySQL encryption key is different in the restore environment, the BBR restore
 might succeed although the restored MySQL database is unusable.
 
-<p class="note"><strong>Note</strong>: A change in VM size or underlying hardware should not affect
+<p class="note"><strong>Note:</strong> A change in VM size or underlying hardware should not affect
 BBR's ability to restore data, as long as there is adequate storage space to restore the data.</p>
 
 ## <a id="recreate-vms"></a> Step 1: Re-create VMs
@@ -68,7 +68,7 @@ Use the optional `--debug` flag to enable debug logs. For more information, see 
 
 #### <a id='restore-director'></a> Restore a BOSH Director
 
-Perform the following steps to restore a BOSH Director:
+To restore a BOSH Director:
 
 1. Ensure the BOSH Director backup artifact is in the directory from which you run BBR.
 1. Run the BBR restore command from your jumpbox to restore the BOSH Director:
@@ -92,7 +92,7 @@ If the command fails, follow the steps in [Recover from a Failing Command](#reco
 
 #### <a id='restore-deployment'></a> Restore a BOSH Deployment
 
-Perform the following steps to restore a BOSH deployment:
+To restore a BOSH deployment:
 
 1. Ensure the BOSH deployment backup artifact is in the directory from which you run BBR.
 1. Run the BBR restore:
@@ -102,7 +102,7 @@ Perform the following steps to restore a BOSH deployment:
     nohup bbr deployment \
     --target BOSH-TARGET \
     --username BOSH-CLIENT \
-    --deployment DEPLOYMENT-NAME \
+    --deployment DEPLOYMENT \
     --ca-cert PATH-TO-BOSH-SERVER-CERTIFICATE \
     restore \
     --artifact-path PATH-TO-DEPLOYMENT-BACKUP

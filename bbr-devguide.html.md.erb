@@ -21,7 +21,7 @@ The following diagram illustrates an example BBR script execution sequence.
 ![Script execution order](images/script-execution-order.png)
 
 Because the framework is focused on the interface, hooks, backup destination, and intra-deployment orchestration, it is mechanism-agnostic.
-Release authors can choose to back up their release how they like, as long as the scripts they write have the correct name and directory structure.
+Release authors can back up their release however they want to, as long as the scripts they write have the correct name and directory structure.
 
 To ensure that backup and restore scripts do not get out of sync with the releases themselves, release authors are responsible for naming, creating, testing, and troubleshooting their own backup and restore scripts.
 
@@ -226,7 +226,7 @@ To add a `post-backup-unlock` script to a release job:
 
 ### <a id='error-handling'></a>Error Handling During Backup
 
-If errors occur during the backup workflow, clean-up tasks are executed to put the system back in a working state.
+If errors occur during the backup workflow, cleanup tasks are executed to put the system back in a working state.
 
 A normal workflow for backing up a deployment does the below:
 
@@ -330,7 +330,7 @@ To add a `post-restore-unlock` script to a release:
 
 ### <a id='error-handling-restore'></a>Error Handling During Restore
 
-If errors occur during the restore workflow, clean-up tasks are executed to put the system back in a working state.
+If errors occur during the restore workflow, cleanup tasks are executed to put the system back in a working state.
 
 A normal workflow for restoring a deployment does the below:
 

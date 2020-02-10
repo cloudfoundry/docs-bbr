@@ -19,7 +19,8 @@ owner: Release Engineering
 
 #### Features
 
-* Added an output log message for the remaining byte percentage of backup files when backing up your deployment.
+* Added an output log entry for the remaining byte percentage of backup files
+ when backing up your deployment.
 
 #### Improvements
 
@@ -175,7 +176,7 @@ If the SSH key passed through `BOSH_ALL_PROXY` is invalid, `bbr` does not hang.
 
 #### Improvements
 
-* `bbr backup` with `BOSH_ALL_PROXY` was still occasionally failing with `connection reset by peer` errors. This release changes how BBR handles SSH connections, which should make `bbr backup` more stable when used with a SOCKS5 proxy. See the [Pivotal Tracker Story](https://www.pivotaltracker.com/n/projects/1662777/stories/160167687) and [GitHub Issue #21](https://github.com/cloudfoundry-incubator/bosh-backup-and-restore/issues/21).
+* `bbr backup` with `BOSH_ALL_PROXY` was still occasionally failing with `connection reset by peer` errors. This release changes how BBR handles SSH connections, which should make `bbr backup` more stable when used with a SOCKS5 proxy. See the [Pivotal Tracker Story](https://www.pivotaltracker.com/n/projects/1662777/stories/160167687) and [Issue #21](https://github.com/cloudfoundry-incubator/bosh-backup-and-restore/issues/21) in GitHub.
 
 * BBR commands now print the job name in the drain logs.
 	<br><br>
@@ -241,7 +242,7 @@ None
 #### Resolved Issues
 
 * Ability to run against deployments with Windows VMs
-* Built with Go 1.10.3
+* Built with Go v1.10.3
 
 #### Known Issues
 

@@ -4,7 +4,7 @@ owner: BBR
 ---
 
 This topic describes how to use BOSH Backup and Restore (BBR) to back up a BOSH deployment or BOSH Director.
-Perform the steps below to back up a BOSH Director, a BOSH deployment, or both.
+Follow the steps below to back up a BOSH Director, a BOSH deployment, or both.
 
 To perform a restore, see [Restoring with BOSH Backup and Restore](restore.html).
 
@@ -52,7 +52,7 @@ Director through the jumpbox.
 When `BOSH_ALL_PROXY` is set, the BBR CLI uses its value to forward
 requests to the BOSH Director.
 
-<p class="note"><strong>Note</strong>:
+<p class="note"><strong>Note:</strong>
   For the following procedures to work, ensure the SOCKS port is not already in
   use by a different tunnel or process.
 </p>
@@ -97,11 +97,11 @@ To connect with `BOSH_ALL_PROXY`, do one of the following:
     * `SOCKS-PORT` is the local SOCKS port.
     * `JUMPBOX-KEY-FILE` is the local SSH private key for accessing the jumpbox.
 
-<p class="note"><strong>Note</strong>:
+<p class="note"><strong>Note:</strong>
   Using <code>BOSH_ALL_PROXY</code> can result in longer backup and restore times
   due to network performance degradation.
-  All operations must pass through the proxy, therefore, moving backup artifacts
-  can be significantly slower.
+  All operations must pass through the proxy, which can make moving backup artifacts
+  significantly slower.
 </p>
 
 <div class="note warning"><strong>Warning:</strong>
@@ -141,7 +141,7 @@ To connect with `BOSH_ALL_PROXY`, do one of the following:
     pre-backup-check
     </pre>
 
-1. If the pre-check command fails, do the following:
+1. If the pre-check command fails:
    * Run the command again adding the `--debug` flag to enable debug logs.
      For more information, see [BBR Logging](logging.html).
    * Make the fix suggested in the output and run the pre-backup check again.<br>
@@ -190,7 +190,7 @@ To connect with `BOSH_ALL_PROXY`, do one of the following:
 
 1. If the backup command completes successfully, follow the steps in [Manage Your Backup Artifact](#good-practices) below.
 
-1. If the backup command fails, do the following:
+1. If the backup command fails:
    * Run the command again adding the `--debug` flag to enable debug logs.<br>
      For more information, see [BBR Logging](logging.html).
    * Follow the steps in [Recover from a Failing Command](#recovering-from-failing-command).
@@ -204,7 +204,7 @@ To connect with `BOSH_ALL_PROXY`, do one of the following:
     bbr deployment \
     --target BOSH-TARGET \
     --username BOSH-CLIENT \
-    --deployment DEPLOYMENT-NAME \
+    --deployment DEPLOYMENT -NAME \
     --ca-cert PATH-TO-BOSH-SERVER-CERTIFICATE \
     pre-backup-check
     ```
@@ -234,7 +234,7 @@ To connect with `BOSH_ALL_PROXY`, do one of the following:
     pre-backup-check
     </pre>
 
-1. If the pre-backup check command fails, do the following:
+1. If the pre-backup check command fails:
    + Run the command again adding the `--debug` flag to enable debug logs.<br>
      For more information, see [BBR Logging](logging.html).
    + Make the fix suggested in the output and run the pre-backup check again.<br>
@@ -286,14 +286,14 @@ To connect with `BOSH_ALL_PROXY`, do one of the following:
 
 1. If the command completes successfully, follow the steps in [What To Do with Your Backup Artifact](#what-to-do-with-artifact) below.
 
-1. If the backup command fails, do the following:
+1. If the backup command fails:
    + Run the command again adding the `--debug` flag to enable debug logs.
      For more information, see [BBR Logging](logging.html).
    + Follow the steps in [Recover from a Failing Command](#recovering-from-failing-command).
 
 ## <a id="recovering-from-failing-command"></a>Recover from a Failing Command
 
-If the backup fails for the BOSH Director or deployment, follow these steps:
+If the backup fails for the BOSH Director or deployment:
 
 1. Ensure that you set all the parameters in the command.
 1. Ensure the BOSH Director credentials are valid.
