@@ -18,7 +18,7 @@ For information, see [Compatibility of Restore](./restore.html#compatibility).
 ## <a id='connect-to-jumpbox'></a> Connect to Your Jumpbox
 
 To back up a BOSH Director or BOSH deployment using BBR, you need to establish a
-connection to your jumpbox in one of the following ways:
+connection to your jumpbox in one of the ways below:
 
 * [Option 1: Connect with SSH](#ssh)
 * [Option 2: Connect with BOSH\_ALL\_PROXY](#bosh-all-proxy)
@@ -53,16 +53,15 @@ When `BOSH_ALL_PROXY` is set, the BBR CLI uses its value to forward
 requests to the BOSH Director.
 
 <p class="note"><strong>Note:</strong>
-  For the following procedures to work, ensure the SOCKS port is not already in
+  For the below procedures to work, ensure the SOCKS port is not already in
   use by a different tunnel or process.
 </p>
 
-To connect with `BOSH_ALL_PROXY`, do one of the following:
+To connect with `BOSH_ALL_PROXY`, follow one of the below procedures:
 
-* **If you want to establish the tunnel separate from the BOSH CLI, do the following:**
+* **To establish the tunnel separate from the BOSH CLI:**
 <br><br>
-  1. Establish the tunnel and make it available on a local port by running the
-  following command:
+  1. Establish the tunnel and make it available on a local port by running:
 
         ```
         ssh -4 -D SOCKS-PORT -fNC JUMPBOX-USERNAME@JUMPBOX-ADDRESS -i JUMPBOX-KEY-FILE -o ServerAliveInterval=60
@@ -75,17 +74,17 @@ To connect with `BOSH_ALL_PROXY`, do one of the following:
       * `JUMPBOX-ADDRESS` is the IP address or hostname of the jumpbox.
       * `JUMPBOX-KEY-FILE` is the local SSH private key for accessing the jumpbox.
   1. Provide the BOSH CLI with access to the tunnel using the `BOSH_ALL_PROXY`
-  environment variable by running the following command:
+  environment variable by running:
 
         ```
         export BOSH_ALL_PROXY=socks5://localhost:SOCKS-PORT
         ```
         Where is `SOCKS-PORT` is your local SOCKS port.
 
-* **If you want to establish the tunnel using the BOSH CLI, do the following:**
+* **To establish the tunnel using the BOSH CLI:**
 <br><br>
   Provide the BOSH CLI with the necessary SSH credentials to create the tunnel by
-  running the following command:
+  running:
 
     ```
     export BOSH_ALL_PROXY=ssh+socks5://JUMPBOX-USERNAME@JUMPBOX-ADDRESS:SOCKS-PORT?private_key=JUMPBOX-KEY-FILE
