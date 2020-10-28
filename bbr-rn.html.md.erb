@@ -11,15 +11,15 @@ owner: Release Engineering
 
 #### Features
 
- * Add specific error message if network drops during SSH.
+* **New error message:** Adds specific error message if network drops during SSH.
+* **S3 configuration validator:** The source code has been added.
 
-### Fixes
+#### Fixes
 
- * Update all golang dependencies. In particular, the latest bosh and bosh-utils libraries include bug fixes for the way BOSH_ALL_PROXY is handled.
+* **Updates all golang dependencies:**
+In particular, the latest `bosh` and `bosh-utils` libraries include bug fixes
+for the way `BOSH_ALL_PROXY` is handled.
 
-### Other
-
- * Add the S3 config validator's source code.
 
 ### <a id='1-8-0'></a> v1.8.0
 
@@ -30,8 +30,8 @@ owner: Release Engineering
 * **BOSH Backup and Restore (BBR) S3 configuration validator:**
 This version introduces the BBR S3 configuration validator.
 You can install this tool on your BBR VM to test your configuration and connectivity to
-an external blobstore. 
-For installation and usage instructions, see the [BBR S3 bucket configuration validator README](https://github.com/cloudfoundry-incubator/bosh-backup-and-restore/blob/master/s3-config-validator/README.md#bbr-s3-bucket-configuration-validator) 
+an external blobstore.
+For installation and usage instructions, see the [BBR S3 bucket configuration validator README](https://github.com/cloudfoundry-incubator/bosh-backup-and-restore/blob/master/s3-config-validator/README.md#bbr-s3-bucket-configuration-validator)
 on GitHub.
 
 ### <a id='1-7-2'></a> v1.7.2
