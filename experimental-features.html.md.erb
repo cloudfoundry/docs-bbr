@@ -1,0 +1,161 @@
+--- 
+title: BOSH Backup and Restore experimental features
+owner: BBR
+---
+
+This topic highlights features which are only recommended for advanced users of
+BBR.
+
+## The BBR `--unsafe-lock-free` flag
+
+As of version 1.9.0, the bbr CLI has an --unsafe-lock-free flag. This flag
+should only be used by expert users of bbr, for reasons that this page
+highlights. If you use this flag during a backup operation, bbr will skip
+running the lock and unlock scripts in your deployment. In the specific case of
+backing up a CF deployment, this means:
+
+1) You will experience no CF API downtime during the backup You may end up with an
+inconsistent backup
+2) You may end up with an inconsistent backup
+
+This document digs into consequence (2). We will cover:
+
+* **why** your backup may be inconsistent,
+* **what** inconsistencies we have observed in testing and their consequences,
+* what **possible** inconsistencies we could imagine,
+* possible **mitigations** for these inconsistencies.
+
+We will not speculate on the consequences of using the --unsafe-lock-free flag for backing up any deployment other than CF.
+
+### Why might the --unsafe-lock-free flag cause inconsistencies?
+
+CF is a distributed system, which relies on distributed state. For a simple example, consider a running app:
+
+* The Cloud Controller keeps the name of the app, and the route it has claimed, and so on in the Cloud Controller Database (CCDB)
+* The actual binary bits that form the running app (the droplet) are stored in the blobstore
+
+If we were to naively back up CF while an app were in the process of being pushed, we might find that our backup of the CCDB contains a reference to this app, while our backup of the blobstore does not contain the app's droplet. If we attempt to restore this back up, this app will fail to start.
+
+To avoid this sort of problem, bbr locks CF before taking a backup. This has the side-effect that the CF API goes down during the critical phase of the backup. The --unsafe-lock-free flag disables this safety feature. If you use it you will experience no CF API downtime, but you will also not be protected from backup inconsistencies like the one described here.
+
+#### What inconsistencies have we observed in testing?
+
+The following inconsistencies were actually observed during testing. For each one, we will describe what happened, and what can be done to mitigate the problem.
+
+#### Missing Blobs
+After restoring this inconsistent backup, some apps failed to start. Running cf events APP_NAME yields something like the following:
+```bigquery
+time                          event                       actor          description
+2020-10-28T11:10:21.00+0000   app.crash                   APP_NAME       index: 0, reason: CRASHED, cell_id: 03fdc92e-8d5e-447c-a894-52f62b5f9c8e, instance: 2e2ae69a-c750-4da6-7339-5240, exit_description: Downloading droplet failed
+```
+This is a sign that the app's droplet is missing from the blobstore.
+
+**When might this happen?**
+
+In testing, we caused this issue by artificially delaying the blobstore backup part of the BBR backup process, while concurrently deleting an app.
+
+We therefore expect the following:
+
+* It seems likely that this issue could occur if a user deletes an app at a critical point during a backup process.
+* This issue may also occur if a user creates an app at a critical point during a backup process.
+
+In both cases, we would expect only the newly deleted/created app to be affected.
+
+**Possible mitigations**
+
+*Reactive fix*
+
+If the app's package is present in the blobstore, we can fix the issue by running cf restage APP_NAME.
+
+However, if the droplet is missing due to an inconsistent backup, there is a good chance that the corresponding package is also missing. In this case, the only way to recover is to re-push the app.
+
+*Prevention*
+
+You can prevent this issue altogether by:
+
+* Using an external blobstore, such as Minio
+* Using the native replication features of your external blobstore to keep your own backups separately from BBR
+* Setting a retention policy on your replica blobstore, so that no files are truly deleted until they have been marked as deleted for X days
+
+Before you perform a bbr restore, first restore your blobstore from your replica (or swap out the live store for the replica).
+
+This will give you an X-day window in which all your backups are valid. If you restore a backup older then X-days-old, you will still be susceptible to this issue.
+
+#### Unstarted App
+
+After restoring, some apps didn't even attempt to start.
+
+**When might this happen?**
+
+If an app is pushed at a critical point during the backup process, the app can get created before the Cloud Controller Database (CCDB) is backed up, but started after the CCDB is backed up. The result is an app which is backed up in a "stopped" state.
+
+**Possible Mitigations**
+
+Run cf start APP_NAME. If this fails, check that you're not missing blobs as described above.
+
+#### An incomplete user
+
+After restoring these inconsistent backups, we observed that:
+
+* a CF user existed who had no name, and no credentials
+* a set of CF user credentials existed, with no corresponding user
+
+**When might this happen?**
+
+In testing, we caused variants of this issue by creating or deleting a CF user at a critical point during the backup process.
+
+In one case, the backup took a snapshot of the Cloud Controller Database (CCDB) in a state in which the user structure had been created, but no name had been assigned. Furthermore, no credentials had been created for the user in the UAA Database (UAADB), so the user was not usable.
+
+In another case, the backup took a snapshot of the CCDB after a user was deleted, and the UAADB before the user was deleted. This left a set of garbage credentials in the UAADB which were connected to no users, and hence had no access to anything in the system.
+
+**Possible Mitigations**
+
+Delete the half-created user if possible.
+
+You can avoid this issue entirely by not creating or deleting users during the backup process.
+
+You can also avoid this issue by using LDAP or similar, rather than managing users directly in CF.
+
+### What additional possible inconsistencies could we imagine occurring?
+
+Above we listed the issues we observed during testing. In addition, we could imagine the following possible scenarios. For each of the following, we either chose not to investigate or were unable to create the issue in our lab. However, the lab is not the field, so it's worth considering these possibilities before relying on --unsafe-lock-free in production.
+
+**An app exists in CCDB, but not in either the networkingDB or the routingDB.**
+
+we could imagine an app appearing to start successfully, but not being reachable from the outside world. Or similarly, for container-to-container networking routes to be unavailable, so your microservices can't talk to each other as expected.
+
+We tried quite hard to force this error case in the lab, but were unable to. Apps in CF have the power to register their own routes, so it's possible that the error did briefly occur but self-corrected before we were able to observe it.
+
+**A route exists with no app**
+
+If this happened, we would expect a route to be restored, pointing to an app that no-longer exists. This could conceivably be a security risk if the route just so happened to accidentally point at a container which was not intended to be exposed to the public internet. However, routes in CF are intentionally short-lived, and must be constantly renewed by the app that claims them, so even in the worst case, we expect this problem would self-correct shortly after the restore.
+
+**An app has credhub bindings (to data services?) which aren't in credhubDB**
+
+If this happened, we would expect an app to believe it has access to some data service, when in fact those credentials no longer exist. This would result in the app failing to access the data service at runtime, and possibly crashing or behaving in unexpected ways as a result.
+
+**An app is missing an autoscaler entry**
+
+If this happened, an app which we expected to autoscale would fail to autoscale.
+
+We did not investigate this issue, since it could just as easily be caused by a locking-backup occurring slightly earlier than expected. If you have this problem using --unsafe-lock-free, we expect you would probably have this problem anyway.
+
+**An autoscaler entry is missing an app**
+
+If this happened, the autoscaler might attempt to scale an app that does not exist. This would fail.
+
+We did not investigate this issue, since we expect it would be very low severity, and we don't believe that our expected users of --unsafe-lock-free use autoscaler.
+
+**A space could be in CCDB "owned" by a user who does not exist in UAADB**
+
+If this happened, we worried that a CF Space might be effectively inaccessible, with its users missing.
+
+We tried to force this error in the lab, but were unable to. This is unsurprising, since the Cloud Controller seems to manage user and space creation and deletion in a sensible order.
+
+**Usage Events might be missing for apps, spaces, or service instances that exist. Or might exist for apps, spaces, or service instances that didn't make it into the backup.**
+
+[Usage Events](https://docs.cloudfoundry.org/running/managing-cf/usage-events.html) is a messaging system, and this is the usual problem with snapshotting messaging systems. With or without locks, it's possible for messages to "get lost" during a backup.
+
+It's possible that some message may be fired just before the backup was taken, but not get to a place where it can be safely persisted until after the backup was taken. If this happens, the observed behaviour of the system is exactly as if the message were fired just after the backup was taken.
+
+This is both low-severity, and also could happen regardless of whether we're using locks or not. For this reason, we did not investigate it.
