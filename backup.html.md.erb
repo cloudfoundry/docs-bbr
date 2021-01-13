@@ -13,7 +13,7 @@ To perform a restore, see [Restoring with BOSH Backup and Restore](restore.html)
 Before using the result of the backup to restore to a destination environment,
 verify that the current environment and the destination environment are compatible.
 For information, see [Compatibility of Restore](./restore.html#compatibility).
-[//]: # (Need a link to the steps to perform to check the compatibility.)
+<%# Need a link to the steps to perform to check the compatibility. %>
 
 ## <a id='connect-to-jumpbox'></a> Connect to Your Jumpbox
 
@@ -30,16 +30,16 @@ For more information about the jumpbox, see [Installing BOSH Backup and Restore]
 To connect to your jumpbox using the command line interface (CLI), run:
 
 ```
-ssh -i PATH-TO-KEY  JUMPBOX-USERNAME@JUMPBOX-ADDRESS
+ssh -i PATH-TO-KEY JUMPBOX-USERNAME@JUMPBOX-ADDRESS
 ```
-
 Where:
 
-  * `PATH-TO-KEY` is the local path to your private key file for the jumpbox host.
-  * `JUMPBOX-USERNAME` is your jumpbox username.
-  * `JUMPBOX-ADDRESS` is the IP address or hostname of the jumpbox.
+* `PATH-TO-KEY` is the local path to your private key file for the jumpbox host.
+* `JUMPBOX-USERNAME` is your jumpbox username.
+* `JUMPBOX-ADDRESS` is the IP address or hostname of the jumpbox.
 
-<p class="note"><strong>Note:</strong> If you connect to your jumpbox with SSH,
+<p class="note">
+  <strong>Note:</strong> If you connect to your jumpbox with SSH,
    you must run the BBR commands in this topic from within your jumpbox.
 </p>
 
@@ -52,8 +52,8 @@ Director through the jumpbox.
 When `BOSH_ALL_PROXY` is set, the BBR CLI uses its value to forward
 requests to the BOSH Director.
 
-<p class="note"><strong>Note:</strong>
-  For the below procedures to work, ensure the SOCKS port is not already in
+<p class="note">
+  <strong>Note:</strong> For the below procedures to work, ensure the SOCKS port is not already in
   use by a different tunnel or process.
 </p>
 
@@ -61,52 +61,50 @@ To connect with `BOSH_ALL_PROXY`, follow one of the below procedures:
 
 * **To establish the tunnel separate from the BOSH CLI:**
 <br><br>
-  1. Establish the tunnel and make it available on a local port by running:
+    1. Establish the tunnel and make it available on a local port by running:
 
         ```
         ssh -4 -D SOCKS-PORT -fNC JUMPBOX-USERNAME@JUMPBOX-ADDRESS -i JUMPBOX-KEY-FILE -o ServerAliveInterval=60
         ```
-
         Where:
+        * `SOCKS-PORT` is the local SOCKS port.
+        * `JUMPBOX-USERNAME` is your jumpbox username.
+        * `JUMPBOX-ADDRESS` is the IP address or hostname of the jumpbox.
+        * `JUMPBOX-KEY-FILE` is the local SSH private key for accessing the jumpbox.
 
-      * `SOCKS-PORT` is the local SOCKS port.
-      * `JUMPBOX-USERNAME` is your jumpbox username.
-      * `JUMPBOX-ADDRESS` is the IP address or hostname of the jumpbox.
-      * `JUMPBOX-KEY-FILE` is the local SSH private key for accessing the jumpbox.
-  1. Provide the BOSH CLI with access to the tunnel using the `BOSH_ALL_PROXY`
-  environment variable by running:
+    1. Provide the BOSH CLI with access to the tunnel using the `BOSH_ALL_PROXY`
+    environment variable by running:
 
         ```
         export BOSH_ALL_PROXY=socks5://localhost:SOCKS-PORT
         ```
-        Where is `SOCKS-PORT` is your local SOCKS port.
+        Where `SOCKS-PORT` is your local SOCKS port.
 
 * **To establish the tunnel using the BOSH CLI:**
 <br><br>
-  Provide the BOSH CLI with the necessary SSH credentials to create the tunnel by
-  running:
+    Provide the BOSH CLI with the necessary SSH credentials to create the tunnel by
+    running:
 
     ```
     export BOSH_ALL_PROXY=ssh+socks5://JUMPBOX-USERNAME@JUMPBOX-ADDRESS:SOCKS-PORT?private_key=JUMPBOX-KEY-FILE
     ```
-
     Where:
     * `JUMPBOX-USERNAME` is your jumpbox username.
     * `JUMPBOX-ADDRESS` is the IP address or hostname of the jumpbox.
     * `SOCKS-PORT` is the local SOCKS port.
     * `JUMPBOX-KEY-FILE` is the local SSH private key for accessing the jumpbox.
 
-<p class="note"><strong>Note:</strong>
-  Using <code>BOSH_ALL_PROXY</code> can result in longer backup and restore times
-  due to network performance degradation.
-  All operations must pass through the proxy, which can make moving backup artifacts
-  significantly slower.
+<p class="note">
+  <strong>Note:</strong> Using <code>BOSH_ALL_PROXY</code> can result in longer backup and restore
+  times due to network performance degradation.
+  All operations must pass through the proxy, which can make moving backup artifacts significantly
+  slower.
 </p>
 
-<div class="note warning"><strong>Warning:</strong>
-  In the BBR v1.5.0 and earlier, the tunnel created by the BOSH CLI does not
-  include the <code>ServerAliveInterval</code> flag.
-  This might cause your SSH connection to time out when transferring large artifacts.
+<div class="note warning">
+  <strong>Warning:</strong> In the BBR v1.5.0 and earlier, the tunnel created by the BOSH CLI does
+  not include the <code>ServerAliveInterval</code> flag.
+  This might cause your SSH connection to timeout when transferring large artifacts.
   In BBR v1.5.1, the <code>ServerAliveInterval</code> flag is included.
   For more information, see
   <a href="https://github.com/cloudfoundry-incubator/bosh-backup-and-restore/releases/tag/v1.5.1">bosh-backup-and-restore</a>
@@ -121,14 +119,14 @@ To connect with `BOSH_ALL_PROXY`, follow one of the below procedures:
     bbr director \
     --private-key-path PATH-TO-PRIVATE-KEY \
     --username USER-NAME \
-    --host HOST \
+    --host BOSH-DIRECTOR-IP \
     pre-backup-check
     ```
     Where:
     * `PATH-TO-PRIVATE-KEY` is the path to the SSH private key used to connect to the BOSH Director.
     * `USER-NAME` is the SSH username of the BOSH Director.
-    * `HOST` is the internal (or public) IP of your BOSH Director.
-       If the BOSH Director is public, this could be a public IP or a domain, such as `my-bosh.xxx.cf-app.com`.
+    * `BOSH-DIRECTOR-IP` is the internal (or public) IP address of your BOSH Director.
+       If the BOSH Director is public, this could be a public IP address or a domain, such as `my-bosh.xxx.cf-app.com`.
 
     For example:
 
@@ -152,14 +150,17 @@ To connect with `BOSH_ALL_PROXY`, follow one of the below procedures:
     bosh clean-up --all
     ```
 
-    The above command removes all unused resources, including packages complied against older stemcells. If a
-    lot of unused resources have accumulated over time, this results in a smaller, faster backup of BOSH Director.
-    For more information see [Clean-Up](https://bosh.io/docs/cli-v2/#clean-up) in the BOSH documentation.
+    The above command removes all unused resources, including packages complied against older
+    stemcells. If a lot of unused resources have accumulated over time, this clean-up causes a
+    smaller, faster backup of BOSH Director.
+    For more information, see [Clean-Up](https://bosh.io/docs/cli-v2/#clean-up) in the BOSH
+    documentation.
 
     <p class="note warning">
-	    <strong>Warning:</strong> The above command is destructive and can remove resources that are unused
-	    but necessary. For example, if an on-demand service broker is deployed and no service instances have been
-      created, the releases needed to create a service instance are categorized as unused and are removed.
+      <strong>Warning:</strong> The above command is destructive and can remove resources that are
+      unused but necessary. For example, if an on-demand service broker is deployed and no service
+      instances have been created, the releases needed to create a service instance are categorized
+      as unused and are removed.
     </p>
 
 1. Run the BBR backup command to back up your BOSH Director:
@@ -168,14 +169,14 @@ To connect with `BOSH_ALL_PROXY`, follow one of the below procedures:
     bbr director \
     --private-key-path PATH-TO-PRIVATE-KEY \
     --username USER-NAME \
-    --host HOST \
+    --host BOSH-DIRECTOR-IP \
     backup
     ```
     Where:
     * `PATH-TO-PRIVATE-KEY` is the path to the SSH private key used to connect to the BOSH Director.
     * `USER-NAME` is the SSH username of the BOSH Director.
-    * `HOST` is the internal (or public) IP of your BOSH Director.
-       If the BOSH Director is public, this could be a public IP or a domain, such as `my-bosh.xxx.cf-app.com`.
+    * `BOSH-DIRECTOR-IP` is the internal (or public) IP address of your BOSH Director.
+       If the BOSH Director is public, this could be a public IP address or a domain, such as `my-bosh.xxx.cf-app.com`.
 
     For example:
 
@@ -196,14 +197,15 @@ To connect with `BOSH_ALL_PROXY`, follow one of the below procedures:
 
 ## <a id='back-up-deployment'></a> Back Up a BOSH Deployment
 
-1. Run the BBR pre-backup check to confirm that your BOSH Director is reachable and has a deployment that you can back up with BBR:
+1. Run the BBR pre-backup check to confirm that your BOSH Director is reachable and has a deployment
+that you can back up with BBR:
 
     ```
     BOSH_CLIENT_SECRET=BOSH-CLIENT-SECRET \
     bbr deployment \
     --target BOSH-TARGET \
     --username BOSH-CLIENT \
-    --deployment DEPLOYMENT-NAME \
+    --deployment BOSH-DEPLOYMENT \
     --ca-cert PATH-TO-BOSH-SERVER-CERTIFICATE \
     pre-backup-check
     ```
@@ -215,7 +217,7 @@ To connect with `BOSH_ALL_PROXY`, follow one of the below procedures:
     * `BOSH-CLIENT`: If you have a BOSH Director with User Account and Authentication (UAA) as the
     authentication provider, this is a UAA client as the username.
     If you have a BOSH Director with basic authentication configured, this is your username.
-    * `DEPLOYMENT-NAME`: The name of the deployment you want to back up. For a list of deployments,
+    * `BOSH-DEPLOYMENT`: The name of the deployment you want to back up. For a list of deployments,
     run `bosh deployments`.
     * `PATH-TO-BOSH-CA-CERTIFICATE`: The path to the BOSH Director's Certificate Authority (CA)
     certificate, if the certificate is not verifiable by the local machine's certificate chain. If you manually deployed,
@@ -247,7 +249,7 @@ To connect with `BOSH_ALL_PROXY`, follow one of the below procedures:
     nohup bbr deployment \
     --target BOSH-TARGET \
     --username BOSH-CLIENT \
-    --deployment DEPLOYMENT-NAME \
+    --deployment BOSH-DEPLOYMENT \
     --ca-cert PATH-TO-BOSH-SERVER-CERTIFICATE \
     backup
     ```
@@ -260,14 +262,20 @@ To connect with `BOSH_ALL_PROXY`, follow one of the below procedures:
     * `BOSH-CLIENT`: If you have a BOSH Director with User Account and Authentication (UAA) as the
     authentication provider, this is a UAA client as the username.
     If you have a BOSH Director with basic authentication configured, this is your username.
-    * `DEPLOYMENT-NAME`: The name of the deployment you want to back up. For a list of deployments,
+    * `BOSH-DEPLOYMENT`: The name of the deployment you want to back up. For a list of deployments,
     run `bosh deployments`.
     * `PATH-TO-BOSH-CA-CERTIFICATE`: The path to the BOSH Director's Certificate Authority (CA)
-    certificate, if the certificate is not verifiable by the local machine's certificate chain. If you manually deployed,
-    then the certificate might be stored in a `secrets.yml` or similar file.
-    <p class="note"><strong>Note:</strong> To include the manifest in the backup artifact, add the  <code>--with-manifest</code> flag. However, be aware that the backup artifact then includes credentials that you need to keep secret.
-   </p>
-    <p class="note"><strong>Note:</strong> The <code>--unsafe-lock-free</code> flag should only be used by advanced users, given that its use can result in inconsistent backups. More information on this feature can be viewed [here](experimental-features.html)
+    certificate, if the certificate is not verifiable by the local machine's certificate chain.
+    If you manually deployed, then the certificate might be stored in a `secrets.yml` or similar file.
+    <p class="note">
+      <strong>Note:</strong> To include the manifest in the backup artifact, add the
+      <code>--with-manifest</code> flag. However, be aware that doing so causes the backup artifact
+      to include credentials that you need to keep secret.
+    </p>
+    <p class="note">
+      <strong>Note:</strong> The <code>--unsafe-lock-free</code> flag should only be used by advanced
+      users, given that its use can result in inconsistent backups. For more information about this
+      feature, see [Experimental Features](experimental-features.html).
    </p>
 
     For example:
@@ -317,9 +325,9 @@ To cancel a backup:
 1. Terminate the BBR process by pressing Ctrl-C and typing `yes` to confirm.
 
 <p class="note warning">
-  <strong>Warning:</strong> Cancelling a backup can leave the system in an unusable state and prevent additional
-  backups. Follow the steps in <a href="#manual-clean">Clean Up after a Failed Backup</a> below to fix these
-  issues.
+  <strong>Warning:</strong> Cancelling a backup can leave the system in an unusable state and prevent
+  additional backups. Follow the steps in <a href="#manual-clean">Clean Up after a Failed Backup</a>
+  below to fix these issues.
 </p>
 
 ## <a id="manual-clean"></a>Clean Up after a Failed Backup
@@ -335,7 +343,7 @@ Follow the steps below to use the BBR cleanup script after a failed backup attem
     bbr director \
     --private-key-path PATH-TO-PRIVATE-KEY \
     --username USER-NAME \
-    --host HOST \
+    --host BOSH-DIRECTOR-IP \
     backup-cleanup
     ```
 
@@ -356,7 +364,7 @@ Follow the steps below to use the BBR cleanup script after a failed backup attem
     bbr deployment \
     --target BOSH-TARGET \
     --username BOSH-CLIENT \
-	 --deployment DEPLOYMENT-NAME \
+    --deployment BOSH-DEPLOYMENT \
     --ca-cert PATH-TO-BOSH-CA-CERTIFICATE \
     backup-cleanup
     ```
@@ -377,12 +385,23 @@ Follow the steps below to use the BBR cleanup script after a failed backup attem
 
 To keep your backup artifact safe:
 
-1. Move the backup artifact off the jumpbox to your storage space. BBR stores each backup in a subdirectory named `DEPLOYMENT-TIMESTAMP` within the current working directory. The backup created by BBR consists of a directory with the backup artifacts and metadata files.
+1. Move the backup artifact off the jumpbox to your storage space. BBR stores each backup in a
+subdirectory named `DEPLOYMENT-TIMESTAMP` within the current working directory.
+The backup created by BBR consists of a directory with the backup artifacts and metadata files.
 
 1. Compress and encrypt the backup artifacts when storing them.
 
-1. Make redundant copies of your backup and store them in multiple locations. This minimizes the risk of losing your backups in the event of a disaster.
+1. Make redundant copies of your backup and store them in multiple locations.
+This minimizes the risk of losing your backups in the event of a disaster.
 
-1. Each time you redeploy Cloud Foundry, test your backup artifact by following the procedures in [Restoring with BOSH Backup and Restore](restore.html).
+1. Each time you redeploy Cloud Foundry, test your backup artifact by following the procedures in
+[Restoring with BOSH Backup and Restore](restore.html).
 
-<p class="note"><strong>Note:</strong> Backup artifacts might contain data covered by the European Union's <em>General Data Protection Regulation (GDPR)</em>. Be mindful that any backup artifacts might contain personal data. For example, a backup of a BOSH deployment could contain user email addresses. As such, backup artifacts should be handled in accordance with organizational policies and applicable laws as they pertain to security, confidentiality, and privacy.</p>
+<p class="note">
+  <strong>Note:</strong> Backup artifacts might contain data covered by the European Union's
+  <em>General Data Protection Regulation (GDPR)</em>.
+  Be mindful that any backup artifacts might contain personal data.
+  For example, a backup of a BOSH deployment could contain user email addresses.
+  As such, backup artifacts should be handled in accordance with organizational policies and
+  applicable laws as they pertain to security, confidentiality, and privacy.
+</p>
