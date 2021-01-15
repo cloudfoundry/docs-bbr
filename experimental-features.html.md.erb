@@ -46,7 +46,7 @@ If you use it you prevent CAPI downtime, but you lose protection from backup inc
 the one described above.
 
 
-### <a id="missing-blob"> Missing Blob
+### <a id="missing-blob"></a> Missing Blob
 
 #### Symptom
 
@@ -145,7 +145,7 @@ We did not observe the following issues during testing.
 We recommend considering these theoretical issues before relying on `--unsafe-lock-free` in
 production.
 
-**An app exists in CCDB, but not in either the networking database or the routing database.**
+### An app exists in CCDB, but not in either the networking database or the routing database.
 
 An app appears to start successfully, but is not reachable from the outside world.
 Alternatively, container-to-container networking routes are unavailable, preventing your microservices
@@ -155,7 +155,7 @@ We were unable to force this error case in the lab.
 Apps in Cloud Foundry can register their own routes, so it is possible that the error briefly
 occurred but self-corrected before we were able to observe it.
 
-**A route exists with no app**
+### A route exists with no app
 
 A route is restored that now points to an app that no longer exists.
 This is a security risk if the route points to a container that should not be exposed to the public
@@ -165,26 +165,26 @@ However, routes in Cloud Foundry are short-lived by design: they must be constan
 app that claims them. So, even in the worst case scenario, we expect this problem to self-correct
 shortly after the restore.
 
-**An app has CredHub bindings <%# to data services? %> which are not in CredHub database**
+### An app has CredHub bindings which are not in CredHub database
 
 An app tries to access a data service even though the relevant credentials no longer exist, causing
 the app to fail to access the data service at runtime and possibly crash or behave unexpectedly.
 
-**An app is missing an autoscaler entry**
+### An app is missing an autoscaler entry
 
 An app expected to autoscale fails to do so.
 
 We did not investigate this issue because, should it occur, it is likely to be caused by a
 locking-backup occurring slightly earlier than expected, not by the `--unsafe-lock-free` flag.
 
-**An autoscaler entry is missing an app**
+### An autoscaler entry is missing an app
 
 The autoscaler attempts to scale an app that does not exist.
 
 We did not investigate this issue, because we expect it would be very low severity, and we do not
 expect many Cloud Foundry users of `--unsafe-lock-free` to also use <%# an? the? %> autoscaler.
 
-**A user who does not exist in UAADB owns a space in CCDB**
+### A user who does not exist in UAADB owns a space in CCDB
 
 A user who does not exist in UAADB owns a space in CCDB, making that Cloud Foundry space effectively
 inaccessible.
@@ -193,14 +193,14 @@ We were unable to force this error in the lab.
 The order in which Cloud Controller manages user and space creation and deletion perhaps makes
 this issue impossible or just very unlikely to occur.
 
-**Usage events might be missing for apps, spaces, or service instances**
+### Usage events might be missing for apps, spaces, or service instances
 
 Usage Events is a messaging system, and this is a common issue when snapshotting messaging
 systems. With or without locks, you might lose messages during a backup.
 For more information, see the
 [Cloud Foundry documentation](https://docs.cloudfoundry.org/running/managing-cf/usage-events.html).
 
-**Usage events might exist for apps, spaces, or service instances that are missing from the backup.**
+### Usage events might exist for apps, spaces, or service instances that are missing from the backup.
 
 A message fires just before the backup is created, and does not safely persist until afterward.
 If this happens, the observed behavior of the system is exactly as if the message were fired just
