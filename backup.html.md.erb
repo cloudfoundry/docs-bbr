@@ -60,7 +60,7 @@ requests to the BOSH Director.
 To connect with `BOSH_ALL_PROXY`, follow one of the below procedures:
 
 * **To establish the tunnel separate from the BOSH CLI:**
-    1. Establish the tunnel and make it available on a local port by running:
+    1. Establish the tunnel and make it available on a local port by running:<br><br>
         ```
         ssh -4 -D SOCKS-PORT -fNC JUMPBOX-USERNAME@JUMPBOX-ADDRESS -i JUMPBOX-KEY-FILE -o ServerAliveInterval=60
         ```
@@ -69,8 +69,8 @@ To connect with `BOSH_ALL_PROXY`, follow one of the below procedures:
         * `JUMPBOX-USERNAME` is your jumpbox username.
         * `JUMPBOX-ADDRESS` is the IP address or hostname of the jumpbox.
         * `JUMPBOX-KEY-FILE` is the local SSH private key for accessing the jumpbox.
-    1. Provide the BOSH CLI with access to the tunnel using the `BOSH_ALL_PROXY`
-    environment variable by running:
+    1. Provide the BOSH CLI with access to the tunnel using the `BOSH_ALL_PROXY` environment variable
+    by running:<br><br>
         ```
         export BOSH_ALL_PROXY=socks5://localhost:SOCKS-PORT
         ```
