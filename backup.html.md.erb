@@ -263,16 +263,17 @@ that you can back up with BBR:
     * `PATH-TO-BOSH-CA-CERTIFICATE`: The path to the BOSH Director's Certificate Authority (CA)
     certificate, if the certificate is not verifiable by the local machine's certificate chain.
     If you manually deployed, then the certificate might be stored in a `secrets.yml` or similar file.
+
     <p class="note">
       <strong>Note:</strong> To include the manifest in the backup artifact, add the
       <code>--with-manifest</code> flag. However, be aware that doing so causes the backup artifact
       to include credentials that you need to keep secret.
     </p>
-    <p class="note">
-      <strong>Note:</strong> The <code>--unsafe-lock-free</code> flag should only be used by advanced
-      users, given that its use can result in inconsistent backups. For more information about this
-      feature, see [Experimental Features](experimental-features.html).
-   </p>
+    <p class="note warning">
+      <strong>Warning:</strong> The <code>--unsafe-lock-free</code> flag should only be used by advanced
+      users because it can result in inconsistent backups. For more information about this
+      feature, see <a href="experimental-features.html">Experimental Features</a>.
+    </p>
 
     For example:
 
