@@ -19,8 +19,8 @@ downtime but might cause an inconsistent backup.
 This topic covers covers:
 
 * Why your backup might be inconsistent
-* Inconsistencies we <%# Specify the party (VMware, Cloud Foundry, etc). %>observed
-* Inconsistencies we <%# Specify the party (VMware, Cloud Foundry, etc). %>did not observe but might still be possible
+* Inconsistencies that testers observed
+* Inconsistencies that testers did not observe but might still be possible
 
 This topic does not speculate about the consequences of using the `--unsafe-lock-free` flag for
 backing up a deployment other than Cloud Foundry.
@@ -63,11 +63,11 @@ This suggests the app's droplet is missing from the blobstore.
 
 #### Explanation
 
-In testing, we <%# Specify the party (VMware, Cloud Foundry, etc). %>caused this issue by artificially delaying the blobstore backup part of the BBR backup
+Testers caused this issue by artificially delaying the blobstore backup part of the BBR backup
 process while deleting an app.
 
 This issue might also occur if a user creates an app at a critical point during the backup
-process. In either case, we <%# Specify the party (VMware, Cloud Foundry, etc). %>expect only the newly deleted or created app to be affected.
+process. In either case, only the newly deleted or created app is expected to be affected.
 
 #### Solutions
 
@@ -112,20 +112,19 @@ For more information, see [Missing Blob](#missing-blob) above.
 
 #### Symptom
 
-After restoring inconsistent backups, we <%# Specify the party (VMware, Cloud Foundry, etc). %>observed that:
+After restoring inconsistent backups, testers observed that:
 
 * A Cloud Foundry user existed who had no name and no credentials
 * A set of Cloud Foundry user credentials existed with no corresponding user
 
 #### Explanation
 
-In testing, we <%# Specify the party (VMware, Cloud Foundry, etc). %>caused variants of this issue by creating or deleting a Cloud Foundry user at a
-critical point during the backup process.
+Testers caused variants of this issue by creating or deleting a Cloud Foundry user at a critical
+point during the backup process.
 
 In one case, the backup took a snapshot of the Cloud Controller database (CCDB) in a state in which
 the user structure was created, but no name was assigned.
-No credentials were created for the user in the UAA Database (UAADB), so the user was
-not usable.
+No credentials were created for the user in the UAA Database (UAADB), so the user was not usable.
 
 In another case, the backup took a snapshot of the CCDB after a user was deleted, and the UAADB
 before the user was deleted.
@@ -144,9 +143,8 @@ You can avoid this issue by:
 
 ## <a id="theoretical"></a> Theoretical --unsafe-lock-free Issues
 
-We <%# Specify the party (VMware, Cloud Foundry, etc). %>did not observe the following issues during testing.
-We <%# Specify the party (VMware, Cloud Foundry, etc). %>recommend considering
-these theoretical issues before relying on `--unsafe-lock-free` in production.
+Testers did not observe the following issues during testing.
+Consider these theoretical issues before relying on `--unsafe-lock-free` in production.
 
 ### An app exists in CCDB, but not in either the networking database or the routing database.
 
@@ -154,9 +152,9 @@ An app appears to start successfully, but is not reachable from the outside worl
 Alternatively, container-to-container networking routes are unavailable, preventing your microservices
 from communicating with each other as expected.
 
-We <%# Specify the party (VMware, Cloud Foundry, etc). %>were unable to force this error case in the lab.
+Testers were unable to force this error case in the lab.
 Apps in Cloud Foundry can register their own routes, so it is possible that the error briefly
-occurred but self-corrected before we <%# Specify the party (VMware, Cloud Foundry, etc). %>were able to observe it.
+occurred but self-corrected before the testers were able to observe it.
 
 ### A route exists with no app
 
@@ -165,7 +163,7 @@ This is a security risk if the route points to a container that should not be ex
 internet.
 
 However, routes in Cloud Foundry are short-lived by design: they must be constantly renewed by the
-app that claims them. So, even in the worst case scenario, we <%# Specify the party (VMware, Cloud Foundry, etc). %>expect this problem to self-correct
+app that claims them. So, even in the worst case scenario, this problem is expected to self-correct
 shortly after the restore.
 
 ### An app has CredHub bindings which are not in CredHub database
@@ -177,22 +175,23 @@ the app to fail to access the data service at runtime and possibly crash or beha
 
 An app expected to autoscale fails to do so.
 
-We <%# Specify the party (VMware, Cloud Foundry, etc). %>did not investigate this issue because it is likely to be caused by a
+Testers did not investigate this issue because it is likely to be caused by a
 locking-backup occurring slightly earlier than expected, not by the `--unsafe-lock-free` flag.
 
 ### An autoscaler entry is missing an app
 
 The autoscaler attempts to scale an app that does not exist.
 
-We <%# Specify the party (VMware, Cloud Foundry, etc). %>did not investigate this issue, because we <%# Specify the party (VMware, Cloud Foundry, etc). %>expect it would<%# Re-phrase for present tense if possible. %> be very low severity, and we <%# Specify the party (VMware, Cloud Foundry, etc). %>do not
-expect many Cloud Foundry users of `--unsafe-lock-free` to also use autoscaler.
+Testers did not investigate this issue.
+Few Cloud Foundry users of `--unsafe-lock-free` are expected to also use autoscaler and, for any who
+do, this issue is expected to be very low severity should it occur.
 
 ### A user who does not exist in UAADB owns a space in CCDB
 
 A user who does not exist in UAADB owns a space in CCDB, making that Cloud Foundry space
 inaccessible.
 
-We <%# Specify the party (VMware, Cloud Foundry, etc). %>were unable to force this error in the lab.
+Testers were unable to force this error in the lab.
 The order in which Cloud Controller manages user and space creation and deletion might make
 this issue impossible or very unlikely to occur.
 
@@ -209,4 +208,4 @@ A message fires just before the backup is created, and does not safely persist u
 If this happens, the observed behavior of the system is exactly as if the message were fired just
 after the backup was taken.
 
-We <%# Specify the party (VMware, Cloud Foundry, etc). %>did not test for this issue because it is low-severity and could happen with or without locks.
+Testers did not test for this issue because it is low-severity and could happen with or without locks.
