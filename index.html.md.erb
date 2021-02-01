@@ -55,19 +55,28 @@ This approach has the following advantages:
 When a BBR `backup` command is run the following things happen:
 
 BBR connects to instances in the deployment/director that was specified in the BBR command invocation.
-Using these connections, BBR gathers information about which scripts it should run for each stage in the backup.
+Using these connections, BBR gathers information about which scripts it should run for each stage in
+the backup.
 
 BBR then runs the `pre-backup-lock`, `backup`, and `post-backup-unlock` scripts in stages.
 
-Scripts in the same stage all finish before the next stage starts. For instance, BBR triggers and waits for completion of all `pre-backup-lock` scripts before it triggers any `backup` scripts.
-Scripts within the `backup` stage can happen in any order. A release author can configure ordering for scripts in in the `locking` and `unlocking` stages, but any scripts that are unconstrained by that ordering
-can also happen in any order within their stage.
+Scripts in the same stage all finish before the next stage starts.
+For instance, BBR triggers and waits for completion of all `pre-backup-lock` scripts before it
+triggers any `backup` scripts.
+Scripts within the `backup` stage can happen in any order.
+A release author can configure ordering for scripts in in the `locking` and `unlocking` stages, but
+any scripts that are unconstrained by that ordering can also happen in any order within their stage.
 
-BBR drains and tars the backup artifacts to the jumpbox from where the operator can transfer the resulting artifact to storage and use it to restore the BOSH deployment or BOSH Director.
+BBR drains and tars the backup artifacts to the jumpbox from where the operator can transfer the
+resulting artifact to storage and use it to restore the BOSH deployment or BOSH Director.
 
 The following diagram shows a sample backup flow.
 
-<%= image_tag("backup-flow.png", :alt => "Backup Workflow") %><%# Images require alt text that describes the image in detail. %>
+<%= image_tag("backup-flow.png", :alt => "BR connects to instances in the deployment/director that
+was specified in the BBR command invocation. BBR runs the pre-backup-lock, backup, and post-backup-
+unlock scripts in stages. BBR drains and tars the backup artifacts to the jumpbox from where the
+operator can transfer the resulting artifact to storage and use it to restore the BOSH deployment or
+BOSH Director.") %>
 
 
 ## <a id='workflow-restore'></a>What happens when you run a BBR restore?
