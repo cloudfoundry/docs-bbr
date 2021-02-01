@@ -18,7 +18,10 @@ Different systems require different strategies for backup and restore. To help r
 
 The following diagram illustrates an example BBR script execution sequence.
 
-![Script execution order](images/script-execution-order.png)
+![In stage 1, the pre-backup-lock script runs in jobs 1 and 2 of instance 0 in group foo, in job 1
+of instance 0 in group bar, and in job 1 of instance 1 in group bar. Stage 2 is identical to stage 1,
+except that the backup script runs instead of the pre-backup-lock script. Stage 3 is identical to
+stage 2, except that the post-backup-unlock script runs instead of the backup script.](images/script-execution-order.png)
 
 Because the framework is focused on the interface, hooks, backup destination, and intra-deployment orchestration, it is mechanism-agnostic.
 Release authors can back up their release however they want to, as long as the scripts they write have the correct name and directory structure.
