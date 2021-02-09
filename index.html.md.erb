@@ -72,11 +72,20 @@ resulting artifact to storage and use it to restore the BOSH deployment or BOSH 
 
 The following diagram shows a sample backup flow.
 
-<%= image_tag("backup-flow.png", :alt => "BR connects to instances in the deployment/director that
-was specified in the BBR command invocation. BBR runs the pre-backup-lock, backup, and post-backup-
-unlock scripts in stages. BBR drains and tars the backup artifacts to the jumpbox from where the
-operator can transfer the resulting artifact to storage and use it to restore the BOSH deployment or
-BOSH Director.") %>
+<%= image_tag("backup-flow.png", :alt => "This diagram is described in the steps immediately below.") %>
+
+1. An operator runs `bbr backup pcf-deployment` on the jumpbox.
+
+1. BBR calls the following backup scripts on the deployment:
+
+    * `backup-lock`
+    * `backup`
+    * `backup-unlock`
+
+1. BBR transfers the backup artifacts from the deployment to the jumpbox.
+
+1. BBR transfers the backup artifacts from the jumpbox to a secondary backup store that is outside of
+the network or availability zone (AZ).
 
 
 ## <a id='workflow-restore'></a>What happens when you run a BBR restore?
