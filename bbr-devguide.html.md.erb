@@ -14,21 +14,37 @@ The BBR framework consists of a command line interface (CLI) and a set of hooks,
 
 ### <a id="mechanism"></a> Backup Mechanism
 
-Different systems require different strategies for backup and restore. To help release authors make consistent backups of their systems, the BBR framework provides hooks to lock scripts that bring a job to a consistent state before backup begins.
+Different systems require different strategies for backup and restore.
+To help release authors make consistent backups of their systems, the BBR framework provides hooks to
+lock scripts that bring a job to a consistent state before backup begins.
 
 The following diagram illustrates an example BBR script execution sequence.
 
-![In stage 1, the pre-backup-lock script runs in jobs 1 and 2 of instance 0 in group foo, in job 1
-of instance 0 in group bar, and in job 1 of instance 1 in group bar. Stage 2 is identical to stage 1,
-except that the backup script runs instead of the pre-backup-lock script. Stage 3 is identical to
-stage 2, except that the post-backup-unlock script runs instead of the backup script.](images/script-execution-order.png)
+![This diagram is described in detail immediately below.](images/script-execution-order.png)
 
-Because the framework is focused on the interface, hooks, backup destination, and intra-deployment orchestration, it is mechanism-agnostic.
-Release authors can back up their release however they want to, as long as the scripts they write have the correct name and directory structure.
+The diagram above shows a deployment that has two instance groups.
+Group foo contains instance foo/0, which contains jobs 1 and 2.
+Group bar contains instances bar/0 and bar/1, each of which contains job 1.
 
-To ensure that backup and restore scripts do not get out of sync with the releases themselves, release authors are responsible for naming, creating, testing, and troubleshooting their own backup and restore scripts.
+* Stage 1 starts: all pre-backup-lock scripts run for all jobs in all instance groups. Stage 1 ends.
+* Stage 2 starts: all backup scripts run for all jobs in all instance groups. Stage 2 ends.
+* Stage 3 starts: all post-backup-lock scripts run for all jobs in all instance groups. Stage 3 ends.
 
-<p class="note"><strong>Note:</strong> For all releases, these backup and restore jobs might be co-located with those of other releases. Therefore, release authors must give these jobs unique and descriptive names to avoid name collisions.
+There is no fixed order in which BBR calls the scripts within each stage.
+
+Because the framework is focused on the interface, hooks, backup destination, and intra-deployment
+orchestration, it is mechanism-agnostic.
+Release authors can back up their release however they want to, as long as the scripts they write
+have the correct name and directory structure.
+
+To ensure that backup and restore scripts do not get out of sync with the releases themselves,
+release authors are responsible for naming, creating, testing, and troubleshooting their own backup
+and restore scripts.
+
+<p class="note">
+  <strong>Note:</strong> For all releases, these backup and restore jobs might be co-located with
+  those of other releases. Therefore, release authors must give these jobs unique and descriptive
+  names to avoid name collisions.
 </p>
 
 ###  <a id='script-implementation'></a>Script Organization
