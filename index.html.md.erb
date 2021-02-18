@@ -99,10 +99,11 @@ The following diagram shows a sample backup flow.
 
 <%= image_tag("backup-flow.png", :alt => "This diagram is described in the steps immediately below.") %>
 
+In the diagram above:
+
 1. An operator runs `bbr backup pcf-deployment` on the jumpbox.
 
 1. BBR calls the following backup scripts on the deployment:
-
     * `backup-lock`
     * `backup`
     * `backup-unlock`
