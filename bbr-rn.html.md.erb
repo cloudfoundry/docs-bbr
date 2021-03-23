@@ -9,18 +9,25 @@ owner: Release Engineering
 
 **Release Date**: March 22, 2021
 
-#### Maintenance Changes
+#### Resolved Issues
 
-* Bug fix for bbr version command
+* **BBR version command:** The `bbr version` command now returns a valid Semver version number.
 
 ### <a id='1-9-4'></a> v1.9.4
 
 **Release Date**: March 19, 2021
 
-#### Maintenance Changes
+#### Improvements
 
-* Bump github.com/onsi/gomega from 1.10.4 to 1.11.0
-* Bump github.com/onsi/ginkgo from 1.14.2 to 1.15.1
+* **gomega:** Updated to v1.11.0.
+For more information, see [gomega](https://github.com/onsi/gomega) in GitHub.
+* **ginkgo:** Updated to v1.15.1.
+For more information, see [ginkgo](https://github.com/onsi/ginkgo) in GitHub.
+
+#### Known Issues
+
+* **BBR version command:** The `bbr version` command does not return a valid Semver version number.
+This might cause pipelines to fail.
 
 ### <a id='1-9-1'></a> v1.9.1
 
@@ -29,7 +36,7 @@ owner: Release Engineering
 #### Improvements
 
 * **gomega:** Updated to v1.10.4.
-For more information, see [gomega](https://github.com/onsi/gomega).
+For more information, see [gomega](https://github.com/onsi/gomega) in GitHub.
 * **gopkg.in:** Updated to v2.4.0.
 For more information, see [gopkg.in/yaml.v2](https://gopkg.in/yaml.v2).
 
