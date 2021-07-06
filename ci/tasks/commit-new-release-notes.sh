@@ -14,7 +14,7 @@ export \
 ROOT_DIR="$(cd "$(dirname "$0")"/../.. && pwd)"
 
 pushd "$ROOT_DIR"
-  sed -i "/Releases/ r release-notes/release-notes.md" bbr-rn.html.md.erb
+  sed -i "/Releases/ r ../release-notes/release-notes.md" bbr-rn.html.md.erb
 
   echo -e "\n > Generated Release Notes:"
   cat bbr-rn.html.md.erb
