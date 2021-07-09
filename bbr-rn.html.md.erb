@@ -4,20 +4,14 @@ owner: Release Engineering
 ---
 
 ## <a id='releases'></a> Releases
+
 ### <a id='1-9-11'></a> v1.9.11
 
 **Release Date**: July 9, 2021
 
 #### Maintenance Changes
 
-* Add release version on docs PR
-* Extract OSL request task on its own job
-* Merge pull request #205 from cloudfoundry-incubator/dependabot/go_modules/github.com/cloudfoundry/bosh-utils-0.0.264
-* Merge pull request #207 from cloudfoundry-incubator/dependabot/go_modules/github.com/onsi/gomega-1.14.0
-* Merge pull request #208 from cloudfoundry-incubator/dependabot/go_modules/s3-config-validator/src/github.com/aws/aws-sdk-go-1.39.1
-* Merge pull request #210 from cloudfoundry-incubator/dependabot/go_modules/s3-config-validator/src/github.com/aws/aws-sdk-go-1.39.2
-* Merge pull request #211 from cloudfoundry-incubator/177967869-extract-osl-task-into-a-separate-job
-* Move story creation step down when releasing
+* Internal technical improvements (CI, etc).
 
 #### Dependencies
 
@@ -32,49 +26,7 @@ owner: Release Engineering
 
 #### Maintenance Changes
 
-* Merge pull request #205 from cloudfoundry-incubator/dependabot/go_modules/github.com/cloudfoundry/bosh-utils-0.0.264
-* Merge pull request #208 from cloudfoundry-incubator/dependabot/go_modules/s3-config-validator/src/github.com/aws/aws-sdk-go-1.39.1
-
-#### Dependencies
-
-* **bosh-utils:** Updated to 0.0.264.<br>For more information, see the [github.com/cloudfoundry/bosh-utils](https://github.com/cloudfoundry/bosh-utils).
-
-
-### <a id='1-9-10'></a> v1.9.10
-
-**Release Date**: July 8, 2021
-
-#### Maintenance Changes
-
-* Merge pull request #205 from cloudfoundry-incubator/dependabot/go_modules/github.com/cloudfoundry/bosh-utils-0.0.264
-* Merge pull request #208 from cloudfoundry-incubator/dependabot/go_modules/s3-config-validator/src/github.com/aws/aws-sdk-go-1.39.1
-
-#### Dependencies
-
-* **bosh-utils:** Updated to 0.0.264.<br>For more information, see the [github.com/cloudfoundry/bosh-utils](https://github.com/cloudfoundry/bosh-utils).
-
-
-### <a id='1-9-10'></a> v1.9.10
-
-**Release Date**: July 8, 2021
-
-#### Maintenance Changes
-
-* Merge pull request #200 from cloudfoundry-incubator/177967869-fix-ci
-* Merge pull request #202 from cloudfoundry-incubator/177967869-fix-build-and-publish-final-job
-* Merge pull request #204 from cloudfoundry-incubator/dependabot/go_modules/github.com/cloudfoundry/socks5-proxy-0.2.12
-* Merge pull request #206 from cloudfoundry-incubator/dependabot/go_modules/s3-config-validator/src/github.com/aws/aws-sdk-go-1.39.0
-* Merge pull request #208 from cloudfoundry-incubator/dependabot/go_modules/s3-config-validator/src/github.com/aws/aws-sdk-go-1.39.1
-* Merge pull request #209 from cloudfoundry-incubator/dependabot/go_modules/s3-config-validator/src/github.com/onsi/gomega-1.14.0
-* Move OSM release step to bottom
-* Only use 1 resource per repo
-* Pull version higher so other steps can use it
-* Re-upload binary to pivnet
-* Update cf-cli to v7.2.0
-* Update task path
-* Use new task to commit release notes
-* ci: bump packages in dockerfile
-* ci: pin kubectl version
+* Internal technical improvements (CI, etc).
 
 #### Dependencies
 
@@ -82,36 +34,33 @@ owner: Release Engineering
 * **socks5-proxy:** Updated to 0.2.12.<br>For more information, see the [github.com/cloudfoundry/socks5-proxy](https://github.com/cloudfoundry/socks5-proxy).
 * **gomega:** Updated to 1.14.0.<br>For more information, see the [github.com/onsi/gomega](https://github.com/onsi/gomega).
 
-
-### <a id='1-9-10'></a> v1.9.10
+### <a id='1-9-9'></a> v1.9.9
 
 **Release Date**: July 8, 2021
 
 #### Maintenance Changes
 
-* Merge pull request #200 from cloudfoundry-incubator/177967869-fix-ci
-* Merge pull request #202 from cloudfoundry-incubator/177967869-fix-build-and-publish-final-job
-* Merge pull request #204 from cloudfoundry-incubator/dependabot/go_modules/github.com/cloudfoundry/socks5-proxy-0.2.12
-* Merge pull request #206 from cloudfoundry-incubator/dependabot/go_modules/s3-config-validator/src/github.com/aws/aws-sdk-go-1.39.0
-* Merge pull request #208 from cloudfoundry-incubator/dependabot/go_modules/s3-config-validator/src/github.com/aws/aws-sdk-go-1.39.1
-* Merge pull request #209 from cloudfoundry-incubator/dependabot/go_modules/s3-config-validator/src/github.com/onsi/gomega-1.14.0
-* Move OSM release step to bottom
-* Only use 1 resource per repo
-* Pull version higher so other steps can use it
-* Re-upload binary to pivnet
-* Update cf-cli to v7.2.0
-* Update task path
-* Use new task to commit release notes
-* ci: bump packages in dockerfile
-* ci: pin kubectl version
+* Various internal technical improvements (CI, etc).
 
 #### Dependencies
 
-* **aws-sdk-go:** Updated to 1.39.1.<br>For more information, see the [github.com/aws/aws-sdk-go](https://github.com/aws/aws-sdk-go).
-* **socks5-proxy:** Updated to 0.2.12.<br>For more information, see the [github.com/cloudfoundry/socks5-proxy](https://github.com/cloudfoundry/socks5-proxy).
-* **gomega:** Updated to 1.14.0.<br>For more information, see the [github.com/onsi/gomega](https://github.com/onsi/gomega).
+* **aws-sdk-go:** Updated to 1.39.0.<br>For more information, see the [github.com/aws/aws-sdk-go](https://github.com/aws/aws-sdk-go).
 
+### <a id='1-9-8'></a> v1.9.8
 
+**Release Date**: July 7, 2021
+
+#### Maintenance Changes
+
+* Various internal improvements (READMEs, CI, etc)
+
+#### Dependencies
+
+* **aws-sdk-go:** Updated to 1.38.70.<br>For more information, see the [github.com/aws/aws-sdk-go](https://github.com/aws/aws-sdk-go).
+* **bosh-utils:** Updated to 0.0.263.<br>For more information, see the [github.com/cloudfoundry/bosh-utils](https://github.com/cloudfoundry/bosh-utils).
+* **socks5-proxy:** Updated to 0.2.9.<br>For more information, see the [github.com/cloudfoundry/socks5-proxy](https://github.com/cloudfoundry/socks5-proxy).
+* **ginkgo:** Updated to 1.16.4.<br>For more information, see the [github.com/onsi/ginkgo](https://github.com/onsi/ginkgo).
+* **gomega:** Updated to 1.13.0.<br>For more information, see the [github.com/onsi/gomega](https://github.com/onsi/gomega).
 
 ### <a id='1-9-7'></a> v1.9.7
 
