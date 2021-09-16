@@ -4,6 +4,92 @@ owner: Release Engineering
 ---
 
 ## <a id='releases'></a> Releases
+### <a id='1-9-12'></a> v1.9.12
+
+**Release Date**: September 16, 2021
+
+#### Maintenance Changes
+
+* Add CF6 CLI to minimal CI image
+* Add gettext-base to be able to use envsubst in tasks
+* Add libxml2-utils to the image to be able to use xmllint in tasks
+* Bumps github.com/cloudfoundry/bosh-utils from 0.0.271 to 0.0.273.
+* Do not ref bosh-backup-and-restore-meta
+* Fix "missing inputs: cryogenics-concourse-tasks"
+* Fix 'missing inputs: cryogenics-concourse-tasks'
+* Fix 'missing inputs: cryogenics-concourse-tasks'
+* Fix set-pipeline job
+* Merge pull request #210 from cloudfoundry-incubator/dependabot/go_modules/s3-config-validator/src/github.com/aws/aws-sdk-go-1.39.2
+* Merge pull request #212 from cloudfoundry-incubator/dependabot/go_modules/s3-config-validator/src/github.com/aws/aws-sdk-go-1.39.3
+* Merge pull request #213 from cloudfoundry-incubator/dependabot/go_modules/s3-config-validator/src/github.com/aws/aws-sdk-go-1.39.4
+* Merge pull request #215 from cloudfoundry-incubator/dependabot/go_modules/s3-config-validator/src/github.com/aws/aws-sdk-go-1.39.6
+* Merge pull request #218 from cloudfoundry-incubator/dependabot/go_modules/github.com/cloudfoundry/socks5-proxy-0.2.13
+* Merge pull request #219 from cloudfoundry-incubator/dependabot/go_modules/github.com/cloudfoundry/bosh-utils-0.0.265
+* Merge pull request #220 from cloudfoundry-incubator/dependabot/go_modules/s3-config-validator/src/github.com/aws/aws-sdk-go-1.40.2
+* Merge pull request #221 from cloudfoundry-incubator/dependabot/go_modules/s3-config-validator/src/github.com/aws/aws-sdk-go-1.40.3
+* Merge pull request #222 from cloudfoundry-incubator/dependabot/go_modules/s3-config-validator/src/github.com/aws/aws-sdk-go-1.40.4
+* Merge pull request #223 from cloudfoundry-incubator/dependabot/go_modules/s3-config-validator/src/github.com/aws/aws-sdk-go-1.40.5
+* Merge pull request #224 from cloudfoundry-incubator/dependabot/go_modules/s3-config-validator/src/github.com/aws/aws-sdk-go-1.40.6
+* Merge pull request #226 from cloudfoundry-incubator/dependabot/go_modules/s3-config-validator/src/github.com/aws/aws-sdk-go-1.40.7
+* Merge pull request #227 from cloudfoundry-incubator/dependabot/go_modules/s3-config-validator/src/github.com/aws/aws-sdk-go-1.40.8
+* Merge pull request #228 from cloudfoundry-incubator/178882672-consolidate-ci-tasks
+* Merge pull request #229 from cloudfoundry-incubator/dependabot/go_modules/s3-config-validator/src/github.com/aws/aws-sdk-go-1.40.9
+* Merge pull request #238 from cloudfoundry-incubator/dependabot/go_modules/github.com/onsi/gomega-1.15.0
+* Merge pull request #240 from cloudfoundry-incubator/dependabot/go_modules/s3-config-validator/src/github.com/onsi/gomega-1.15.0
+* Merge pull request #241 from cloudfoundry-incubator/dependabot/go_modules/s3-config-validator/src/github.com/aws/aws-sdk-go-1.40.17
+* Merge pull request #243 from cloudfoundry-incubator/dependabot/go_modules/github.com/cloudfoundry/bosh-utils-0.0.267
+* Merge pull request #244 from cloudfoundry-incubator/dependabot/go_modules/s3-config-validator/src/github.com/aws/aws-sdk-go-1.40.18
+* Merge pull request #246 from cloudfoundry-incubator/dependabot/go_modules/s3-config-validator/src/github.com/aws/aws-sdk-go-1.40.20
+* Merge pull request #248 from cloudfoundry-incubator/dependabot/go_modules/github.com/cloudfoundry/socks5-proxy-0.2.16
+* Merge pull request #249 from cloudfoundry-incubator/dependabot/go_modules/github.com/cloudfoundry/bosh-utils-0.0.270
+* Merge pull request #250 from cloudfoundry-incubator/dependabot/go_modules/s3-config-validator/src/github.com/aws/aws-sdk-go-1.40.22
+* Merge pull request #251 from cloudfoundry-incubator/dependabot/go_modules/s3-config-validator/src/github.com/aws/aws-sdk-go-1.40.23
+* Merge pull request #252 from cloudfoundry-incubator/dependabot/go_modules/s3-config-validator/src/github.com/aws/aws-sdk-go-1.40.24
+* Merge pull request #254 from cloudfoundry-incubator/trigger-weekly
+* Merge pull request #255 from cloudfoundry-incubator/dependabot/go_modules/github.com/onsi/gomega-1.16.0
+* Merge pull request #256 from cloudfoundry-incubator/dependabot/go_modules/s3-config-validator/src/github.com/onsi/gomega-1.16.0
+* Merge pull request #257 from cloudfoundry-incubator/dependabot/go_modules/s3-config-validator/src/github.com/aws/aws-sdk-go-1.40.26
+* Merge pull request #258 from cloudfoundry-incubator/dependabot/go_modules/github.com/cloudfoundry/socks5-proxy-0.2.17
+* Merge pull request #259 from cloudfoundry-incubator/dependabot/go_modules/s3-config-validator/src/github.com/aws/aws-sdk-go-1.40.27
+* Merge pull request #261 from cloudfoundry-incubator/dependabot/go_modules/s3-config-validator/src/github.com/aws/aws-sdk-go-1.40.29
+* Merge pull request #262 from cloudfoundry-incubator/dependabot/go_modules/github.com/cloudfoundry/bosh-utils-0.0.271
+* Merge pull request #263 from cloudfoundry-incubator/dependabot/go_modules/s3-config-validator/src/github.com/aws/aws-sdk-go-1.40.30
+* Merge pull request #264 from cloudfoundry-incubator/upgrade-cfcli-v7.3
+* Merge pull request #265 from cloudfoundry-incubator/dependabot/go_modules/s3-config-validator/src/github.com/aws/aws-sdk-go-1.40.31
+* Merge pull request #268 from cloudfoundry-incubator/upgrade-bosh-utils-0.0.273
+* Merge pull request #271 from cloudfoundry-incubator/dependabot/go_modules/s3-config-validator/src/github.com/aws/aws-sdk-go-1.40.36
+* Merge pull request #272 from cloudfoundry-incubator/dependabot/go_modules/github.com/cloudfoundry/socks5-proxy-0.2.19
+* Merge pull request #273 from cloudfoundry-incubator/dependabot/go_modules/s3-config-validator/src/github.com/aws/aws-sdk-go-1.40.37
+* Merge pull request #276 from cloudfoundry-incubator/dependabot/go_modules/s3-config-validator/src/github.com/aws/aws-sdk-go-1.40.40
+* Merge pull request #277 from cloudfoundry-incubator/dependabot/go_modules/github.com/cloudfoundry/bosh-utils-0.0.274
+* Merge pull request #279 from cloudfoundry-incubator/dependabot/go_modules/s3-config-validator/src/github.com/aws/aws-sdk-go-1.40.41
+* Merge pull request #280 from cloudfoundry-incubator/dependabot/go_modules/s3-config-validator/src/github.com/aws/aws-sdk-go-1.40.42
+* Merge pull request #281 from cloudfoundry-incubator/dependabot/go_modules/s3-config-validator/src/github.com/aws/aws-sdk-go-1.40.43
+* Quieten wget when building the minimal CI image
+* Remove all refs to bosh-backup-and-restore-meta
+* Remove unused task input
+* Trigger bbr-pcf-pipeline-tasks build every week
+* Update BBL to v8.4.44
+* Update golang in backup-and-restore-minimal to v1.16.6
+* Update golang in backup-and-restore-minimal to v1.16.7
+* Update golang in backup-and-restore-minimal to v1.17
+* Update golang in backup-and-restore-minimal to v1.17.1
+* Upgrade cf-cli from 7.2 to 7.3
+* Use Vault key instead of git repo one
+* Use new task location
+* Use private key from Vault
+* [ci] rename git resource
+* [ci] replace cryogenics-meta by cryogenics-ci repo
+* go mod tidy
+
+#### Dependencies
+
+* **aws-sdk-go:** Updated to v1.40.17.<br>For more information, see [aws-sdk-go](https://github.com/aws/aws-sdk-go).
+* **bosh-utils:** Updated to v0.0.274.<br>For more information, see [bosh-utils](https://github.com/cloudfoundry/bosh-utils).
+* **socks5-proxy:** Updated to v0.2.19.<br>For more information, see [socks5-proxy](https://github.com/cloudfoundry/socks5-proxy).
+* **gomega:** Updated to v1.16.0.<br>For more information, see [gomega](https://github.com/onsi/gomega).
+
+
 
 ### <a id='1-9-11'></a> v1.9.11
 
