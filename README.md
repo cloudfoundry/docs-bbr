@@ -10,7 +10,7 @@ This repo is published to the following locations:
 
 ### BBR Release Notes
 
-The BBR release notes are published to http://docs.cloudfoundry.org/bbr/bbr-rn.html (OSS CF documentation)
+The BBR release notes are published on GitHub: https://github.com/cloudfoundry-incubator/bosh-backup-and-restore/releases
 
 ## Where the Subnavs Live
 
@@ -46,9 +46,8 @@ This table lists the GitHub locations and URLs for all BBR documentation.
   <td>https://docs.cloudfoundry.org/bbr/</td>
 </tr>
 <tr>
-  <td>BBR release notes in OSS CF</td>
-  <td>https://github.com/cloudfoundry/docs-bbr/blob/master/bbr-rn.html.md.erb</td>
-  <td>http://docs.cloudfoundry.org/bbr/bbr-rn.html</td>
+  <td>BBR release notes for OSS CF</td>
+  <td>https://github.com/cloudfoundry-incubator/bosh-backup-and-restore/releases</td>
 </tr>
 <tr>
   <td>BBR template variables in <code>docs-book-cloudfoundry</code></td>
