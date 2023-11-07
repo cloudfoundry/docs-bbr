@@ -18,7 +18,7 @@ The BBR documentation published in the OSS CF documentation at https://docs.clou
 
 ## Template Variables
 
-BBR template variables that contextualize topics for OSS CF live in the `docs-book-cloudfoundry` template variables [file](https://github.com/cloudfoundry/docs-book-cloudfoundry/blob/master/config/template_variables.yml). 
+BBR template variables that contextualize topics for OSS CF live in the `docs-book-cloudfoundry` template variables [file](https://github.com/cloudfoundry/docs-book-cloudfoundry/blob/master/config/template_variables.yml).
 
 These variables appear in the following topics:
 * [BOSH Backup and Restore](https://github.com/cloudfoundry/docs-bbr/blob/master/index.html.md.erb)
@@ -29,12 +29,14 @@ These variables appear in the following topics:
 
 This table lists the GitHub locations and URLs for all BBR documentation.
 
-<table>
-<tr> 
+<table class="table">
+<thead>
+<tr>
  <th>Name</th>
  <th>GitHub Location</th>
  <th>URL</th>
 </tr>
+</thead>
 <tr>
   <td>Generic BBR docs in OSS CF</td>
   <td>https://github.com/cloudfoundry/docs-bbr</td>
