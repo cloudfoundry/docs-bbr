@@ -109,7 +109,7 @@ To connect with `BOSH_ALL_PROXY`, follow one of the below procedures:
 
 ## <a id='back-up-director'></a> Back Up a BOSH Director
 
-1. Run the BBR pre-backup check to confirm that your BOSH Director is reachable and can be backed up with BBR:
+1. Run the BBR pre-backup check to confirm that your BOSH Director is reachable, and can therefore be backed up with BBR.
 
     ```
     bbr director \
@@ -133,6 +133,11 @@ To connect with `BOSH_ALL_PROXY`, follow one of the below procedures:
     --host bosh.example.com \
     pre-backup-check
     </pre>
+
+<p class="note">
+  <strong>Note:</strong> The pre-backup check cannot check for available disk space, ongoing network connections (for example, to databases), correctly configured credentials, or other circumstances that might impede a successful backup. It only checks that we can connect to the director.
+</p>
+
 
 1. If the pre-check command fails:
    * Run the command again adding the `--debug` flag to enable debug logs.
@@ -230,6 +235,10 @@ that you can back up with BBR:
     --ca-cert bosh.ca.cert \
     pre-backup-check
     </pre>
+
+<p class="note">
+  <strong>Note:</strong> The pre-backup check cannot check for available disk space, ongoing network connections (for example, to databases), correctly configured credentials, or other circumstances that might impede a successful backup. It only checks that we can connect to the director, and the VMs of our deployment.
+</p>
 
 1. If the pre-backup check command fails:
    + Run the command again adding the `--debug` flag to enable debug logs.<br>
