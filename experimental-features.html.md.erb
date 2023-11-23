@@ -1,12 +1,12 @@
 ---
-title: Experimental Features
+title: Experimental features
 owner: BBR
 ---
 
 This topic highlights features that are only recommended for advanced users of BBR.
 
 
-## <a id="ulf-flag"></a> Overview of --unsafe-lock-free
+## <a id="ulf-flag"></a>--unsafe-lock-free
 
 As of v1.9.0, the BBR CLI has an `--unsafe-lock-free` flag.
 This flag should only be used by expert users of BBR, for reasons that this topic highlights.
@@ -26,7 +26,7 @@ This topic does not speculate about the consequences of using the `--unsafe-lock
 backing up a deployment other than Cloud Foundry.
 
 
-## <a id="tshoot-obs"></a> Troubleshooting for Observed --unsafe-lock-free Issues
+### <a id="tshoot-obs"></a>Troubleshooting for observed --unsafe-lock-free issues
 
 Cloud Foundry is a distributed system that relies on distributed state.
 For example, consider a running app:
@@ -46,7 +46,7 @@ If you use it you prevent CAPI downtime, but you lose protection from backup inc
 the one described above.
 
 
-### <a id="missing-blob"></a> Missing Blob
+### <a id="missing-blob"></a> Missing blob
 
 #### Symptom
 
@@ -89,7 +89,7 @@ This gives you a certain period of time in which all your backups are valid.
 If you restore a backup older than that period, you might still experience this issue.
 
 
-### <a id="unstarted"></a> Unstarted App
+### <a id="unstarted"></a> Unstarted app
 
 #### Symptom
 
@@ -105,10 +105,10 @@ The result is an app which is backed up in a stopped state.
 
 Run `cf start APP-NAME`.
 If this fails, check that you are not missing blobs.
-For more information, see [Missing Blob](#missing-blob) above.
+For more information, see [Missing blob](#missing-blob) above.
 
 
-### <a id="incomplete"></a> An Incomplete User
+### <a id="incomplete"></a> An incomplete user
 
 #### Symptom
 
@@ -141,12 +141,12 @@ You can avoid this issue by:
 * Using LDAP or similar, rather than managing users directly in Cloud Foundry.
 
 
-## <a id="theoretical"></a> Theoretical --unsafe-lock-free Issues
+## <a id="theoretical"></a> Theoretical --unsafe-lock-free issues
 
 Testers did not observe the following issues during testing.
 Consider these theoretical issues before relying on `--unsafe-lock-free` in production.
 
-### An app exists in CCDB, but not in either the networking database or the routing database.
+### An app exists in CCDB, but not in either the networking database or the routing database
 
 An app appears to start successfully, but is not reachable from the outside world.
 Alternatively, container-to-container networking routes are unavailable, preventing your microservices
@@ -200,7 +200,7 @@ this issue impossible or very unlikely to occur.
 Usage Events is a messaging system, and this is a common issue when snapshotting messaging
 systems. With or without locks, you might lose messages during a backup.
 For more information about Usage Events, see
-[Usage Events and Billing](https://docs.cloudfoundry.org/running/managing-cf/usage-events.html).
+[Usage events and billing](https://docs.cloudfoundry.org/running/managing-cf/usage-events.html).
 
 ### Usage events might exist for apps, spaces, or service instances that are missing from the backup
 

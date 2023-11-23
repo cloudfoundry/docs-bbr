@@ -1,5 +1,5 @@
 ---
-title: Backing Up with BOSH Backup and Restore
+title: Backing up with BOSH Backup and Restore
 owner: BBR
 ---
 
@@ -144,7 +144,7 @@ The pre-backup check cannot check for available disk space, ongoing network conn
 
 1. If the pre-check command fails:
    * Run the command again adding the `--debug` flag to enable debug logs.
-     For more information, see [BBR Logging](logging.html).
+     For more information, see [BBR logging](logging.html).
    * Make the fix suggested in the output and run the pre-backup check again.<br>
      For example, the command fails if the BOSH Director selected did not have the correct backup scripts or if the connection to the BOSH Director failed.
 
@@ -197,7 +197,7 @@ The pre-backup check cannot check for available disk space, ongoing network conn
 
 1. If the backup command fails:
    * Run the command again adding the `--debug` flag to enable debug logs.<br>
-     For more information, see [BBR Logging](logging.html).
+     For more information, see [BBR logging](logging.html).
    * Follow the steps in [Recover from a failing command](#recovering-from-failing-command).
 
 ## <a id='back-up-deployment'></a> Back up a BOSH deployment
@@ -247,7 +247,7 @@ The pre-backup check cannot check for available disk space, ongoing network conn
 
 1. If the pre-backup check command fails:
    + Run the command again adding the `--debug` flag to enable debug logs.<br>
-     For more information, see [BBR Logging](logging.html).
+     For more information, see [BBR logging](logging.html).
    + Make the fix suggested in the output and run the pre-backup check again.<br>
      For example, the deployment you selected might not have the correct backup scripts,
      or the connection to the BOSH Director failed.
@@ -288,7 +288,7 @@ The pre-backup check cannot check for available disk space, ongoing network conn
     <span class="note__title"><strong>Caution</strong></span>
     The <code>--unsafe-lock-free</code> flag should only be used by advanced
     users because it can result in inconsistent backups. For more information about this
-    feature, see <a href="experimental-features.html">Experimental Features</a>.
+    feature, see <a href="experimental-features.html">Experimental features</a>.
     </p>
 
     For example:
@@ -313,7 +313,7 @@ The pre-backup check cannot check for available disk space, ongoing network conn
 
 1. If the backup command fails:
    + Run the command again adding the `--debug` flag to enable debug logs.
-     For more information, see [BBR Logging](logging.html).
+     For more information, see [BBR logging](logging.html).
    + Follow the steps in [Recover from a failing command](#recovering-from-failing-command).
 
 ## <a id="recovering-from-failing-command"></a>Recover from a failing command
@@ -324,7 +324,7 @@ If the backup fails for the BOSH Director or deployment:
 1. Ensure the BOSH Director credentials are valid.
 1. If you are backing up a deployment, ensure the deployment you specify in the BBR command exists.
 1. Ensure that the jumpbox can reach the BOSH Director.
-1. See [BBR Logging](logging.html).
+1. See [BBR logging](logging.html).
 1. If you see the error message `Directory /var/vcap/store/bbr-backup already exists on instance`,
    run the appropriate cleanup command. See [Clean up after a failed backup](#manual-clean) below.
 1. If the backup artifact is corrupted, discard the failing artifacts and rerun the backup.

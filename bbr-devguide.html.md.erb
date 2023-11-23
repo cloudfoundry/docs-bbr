@@ -1,9 +1,8 @@
 ---
-title: "BOSH Backup and Restore Developer's Guide"
+title: BOSH Backup and Restore Developer's Guide
 owner: BOSH Backup & Restore Team
 ---
 
-## <a id="overview"></a> Overview
 
 This guide describes the framework for release authors to add backup and restore functionality to their release by using BOSH Backup and Restore (BBR).
 
@@ -202,7 +201,7 @@ templates:
 </li>
 
 </pre>
-See <a href="#metadata">Metadata Script</a> below for information about the properties you can use in this script.
+See <a href="#metadata">Metadata script</a> below for information about the properties you can use in this script.
 
 </ol>
 
@@ -309,7 +308,7 @@ To add a `pre-restore-lock` script to a job:
       ...
       metadata.sh.erb: bin/bbr/metadata
     ```
-    See <a href="#metadata">Metadata Script</a> below for information about the properties you can use in this script.
+    See <a href="#metadata">Metadata script</a> below for information about the properties you can use in this script.
 
 ### <a id='restore'></a>Restore
 

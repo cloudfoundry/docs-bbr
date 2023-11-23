@@ -1,13 +1,10 @@
 ---
-title: BOSH Backup and Restore
+title: BOSH Backup and Restore (BBR)
 owner: BBR
 ---
 
 This guide documents BOSH Backup and Restore (BBR), a framework for backing up and restoring BOSH
 deployments and BOSH Directors.
-
-
-## <a id='overview'></a>Overview
 
 BBR orchestrates triggering the backup or restore process on the BOSH deployment or BOSH Director,
 and transfers the backup artifacts to and from the BOSH deployment or BOSH Director.
@@ -25,7 +22,7 @@ For more information about backing up and restoring cf-deployment with BBR, see
 [Configuring Cloud Foundry for BOSH Backup and Restore](cf-backup.html).
 
 
-## <a id='supported'></a>Supported Components
+## <a id='supported'></a>Supported components
 
 BBR is a binary that can back up and restore BOSH deployments and BOSH Directors.
 BBR requires that the backup targets supply scripts that implement the backup and restore functions.
@@ -56,7 +53,7 @@ This approach has the following advantages:
 can change as the deployment changes and do not get out of sync.
 
 
-### Backup Scripts
+### Backup scripts
 
 1. **pre-backup-lock**: The pre-backup lock script locks the job so backups are consistent across the
 cluster.
@@ -64,7 +61,7 @@ cluster.
 1. **post-backup-unlock**: The post-backup unlock script unlocks the job after the backup is complete.
 
 
-### Restore Scripts
+### Restore scripts
 
 1. **pre-restore-lock**: The pre-restore-lock script locks the job so the restore is consistent
 across the cluster.
@@ -75,7 +72,7 @@ complete.
 
 ## <a id='workflow'></a>What happens when you run a BBR backup?
 
-*Prerequisite:* The operator has [installed BBR](installing.html)
+**Prerequisite:** The operator has [installed BBR](installing.html).
 
 When a BBR `backup` command is run the following things happen:
 
@@ -141,7 +138,7 @@ any scripts that are unconstrained by that ordering can also happen in any order
 
 This section provides syntax information for the BBR binary.
 For detailed procedures on how to use BBR to back up and restore a BOSH Director or BOSH deployment,
-see the [Backing Up with BOSH Backup and Restore](backup.html) and
+see the [Backing up with BOSH Backup and Restore](backup.html) and
 [Restoring with BOSH Backup and Restore](restore.html) topics.
 
 The syntax for the BBR binary is:
@@ -185,7 +182,7 @@ Otherwise, this is the BOSH Director IP address.
 restore from.
 
 
-### BOSH Deployment
+### BOSH deployment
 
 The arguments to specify when running BBR for a BOSH deployment are:
 

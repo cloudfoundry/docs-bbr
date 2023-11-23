@@ -51,7 +51,7 @@ in GitHub.
 
 You can use an external blobstore instead
 of the default internal blobstore. For more information about supported external
-blobstores, see [Backup and Restore for External Blobstores](external-blobstores.html).
+blobstores, see [Backup and restore for external blobstores](external-blobstores.html).
 
 When BBR backs up and restores your Cloud Foundry blobstore, it includes droplets, buildpacks, and packages
 by default.
@@ -63,10 +63,12 @@ using the following ops files:
 | <a href="https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/skip-backup-restore-droplets.yml">`skip-backup-restore-droplets.yml`</a>                           | Buildpacks, Packages |
 | <a href="https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/skip-backup-restore-droplets-and-packages.yml">`skip-backup-restore-droplets-and-packages.yml`</a> | Buildpacks           |
 
-<p class="note warning"><strong>Warning:</strong> Selective backups increase
+<p class="note caution">
+<span class="note__title"><strong>Caution</strong></span>
+Selective backups increase
 your overall recovery time. When you use selective backup ops files, apps
 require extra steps to return to a running state after a restore. For more
-information, see the <a href="#selective-backup-restore-steps">Restoring Apps When Using Selective Backups</a> section below.<p>
+information, see the <a href="#selective-backup-restore-steps">Restoring apps when using selective backups</a> section below.<p>
 
 #### <a id='selective-backup-restore-steps'></a>Restoring apps when using selective backups
 
@@ -112,11 +114,11 @@ You can apply other component ops files before the backup and restore ops files.
 
 After you have configured Cloud Foundry to be compatible with BBR, you can back up and restore Cloud Foundry.
 
-Follow the procedures in the [Back Up a BOSH Deployment](backup.html#back-up-deployment) section
-of _Backing up with BOSH Backup and Restore_ and the [Restore a BOSH Deployment](restore.html#restore-deployment) section
+Follow the procedures in the [Back up a BOSH deployment](backup.html#back-up-deployment) section
+of _Backing up with BOSH Backup and Restore_ and the [Restore a BOSH deployment](restore.html#restore-deployment) section
 of _Restoring with BOSH Backup and Restore_.
 
 At minimum, run the pre-backup check against your Cloud Foundry deployment by following
-the first two steps of the [Back Up a BOSH Deployment](backup.html#back-up-deployment) section
+the first two steps of the [Back up a BOSH deployment](backup.html#back-up-deployment) section
 of _Backing up with BOSH Backup_.
 This lists the scripts that run during a backup and the order in which they are applied.
