@@ -13,8 +13,8 @@ If you do not use ops files for customization, you can still customize your
 Cloud Foundry to use BBR. Examine the contents of the ops files on this page,
 and use them as a guide to customize your deployment manifest directly.
 
-<div class="note warning">
-  <strong>Warning:</strong>
+<div class="note caution">
+  <span class="note__title"><strong>Caution</strong></span>
   <ul>
     <li><strong>Backup artifacts can contain secrets.</strong> Secure backup artifacts with encryption or by other means.</li>
     <li><strong>The restore is a destructive operation.</strong> BBR is designed to restore CF after a disaster.
@@ -28,7 +28,7 @@ and use them as a guide to customize your deployment manifest directly.
   </ul>
 </div>
 
-## <a id='configure-cf'></a>Supported CF Configurations
+## <a id='configure-cf'></a>Supported Cloud Foundry configurations
 
 To enable backup and restore for your `cf-deployment`, deploy it with the
 [enable-backup-restore.yml](https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/enable-backup-restore.yml) ops file. This
@@ -40,14 +40,14 @@ To enable BBR backup and restore for different configurations, you must also use
 For information about the available backup and restore ops files, see the
 [cf-deployment README file](https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/README.md) in GitHub.
 
-### <a id='supported-external-databases'></a>Supported External Databases
+### <a id='supported-external-databases'></a>Supported external databases
 
 Cloud Foundry components use the backup and restore SDK to interface with databases for backup and restore.
 For supported databases and versions, see
 [backup-and-restore-sdk-release](https://github.com/cloudfoundry-incubator/backup-and-restore-sdk-release#database-backup-and-restore)
 in GitHub.
 
-### <a id='supported-blobstore-backup-configurations'></a>Selective Backup and Restore Configurations for Blobstores
+### <a id='supported-blobstore-backup-configurations'></a>Selective backup and restore configurations for blobstores
 
 You can use an external blobstore instead
 of the default internal blobstore. For more information about supported external
@@ -58,7 +58,7 @@ by default.
 You can omit specific blobstore content from your backup and restore
 using the following ops files:
 
-| Selective Backup Ops File                                                                                                                                                                                            | Content Included in Backup |
+| Selective backup ops file                                                                                                                                                                                            | Content included in backup |
 |:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:---------------------|
 | <a href="https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/skip-backup-restore-droplets.yml">`skip-backup-restore-droplets.yml`</a>                           | Buildpacks, Packages |
 | <a href="https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/skip-backup-restore-droplets-and-packages.yml">`skip-backup-restore-droplets-and-packages.yml`</a> | Buildpacks           |
@@ -68,7 +68,7 @@ your overall recovery time. When you use selective backup ops files, apps
 require extra steps to return to a running state after a restore. For more
 information, see the <a href="#selective-backup-restore-steps">Restoring Apps When Using Selective Backups</a> section below.<p>
 
-#### <a id='selective-backup-restore-steps'></a>Restoring Apps When Using Selective Backups
+#### <a id='selective-backup-restore-steps'></a>Restoring apps when using selective backups
 
 When using the `skip-backup-restore-droplets.yml` ops file, do the following to get your apps running after a restore:
 
@@ -80,21 +80,21 @@ When using the `skip-backup-restore-droplets-and-packages.yml` ops file, do the 
 1. For each user-pushed application, run `cf push`.
 1. For each application pushed using a BOSH errand, re-run the BOSH errand.
 
-### <a id="order"></a> Applying Ops Files in the Correct Order
+### <a id="order"></a> Applying ops files in the correct order
 
 When enabling backup and restore for a `cf-deployment` component, you must apply
 the component ops files first, then `enable-backup-restore.yml`, and then any
 additional backup and restore ops files required by the components. See the
 following sections for examples of applying ops files in the correct order.
 
-**External Database**
+**External database**
 
 To configure `cf-deployment` to use an external database with backup and restore enabled, apply the ops files in the following order:
 
 1. `use-external-db.yml`
 1. `enable-backup-restore.yml`
 
-**S3-Compatible Unversioned Blobstore with Selective Backup and Restore**
+**S3-compatible unversioned blobstore with selective backup and restore**
 
 To configure `cf-deployment` to use an S3-compatible unversioned blobstore with selective backup and restore enabled, apply the ops files in the following order:
 
@@ -104,9 +104,11 @@ To configure `cf-deployment` to use an S3-compatible unversioned blobstore with 
 1. `enable-backup-restore-s3-unversioned.yml`
 1. `skip-backup-and-restore-droplets-and-packages.yml`
 
-<p class="note"><strong>Note:</strong> You can apply other component ops files before the backup and restore ops files. For example, you can apply other component ops file between <code>use-s3-blobstore.yml</code> and <code>enable-backup-restore.yml</code>.<p>
+<p class="note">
+<span class="note__title"><strong>Note</strong></span>
+You can apply other component ops files before the backup and restore ops files. For example, you can apply other component ops file between <code>use-s3-blobstore.yml</code> and <code>enable-backup-restore.yml</code>.<p>
 
-## <a id='process'></a> Next Steps
+## <a id='process'></a> Next steps
 
 After you have configured Cloud Foundry to be compatible with BBR, you can back up and restore Cloud Foundry.
 

@@ -39,7 +39,9 @@ you must co-locate the `s3-unversioned-blobstore-backup-restorer` job from the [
 
 1. Verify that your blobstore is either an Amazon S3 bucket or an S3-compatible bucket with support for AWS Signature Version 4.
 
-    <p class="note"><strong>Note:</strong> If your S3-compatible blobstore uses a custom CA certificate, see <a href="https://bosh.io/docs/trusted-certs.html">Configuring Trusted Certificates</a> in the <a href="https://bosh.io/docs">BOSH documentation</a>.
+    <p class="note">
+    <span class="note__title"><strong>Note</strong></span>
+    If your S3-compatible blobstore uses a custom CA certificate, see <a href="https://bosh.io/docs/trusted-certs.html">Configuring Trusted Certificates</a> in the <a href="https://bosh.io/docs">BOSH documentation</a>.
      BBR automatically makes use of your configured trusted certificates.
     </p>
 
@@ -48,15 +50,19 @@ you must co-locate the `s3-unversioned-blobstore-backup-restorer` job from the [
 1. Include the `enable-backup-restore-s3-unversioned.yml` ops file in your deployment. The `enable-backup-restore-s3-unversioned.yml` file is in the [cf-deployment](https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/enable-backup-restore-s3-unversioned.yml) GitHub repository.
   <br><br>
   See [vars-enable-backup-restore-s3-unversioned.yml](https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/example-vars-files/vars-enable-backup-restore-s3-unversioned.yml) in GitHub for information about how to configure the variables for your backup bucket locations.
-    <p class="note"><strong>Note:</strong> Apply <code>enable-backup-restore.yml</code> and <code>use-s3-blobstore.yml</code>
+
+    <p class="note">
+    <span class="note__title"><strong>Note</strong></span>
+    Apply <code>enable-backup-restore.yml</code> and <code>use-s3-blobstore.yml</code>
     before <code>enable-backup-restore-s3-unversioned.yml</code>.
     See <a href="cf-backup.html#order">Apply Ops Files in the Correct Order</a>.</p>
     <br>
     If you do not use [cf-deployment](https://github.com/cloudfoundry/cf-deployment) and ops files, you can still back up and restore external blobstores with BBR.
     See the contents of the `enable-backup-restore-s3-unversioned.yml` ops file as an example and review the [backup-and-restore-sdk-release](https://github.com/cloudfoundry-incubator/backup-and-restore-sdk-release/blob/master/docs/blobstore-backup-restore.md#s3-compatible-unversioned-blobstores) documentation in GitHub for further information.
 
-<p class="note warning">
-  <strong>Warning:</strong> To minimize storage costs, Cloud Foundry recommends creating a lifecycle policy for your backup buckets that permanently expires your older backups. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/user-guide/create-lifecycle.html">the AWS documentation</a>.
+<p class="note caution">
+<span class="note__title"><strong>Caution</strong></span>
+To minimize storage costs, Cloud Foundry recommends creating a lifecycle policy for your backup buckets that permanently expires your older backups. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/user-guide/create-lifecycle.html">the AWS documentation</a>.
 </p>
 
 ### <a id="s3-unversioned-supported-restore-scenarios"></a> Supported Restore Scenarios for Your Unversioned S3-Compatible Blobstore
@@ -65,9 +71,10 @@ The restore process copies blobs from a directory in the backup bucket to the li
 
 If your original backup buckets are lost but you are restoring from copies of those original backup buckets, ensure that the variables listed in [vars-enable-backup-restore-s3-unversioned.yml](https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/example-vars-files/vars-enable-backup-restore-s3-unversioned.yml) reference those copies.
 
-<p class="note warning">
-  <strong>Warning:</strong> Restoring to an unversioned bucket overwrites blobs with the backed up copies of those blobs.
-  BBR only modifies the blobs that were copied to the backup bucket. Other blobs are not changed during this process.
+<p class="note caution">
+<span class="note__title"><strong>Caution</strong></span>
+Restoring to an unversioned bucket overwrites blobs with the backed up copies of those blobs.
+BBR only modifies the blobs that were copied to the backup bucket. Other blobs are not changed during this process.
 </p>
 
 ## <a id="s3-versioned"></a> S3-Compatible Versioned Blobstores
@@ -77,30 +84,36 @@ see [Enable Versioning on Your S3-Compatible Blobstore](#enable-s3-versioning) b
 
 External blobstores are backed up by storing the current version of each blob, not the actual files. Those versions are set to be the current versions at restore time.
 
-<p class="note warning">
-  <strong>Warning:</strong> Storing the current version of each blob makes backing up and restoring faster. However, this means that you can only restore if the original bucket still exists. If the original bucket is deleted, all of that bucket's related versions are also deleted. If the original bucket is deleted, you can only restore from a replica.  For more information, see <a href="external-blobstores.html#s3-versioned-restore-from-replicas">Restore from Replicas</a>.
+<p class="note caution">
+<span class="note__title"><strong>Caution</strong></span>
+Storing the current version of each blob makes backing up and restoring faster. However, this means that you can only restore if the original bucket still exists. If the original bucket is deleted, all of that bucket's related versions are also deleted. If the original bucket is deleted, you can only restore from a replica.  For more information, see <a href="external-blobstores.html#s3-versioned-restore-from-replicas">Restore from replicas</a>.
 </p>
 
-<p class="note warning">
-  <strong>Warning:</strong> The <code>s3-versioned-blobstore-backup-restorer</code> in
-  <a href="https://github.com/cloudfoundry-incubator/backup-and-restore-sdk-release/releases">backup-and-restore-sdk</a>
-  v1.5.1 and earlier does not support the backup and restore of an Amazon S3 blobstore with individual blobs greater than 5&nbsp;GB.
+<p class="note caution">
+<span class="note__title"><strong>Caution</strong></span>
+The <code>s3-versioned-blobstore-backup-restorer</code> in
+<a href="https://github.com/cloudfoundry-incubator/backup-and-restore-sdk-release/releases">backup-and-restore-sdk</a>
+v1.5.1 and earlier does not support the backup and restore of an Amazon S3 blobstore with individual blobs greater than 5&nbsp;GB.
 </p>
 
-### <a id="enable-backup-and-restore-s3-versioned"></a> Enable Backup and Restore of Your Versioned S3-Compatible Blobstore
+### <a id="enable-backup-and-restore-s3-versioned"></a> Enable backup and restore of your versioned S3-compatible blobstore
 
 To back up a Cloud Foundry deployment that uses an external blobstore,
 you must co-locate the `s3-versioned-blobstore-backup-restorer` job from [`backup-and-restore-sdk-release`](https://github.com/cloudfoundry-incubator/backup-and-restore-sdk-release/tree/master) as part of your deployment.
 
 1. Verify that your blobstore is either an Amazon S3 bucket with versioning enabled or an S3-compatible bucket with versioning enabled and support for AWS Signature Version 4.
 
-       <p class="note"><strong>Note:</strong> If your S3-compatible blobstore uses a custom CA certificate, see <a href="https://bosh.io/docs/trusted-certs.html">Configuring Trusted Certificates</a> in the <a href="https://bosh.io/docs">BOSH documentation</a>. BBR automatically makes use of your configured trusted certificates.</p>
+    <p class="note">
+    <span class="note__title"><strong>Note</strong></span>
+    If your S3-compatible blobstore uses a custom CA certificate, see <a href="https://bosh.io/docs/trusted-certs.html">Configuring Trusted Certificates</a> in the <a href="https://bosh.io/docs">BOSH documentation</a>. BBR automatically makes use of your configured trusted certificates.</p>
 
 2. Include the `enable-backup-restore-s3-versioned.yml` ops file in your deployment.  The `enable-backup-restore-s3-unversioned.yml` file is in the [cf-deployment](https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/enable-backup-restore-s3-unversioned.yml) GitHub repository.
 
-    <p class="note"><strong>Note:</strong> Apply <code>enable-backup-restore.yml</code> and <code>use-s3-blobstore.yml</code>
-       before <code>enable-backup-restore-s3-versioned.yml</code>.
-       See <a href="cf-backup.html#order">Apply Ops Files in the Correct Order</a>.</p>
+    <p class="note">
+    <span class="note__title"><strong>Note</strong></span>
+    Apply <code>enable-backup-restore.yml</code> and <code>use-s3-blobstore.yml</code>
+    before <code>enable-backup-restore-s3-versioned.yml</code>.
+    See <a href="cf-backup.html#order">Apply Ops Files in the Correct Order</a>.</p>
 
     If you do not use [cf-deployment](https://github.com/cloudfoundry/cf-deployment) and ops files, you can still back up and restore external blobstores with BBR.
     See the contents of the `enable-backup-restore-s3-versioned.yml` ops file as an example and see the [S3-Compatible Versioned Blobstores](https://github.com/cloudfoundry-incubator/backup-and-restore-sdk-release/blob/master/docs/blobstore-backup-restore.md#s3-compatible-versioned-blobstores) in the Blobstore Backup and Restore documentation in GitHub.
@@ -134,18 +147,18 @@ If you prefer to use the [AWS CLI](https://aws.amazon.com/cli/), use the `put-bu
     $ aws s3 cp s3://my-bucket/ s3://my-bucket/ --recursive --metadata bump=true
     </pre>
 
-
-
     This ensures that each file in your buckets has a valid version ID.
 
 3. After enabling versioning, you have a current version and zero or more non-current versions for each object.
-<div class="note warning">
-  <strong>Warning:</strong>
+
+<div class="note">
+<span class="note__title"><strong>Note</strong></span>
     Cloud Foundry recommends setting an expiration policy on your buckets to delete old non-current versions and minimize storage costs. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/lifecycle-configuration-examples.html#lifecycle-config-conceptual-ex6">the AWS documentation</a> in the Amazon Simple Storage Service documentation.
 </div>
-</p>
 
-<p class="note"><strong>Note</strong>: If your blobstore uses S3-compatible buckets that are not from Amazon,
+<p class="note">
+<span class="note__title"><strong>Note</strong></span>
+If your blobstore uses S3-compatible buckets that are not from Amazon,
 see the documentation for your storage provider regarding enabling versioning and setting an expiration policy.
 </p>
 
@@ -168,7 +181,8 @@ Determine which of the following scenarios applies to your deployment before res
 + [Restore from Replicas](#s3-versioned-restore-from-replicas)
 
 <p class="note">
-  When restoring to a bucket, BBR only modifies blobs that are recorded in the backup artifact. Other blobs are not affected.
+<span class="note__title"><strong>Note</strong></span>
+When restoring to a bucket, BBR only modifies blobs that are recorded in the backup artifact. Other blobs are not affected.
 </p>
 
 #### <a id="s3-versioned-in-place-restore"></a> In-Place Restore
@@ -257,7 +271,9 @@ An Azure data center failure can render your original container unavailable. To 
 To back up a Cloud Foundry deployment that uses an Azure external blobstore, you must include the `enable-backup-restore-azure.yml` ops file in your deployment.
 This co-locates the `azure-blobstore-backup-restorer` job from <a href="https://github.com/cloudfoundry-incubator/backup-and-restore-sdk-release/tree/master">backup-and-restore-sdk-release</a> as part of your deployment.
 
-<p class="note"><strong>Note</strong>: Apply <code>enable-backup-restore.yml</code> and <code>use-azure-storage-blobstore.yml</code>
+<p class="note">
+<span class="note__title"><strong>Note</strong></span>
+Apply <code>enable-backup-restore.yml</code> and <code>use-azure-storage-blobstore.yml</code>
 before <code>enable-backup-restore-azure.yml</code>.
 For more information, see <a href="cf-backup.html#order">Apply Ops Files in the Correct Order</a>.
 </p>
@@ -275,6 +291,7 @@ Determine which of the following scenarios applies to your deployment before res
 + <a href="#azure-restore-to-different-storage-account">Restore to a New Container in a Different Storage Account</a>
 
 <p class="note">
+<span class="note__title"><strong>Note</strong></span>
 When restoring to a container, BBR modifies only blobs that are recorded in the backup artifact. Other blobs are not affected.
 </p>
 
@@ -297,9 +314,10 @@ In this scenario, BBR copies the blobs from the backed-up containers in the sour
 You must use the `enable-restore-azure-clone.yml` ops file in your deployment.
 
 <p class="note">
-  <strong>Note</strong>: Apply <code>enable-backup-restore.yml</code> and <code>use-azure-storage-blobstore.yml</code>
-  before <code>enable-restore-azure-clone.yml</code>.
-  For more information, see <a href="cf-backup.html#order">Apply Ops Files in the Correct Order</a>
+<span class="note__title"><strong>Note</strong></span>
+Apply <code>enable-backup-restore.yml</code> and <code>use-azure-storage-blobstore.yml</code>
+before <code>enable-restore-azure-clone.yml</code>.
+For more information, see <a href="cf-backup.html#order">Apply ops files in the correct order</a>
 in <em>Configuring Cloud Foundry for BOSH Backup and Restore</em>.
 </p>
 
@@ -322,16 +340,21 @@ you must co-locate the `gcs-blobstore-backup-restorer` job from the [backup-and-
   <br><br>
   See [vars-enable-backup-restore-gcs.yml](https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/example-vars-files/vars-enable-backup-restore-gcs.yml) for information about how to configure the variables for your backup bucket locations.
   <br><br>
-    <p class="note"><strong>Note:</strong> Apply <code>enable-backup-restore.yml</code> and <code>use-gcs-blobstore-service-account.yml</code>
+
+    <p class="note">
+    <span class="note__title"><strong>Note</strong></span>
+    Apply <code>enable-backup-restore.yml</code> and <code>use-gcs-blobstore-service-account.yml</code>
     before <code>enable-backup-restore-gcs.yml</code>.
-    See <a href="cf-backup.html#order">Apply Ops Files in the Correct Order</a> in
+    See <a href="cf-backup.html#order">Apply ops files in the correct order</a> in
     <em>Configuring Cloud Foundry for BOSH Backup and Restore</em>.</p>
+
   <br>
   If you do not use [cf-deployment](https://github.com/cloudfoundry/cf-deployment) and ops files, you can still back up and restore external blobstores with BBR.
   See the contents of the `enable-backup-restore-gcs.yml` ops file as an example and review the [backup-and-restore-sdk-release](https://github.com/cloudfoundry-incubator/backup-and-restore-sdk-release/blob/master/docs/blobstore-backup-restore.md#google-cloud-storage-blobstores) documentation in GitHub for further information.
 
-<p class="note warning">
-  <strong>Warning:</strong> To minimize storage costs, Cloud Foundry recommends creating a lifecycle policy for your backup buckets that permanently expires your older backups. For more information, see <a href="https://cloud.google.com/storage/docs/lifecycle">the GCP documentation</a>.
+<p class="note caution">
+<span class="note__title"><strong>Caution</strong></span>
+To minimize storage costs, Cloud Foundry recommends creating a lifecycle policy for your backup buckets that permanently expires your older backups. For more information, see <a href="https://cloud.google.com/storage/docs/lifecycle">the GCP documentation</a>.
 </p>
 
 
@@ -341,7 +364,8 @@ The restore process copies blobs from a directory in the backup bucket to the li
 
 If your original backup buckets are lost but you are restoring from copies of those original backup buckets, ensure that the variables listed in [vars-enable-backup-restore-gcs.yml](https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/example-vars-files/vars-enable-backup-restore-gcs.yml) reference those copies.
 
-<p class="note warning">
-  <strong>Warning:</strong> Restoring to a GCS bucket overwrites blobs with the backed up copies of those blobs.
-  BBR only modifies the blobs that were copied to the backup bucket. Other blobs are not changed during this process.
+<p class="note caution">
+<span class="note__title"><strong>Caution</strong></span>
+Restoring to a GCS bucket overwrites blobs with the backed up copies of those blobs.
+BBR only modifies the blobs that were copied to the backup bucket. Other blobs are not changed during this process.
 </p>

@@ -12,10 +12,10 @@ To perform a restore, see [Restoring with BOSH Backup and Restore](restore.html)
 
 Before using the result of the backup to restore to a destination environment,
 verify that the current environment and the destination environment are compatible.
-For information, see [Compatibility of Restore](./restore.html#compatibility).
+For information, see [Compatibility of restore](./restore.html#compatibility).
 <%# Need a link to the steps to perform to check the compatibility. %>
 
-## <a id='connect-to-jumpbox'></a> Connect to Your Jumpbox
+## <a id='connect-to-jumpbox'></a> Connect to your jumpbox
 
 To back up a BOSH Director or BOSH deployment using BBR, you need to establish a
 connection to your jumpbox in one of the ways below:
@@ -39,8 +39,8 @@ Where:
 * `JUMPBOX-ADDRESS` is the IP address or hostname of the jumpbox.
 
 <p class="note">
-  <strong>Note:</strong> If you connect to your jumpbox with SSH,
-   you must run the BBR commands in this topic from within your jumpbox.
+<span class="note__title"><strong>Note</strong></span>
+If you connect to your jumpbox with SSH, you must run the BBR commands in this topic from inside your jumpbox.
 </p>
 
 ### <a id='bosh-all-proxy'></a> Option 2: Connect with BOSH\_ALL\_PROXY
@@ -53,8 +53,8 @@ When `BOSH_ALL_PROXY` is set, the BBR CLI uses its value to forward
 requests to the BOSH Director.
 
 <p class="note">
-  <strong>Note:</strong> For the below procedures to work, ensure the SOCKS port is not already in
-  use by a different tunnel or process.
+<span class="note__title"><strong>Note</strong></span>
+For the following procedures to work, ensure the SOCKS port is not already in use by a different tunnel or process.
 </p>
 
 To connect with `BOSH_ALL_PROXY`, follow one of the below procedures:
@@ -69,7 +69,7 @@ To connect with `BOSH_ALL_PROXY`, follow one of the below procedures:
         * `JUMPBOX-USERNAME` is your jumpbox username.
         * `JUMPBOX-ADDRESS` is the IP address or hostname of the jumpbox.
         * `JUMPBOX-KEY-FILE` is the local SSH private key for accessing the jumpbox.
-    1. Provide the BOSH CLI with access to the tunnel using the `BOSH_ALL_PROXY` environment variable
+    2. Provide the BOSH CLI with access to the tunnel using the `BOSH_ALL_PROXY` environment variable
     by running:<br>
         ```
         export BOSH_ALL_PROXY=socks5://localhost:SOCKS-PORT
@@ -91,23 +91,25 @@ To connect with `BOSH_ALL_PROXY`, follow one of the below procedures:
     * `JUMPBOX-KEY-FILE` is the local SSH private key for accessing the jumpbox.
 
 <p class="note">
-  <strong>Note:</strong> Using <code>BOSH_ALL_PROXY</code> can result in longer backup and restore
-  times due to network performance degradation.
-  All operations must pass through the proxy, which can make moving backup artifacts significantly
-  slower.
+<span class="note__title"><strong>Note</strong></span>
+Using <code>BOSH_ALL_PROXY</code> can result in longer backup and restore
+times due to network performance degradation.
+All operations must pass through the proxy, which can make moving backup artifacts significantly
+slower.
 </p>
 
-<div class="note warning">
-  <strong>Warning:</strong> In the BBR v1.5.0 and earlier, the tunnel created by the BOSH CLI does
-  not include the <code>ServerAliveInterval</code> flag.
-  This might cause your SSH connection to timeout when transferring large artifacts.
-  In BBR v1.5.1, the <code>ServerAliveInterval</code> flag is included.
-  For more information, see
-  <a href="https://github.com/cloudfoundry-incubator/bosh-backup-and-restore/releases/tag/v1.5.1">bosh-backup-and-restore</a>
-  on GitHub.
-</div>
+<p class="note caution">
+<span class="note__title"><strong>Caution</strong></span>
+In the BBR v1.5.0 and earlier, the tunnel created by the BOSH CLI does
+not include the <code>ServerAliveInterval</code> flag.
+This might cause your SSH connection to timeout when transferring large artifacts.
+In BBR v1.5.1, the <code>ServerAliveInterval</code> flag is included.
+For more information, see
+<a href="https://github.com/cloudfoundry-incubator/bosh-backup-and-restore/releases/tag/v1.5.1">bosh-backup-and-restore</a>
+on GitHub.
+</p>
 
-## <a id='back-up-director'></a> Back Up a BOSH Director
+## <a id='back-up-director'></a> Back up a BOSH Director
 
 1. Run the BBR pre-backup check to confirm that your BOSH Director is reachable, and can therefore be backed up with BBR.
 
@@ -135,7 +137,8 @@ To connect with `BOSH_ALL_PROXY`, follow one of the below procedures:
     </pre>
 
 <p class="note">
-  <strong>Note:</strong> The pre-backup check cannot check for available disk space, ongoing network connections (for example, to databases), correctly configured credentials, or other circumstances that might impede a successful backup. It only checks that we can connect to the director.
+<span class="note__title"><strong>Note</strong></span>
+The pre-backup check cannot check for available disk space, ongoing network connections (for example, to databases), correctly configured credentials, or other circumstances that might impede a successful backup. It only checks that we can connect to the director.
 </p>
 
 
@@ -151,17 +154,18 @@ To connect with `BOSH_ALL_PROXY`, follow one of the below procedures:
     bosh clean-up --all
     ```
 
-    The above command removes all unused resources, including packages complied against older
+    This command removes all unused resources, including packages complied against older
     stemcells. If a lot of unused resources have accumulated over time, this clean-up causes a
     smaller, faster backup of BOSH Director.
-    For more information, see [Clean-Up](https://bosh.io/docs/cli-v2/#clean-up) in the BOSH
+    For more information, see [Clean-up](https://bosh.io/docs/cli-v2/#clean-up) in the BOSH
     documentation.
 
-    <p class="note warning">
-      <strong>Warning:</strong> The above command is destructive and can remove resources that are
-      unused but necessary. For example, if an on-demand service broker is deployed and no service
-      instances have been created, the releases needed to create a service instance are categorized
-      as unused and are removed.
+    <p class="note caution">
+    <span class="note__title"><strong>Caution</strong></span>
+    This command is destructive and can remove resources that are
+    unused but necessary. For example, if an on-demand service broker is deployed and no service
+    instances have been created, the releases needed to create a service instance are categorized
+    as unused and are removed.
     </p>
 
 1. Run the BBR backup command to back up your BOSH Director:
@@ -189,14 +193,14 @@ To connect with `BOSH_ALL_PROXY`, follow one of the below procedures:
     backup
     </pre>
 
-1. If the backup command completes successfully, follow the steps in [Manage Your Backup Artifact](#good-practices) below.
+1. If the backup command completes successfully, follow the steps in [Manage your backup artifact](#good-practices) below.
 
 1. If the backup command fails:
    * Run the command again adding the `--debug` flag to enable debug logs.<br>
      For more information, see [BBR Logging](logging.html).
-   * Follow the steps in [Recover from a Failing Command](#recovering-from-failing-command).
+   * Follow the steps in [Recover from a failing command](#recovering-from-failing-command).
 
-## <a id='back-up-deployment'></a> Back Up a BOSH Deployment
+## <a id='back-up-deployment'></a> Back up a BOSH deployment
 
 1. Run the BBR pre-backup check to confirm that your BOSH Director is reachable and has a deployment
 that you can back up with BBR:
@@ -237,7 +241,8 @@ that you can back up with BBR:
     </pre>
 
 <p class="note">
-  <strong>Note:</strong> The pre-backup check cannot check for available disk space, ongoing network connections (for example, to databases), correctly configured credentials, or other circumstances that might impede a successful backup. It only checks that we can connect to the director, and the VMs of our deployment.
+<span class="note__title"><strong>Note</strong></span>
+The pre-backup check cannot check for available disk space, ongoing network connections (for example, to databases), correctly configured credentials, or other circumstances that might impede a successful backup. It only checks that we can connect to the director, and the VMs of our deployment.
 </p>
 
 1. If the pre-backup check command fails:
@@ -273,15 +278,17 @@ that you can back up with BBR:
     certificate, if the certificate is not verifiable by the local machine's certificate chain.
     If you manually deployed, then the certificate might be stored in a `secrets.yml` or similar file.
 
-    <p class="note">
-      <strong>Note:</strong> To include the manifest in the backup artifact, add the
-      <code>--with-manifest</code> flag. However, be aware that doing so causes the backup artifact
-      to include credentials that you need to keep secret.
+    <p cclass="note">
+    <span class="note__title"><strong>Note</strong></span>
+    To include the manifest in the backup artifact, add the
+    <code>--with-manifest</code> flag. However, be aware that doing so causes the backup artifact
+    to include credentials that you need to keep secret.
     </p>
-    <p class="note warning">
-      <strong>Warning:</strong> The <code>--unsafe-lock-free</code> flag should only be used by advanced
-      users because it can result in inconsistent backups. For more information about this
-      feature, see <a href="experimental-features.html">Experimental Features</a>.
+    <p class="note caution">
+    <span class="note__title"><strong>Caution</strong></span>
+    The <code>--unsafe-lock-free</code> flag should only be used by advanced
+    users because it can result in inconsistent backups. For more information about this
+    feature, see <a href="experimental-features.html">Experimental Features</a>.
     </p>
 
     For example:
@@ -295,19 +302,21 @@ that you can back up with BBR:
     --ca-cert bosh.ca.cert \
     backup</pre>
 
-    <p class="note"><strong>Note:</strong> The BBR backup command can take a long time to complete.
+    <p class="note">
+    <span class="note__title">Note</span>
+    The BBR backup command can take a long time to complete.
     You can run it independently of the SSH session so that the process can continue running even
     if your connection to the jumpbox fails. The command above uses <code>nohup</code>, but you can
     run the command in a <code>screen</code> or <code>tmux</code> session instead.</p>
 
-1. If the command completes successfully, follow the steps in [What To Do with Your Backup Artifact](#what-to-do-with-artifact) below.
+1. If the command completes successfully, follow the steps in [What to do with your backup artifact](#what-to-do-with-artifact) below.
 
 1. If the backup command fails:
    + Run the command again adding the `--debug` flag to enable debug logs.
      For more information, see [BBR Logging](logging.html).
-   + Follow the steps in [Recover from a Failing Command](#recovering-from-failing-command).
+   + Follow the steps in [Recover from a failing command](#recovering-from-failing-command).
 
-## <a id="recovering-from-failing-command"></a>Recover from a Failing Command
+## <a id="recovering-from-failing-command"></a>Recover from a failing command
 
 If the backup fails for the BOSH Director or deployment:
 
@@ -317,10 +326,10 @@ If the backup fails for the BOSH Director or deployment:
 1. Ensure that the jumpbox can reach the BOSH Director.
 1. See [BBR Logging](logging.html).
 1. If you see the error message `Directory /var/vcap/store/bbr-backup already exists on instance`,
-   run the appropriate cleanup command. See [Clean Up after a Failed Backup](#manual-clean) below.
+   run the appropriate cleanup command. See [Clean up after a failed backup](#manual-clean) below.
 1. If the backup artifact is corrupted, discard the failing artifacts and rerun the backup.
 
-## <a id='cancel-backup'></a>Cancel a Backup
+## <a id='cancel-backup'></a>Cancel a backup
 
 Backups can take a long time.
 You might want to cancel a backup, for example, if you learn that the backup is going to fail
@@ -330,13 +339,14 @@ To cancel a backup:
 
 1. Terminate the BBR process by pressing Ctrl-C and typing `yes` to confirm.
 
-<p class="note warning">
-  <strong>Warning:</strong> Cancelling a backup can leave the system in an unusable state and prevent
-  additional backups. Follow the steps in <a href="#manual-clean">Clean Up after a Failed Backup</a>
-  below to fix these issues.
+<p class="note caution">
+<span class="note__title"><strong>Caution</strong></span>
+Cancelling a backup can leave the system in an unusable state and prevent
+additional backups. Follow the steps in <a href="#manual-clean">Clean up after a failed backup</a>
+below to fix these issues.
 </p>
 
-## <a id="manual-clean"></a>Clean Up after a Failed Backup
+## <a id="manual-clean"></a>Clean up after a failed backup
 
 If your backup process fails, it might leave the BBR backup directory on the instance, causing any
 subsequent attempts to backup to fail. In addition, BBR might not have run the post-backup scripts, leaving the instance in a locked state.
@@ -387,7 +397,7 @@ Follow the steps below to use the BBR cleanup script after a failed backup attem
     backup-cleanup
     </pre>
 
-## <a id="good-practices"></a>Manage Your Backup Artifact
+## <a id="good-practices"></a>Manage your backup artifact
 
 To keep your backup artifact safe:
 
@@ -404,10 +414,10 @@ This minimizes the risk of losing your backups in the event of a disaster.
 [Restoring with BOSH Backup and Restore](restore.html).
 
 <p class="note">
-  <strong>Note:</strong> Backup artifacts might contain data covered by the European Union's
-  <em>General Data Protection Regulation (GDPR)</em>.
-  Be mindful that any backup artifacts might contain personal data.
-  For example, a backup of a BOSH deployment could contain user email addresses.
-  As such, backup artifacts should be handled in accordance with organizational policies and
-  applicable laws as they pertain to security, confidentiality, and privacy.
+<span class="note__title"><strong>Note</strong></span>
+Backup artifacts might contain data covered by the European Union's
+General Data Protection Regulation (GDPR), includingS contain personal data.
+For example, a backup of a BOSH deployment could contain user email addresses.
+As such, backup artifacts should be handled in accordance with organizational policies and
+applicable laws as they pertain to security, confidentiality, and privacy.
 </p>
