@@ -11,7 +11,7 @@ BBR is a framework for backing up and restoring BOSH deployments and BOSH Direct
 
 The BBR framework consists of a command line interface (CLI) and a set of hooks, which call out to scripts. The framework uses BOSH to orchestrate the execution of backup and restore scripts. BBR allows release authors fine-grained control over how their release is backed up.
 
-### <a id="mechanism"></a> Backup mechanism
+## <a id="mechanism"></a> Backup mechanism
 
 Different systems require different strategies for backup and restore.
 To help release authors make consistent backups of their systems, the BBR framework provides hooks to
@@ -46,7 +46,7 @@ those of other releases. Therefore, release authors must give these jobs unique 
 names to avoid name collisions.
 </p>
 
-###  <a id='script-implementation'></a>Script organization
+## <a id='script-implementation'></a>Script organization
 
 BBR sets out a contract with release authors to call designated backup and restore
 scripts under the `/var/vcap/jobs/JOB-NAME/bin/bbr/SCRIPT-NAME` directory:
