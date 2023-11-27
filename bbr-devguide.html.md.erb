@@ -41,7 +41,8 @@ release authors are responsible for naming, creating, testing, and troubleshooti
 and restore scripts.
 
 <p class="note">
-<span class="note__title"><strong>Note</strong></span>For all releases, these backup and restore jobs might be co-located with
+<span class="note__title"><strong>Note</strong></span>
+For all releases, these backup and restore jobs might be co-located with
 those of other releases. Therefore, release authors must give these jobs unique and descriptive
 names to avoid name collisions.
 </p>
@@ -501,7 +502,7 @@ cp $ARTIFACT_DIRECTORY <output_file>
 <p class="note important">
 <span class="note__title"><strong>Important</strong></span>
 Release authors must ensure the following.
-<br><strong>For CF Releases</strong>---Your scripts must respect the <code>release_level_backup</code> job property so the scripts run if set to <code>true</code>, but do nothing if set to <code>false</code>.
+<br><strong>For CF Releases</strong>, Your scripts must respect the <code>release_level_backup</code> job property so the scripts run if set to <code>true</code>, but do nothing if set to <code>false</code>.
 </p>
 
 BBR provides a pattern for Cloud Foundry release authors that ensures their scripts abide by the BBR Framework contract.
