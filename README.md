@@ -2,21 +2,21 @@
 
 This repository contains the documentation for BOSH Backup and Restore (BBR), a framework for backing up and restoring BOSH deployments and BOSH Directors. This is the generic BBR documentation: it describes how to use BBR with any BOSH deployment or BOSH Director.
 
-## How This Repo Is Published
+This is a content repository in the [Cloud Foundry documentation set](https://github.com/cloudfoundry/docs-book-cloudfoundry).
 
-This repo is published to the following locations:
+## Published location
 
-* https://docs.cloudfoundry.org/bbr/ (OSS CF documentation)
+This content is published at https://docs.cloudfoundry.org/bbr/.
 
-### BBR Release Notes
+## Branch
 
-The BBR release notes are published on GitHub: https://github.com/cloudfoundry-incubator/bosh-backup-and-restore/releases
+This repository uses only the `master` branch for the Cloud Foundry OSS documentation.
 
-## Where the Subnavs Live
+## Where the subnav lives
 
-The BBR documentation published in the OSS CF documentation at https://docs.cloudfoundry.org/bbr/ is included in the main subnav in `docs-book-cloudfoundry`: https://github.com/cloudfoundry/docs-book-cloudfoundry/blob/master/master_middleman/source/subnavs/_cf-subnav.erb. The BBR section appears under **Information for Operators > Deploying Cloud Foundry**.
+The BBR documentation is included in the main subnav in `docs-book-cloudfoundry`: https://github.com/cloudfoundry/docs-book-cloudfoundry/blob/master/master_middleman/source/subnavs/_cf-subnav.erb. The BBR section appears under **Information for Operators > Deploying Cloud Foundry**.
 
-## Template Variables
+## Template variables
 
 BBR template variables that contextualize topics for OSS CF live in the `docs-book-cloudfoundry` template variables [file](https://github.com/cloudfoundry/docs-book-cloudfoundry/blob/master/config/template_variables.yml).
 
@@ -25,35 +25,25 @@ These variables appear in the following topics:
 * [Backing up with BOSH Backup and Restore](https://github.com/cloudfoundry/docs-bbr/blob/master/backup.html.md.erb)
 * [Installing BOSH Backup and Restore](https://github.com/cloudfoundry/docs-bbr/blob/master/installing.html.md.erb)
 
-## One Big Table of All BBR Docs
+## BBR release notes
 
-This table lists the GitHub locations and URLs for all BBR documentation.
+The BBR release notes are published on GitHub: https://github.com/cloudfoundry/bosh-backup-and-restore/releases
 
-<table class="table">
-<thead>
-<tr>
- <th>Name</th>
- <th>GitHub Location</th>
- <th>URL</th>
-</tr>
-</thead>
-<tr>
-  <td>Generic BBR docs in OSS CF</td>
-  <td>https://github.com/cloudfoundry/docs-bbr</td>
-  <td>https://docs.cloudfoundry.org/bbr/</td>
-</tr>
-<tr>
-  <td>Generic BBR docs in OSS CF subnav</td>
-  <td>https://github.com/cloudfoundry/docs-book-cloudfoundry/blob/master/master_middleman/source/subnavs/_cf-subnav.erb</td>
-  <td>https://docs.cloudfoundry.org/bbr/</td>
-</tr>
-<tr>
-  <td>BBR release notes for OSS CF</td>
-  <td>https://github.com/cloudfoundry-incubator/bosh-backup-and-restore/releases</td>
-</tr>
-<tr>
-  <td>BBR template variables in <code>docs-book-cloudfoundry</code></td>
-  <td>https://github.com/cloudfoundry/docs-book-cloudfoundry/blob/master/config/template_variables.yml</td>
-  <td>n/a</td>
-</tr>
-</table>
+## All BBR documentation locations
+
+| Name | GitHub location | Published URL |
+|------|-----------------|---------------|
+| BBR docs in OSS CF | https://github.com/cloudfoundry/docs-bbr | https://docs.cloudfoundry.org/bbr/ |
+| BBR subnav in OSS CF | https://github.com/cloudfoundry/docs-book-cloudfoundry/blob/master/master_middleman/source/subnavs/_cf-subnav.erb | https://docs.cloudfoundry.org/bbr/ |
+| BBR release notes | https://github.com/cloudfoundry/bosh-backup-and-restore/releases | n/a |
+| BBR template variables in `docs-book-cloudfoundry` | https://github.com/cloudfoundry/docs-book-cloudfoundry/blob/master/config/template_variables.yml | n/a |
+
+## Contributing
+
+1. Fork this repository.
+2. Create a branch from `master`, make your changes, and submit a pull request to `master`.
+
+Only the CFF Docs WG lead can merge pull requests, build to staging, and publish the documentation.
+
+* **Staging site:** https://docs-staging.cloudfoundry.org/
+* **Published site:** https://docs.cloudfoundry.org/
