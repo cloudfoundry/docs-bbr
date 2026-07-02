@@ -55,7 +55,8 @@ you must co-locate the `s3-unversioned-blobstore-backup-restorer` job from the [
     <span class="note__title"><strong>Note</strong></span>
     Apply <code>enable-backup-restore.yml</code> and <code>use-s3-blobstore.yml</code>
     before <code>enable-backup-restore-s3-unversioned.yml</code>.
-    See <a href="cf-backup.html#order">Apply ops files in the correct order</a>.</p>
+    See <a href="cf-backup.html#order">Apply ops files in the correct order</a>.
+</p>
     <br>
     If you do not use [cf-deployment](https://github.com/cloudfoundry/cf-deployment) and ops files, you can still back up and restore external blobstores with BBR.
     See the contents of the `enable-backup-restore-s3-unversioned.yml` ops file as an example and review the [backup-and-restore-sdk-release](https://github.com/cloudfoundry-incubator/backup-and-restore-sdk-release/blob/master/docs/blobstore-backup-restore.md#s3-compatible-unversioned-blobstores) documentation in GitHub for further information.
@@ -105,7 +106,8 @@ you must co-locate the `s3-versioned-blobstore-backup-restorer` job from [`backu
 
     <p class="note">
     <span class="note__title"><strong>Note</strong></span>
-    If your S3-compatible blobstore uses a custom CA certificate, see <a href="https://bosh.io/docs/trusted-certs.html">Configuring trusted certificates</a> in the <a href="https://bosh.io/docs">BOSH documentation</a>. BBR automatically makes use of your configured trusted certificates.</p>
+    If your S3-compatible blobstore uses a custom CA certificate, see <a href="https://bosh.io/docs/trusted-certs.html">Configuring trusted certificates</a> in the <a href="https://bosh.io/docs">BOSH documentation</a>. BBR automatically makes use of your configured trusted certificates.
+</p>
 
 2. Include the `enable-backup-restore-s3-versioned.yml` ops file in your deployment.  The `enable-backup-restore-s3-unversioned.yml` file is in the [cf-deployment](https://github.com/cloudfoundry/cf-deployment/blob/master/operations/backup-and-restore/enable-backup-restore-s3-unversioned.yml) GitHub repository.
 
@@ -113,7 +115,8 @@ you must co-locate the `s3-versioned-blobstore-backup-restorer` job from [`backu
     <span class="note__title"><strong>Note</strong></span>
     Apply <code>enable-backup-restore.yml</code> and <code>use-s3-blobstore.yml</code>
     before <code>enable-backup-restore-s3-versioned.yml</code>.
-    See <a href="cf-backup.html#order">Apply ops files in the correct order</a>.</p>
+    See <a href="cf-backup.html#order">Apply ops files in the correct order</a>.
+</p>
 
     If you do not use [cf-deployment](https://github.com/cloudfoundry/cf-deployment) and ops files, you can still back up and restore external blobstores with BBR.
     See the contents of the `enable-backup-restore-s3-versioned.yml` ops file as an example and see the [S3-compatible Versioned Blobstores](https://github.com/cloudfoundry-incubator/backup-and-restore-sdk-release/blob/master/docs/blobstore-backup-restore.md#s3-compatible-versioned-blobstores) in the Blobstore Backup and Restore documentation in GitHub.
@@ -346,7 +349,8 @@ you must co-locate the `gcs-blobstore-backup-restorer` job from the [backup-and-
     Apply <code>enable-backup-restore.yml</code> and <code>use-gcs-blobstore-service-account.yml</code>
     before <code>enable-backup-restore-gcs.yml</code>.
     See <a href="cf-backup.html#order">Apply ops files in the correct order</a> in
-    <em>Configuring Cloud Foundry for BOSH Backup and Restore</em>.</p>
+    <em>Configuring Cloud Foundry for BOSH Backup and Restore</em>.
+</p>
 
   <br>
   If you do not use [cf-deployment](https://github.com/cloudfoundry/cf-deployment) and ops files, you can still back up and restore external blobstores with BBR.

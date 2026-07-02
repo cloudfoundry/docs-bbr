@@ -31,7 +31,8 @@ might succeed although the restored MySQL database is unusable.
 <p class="note">
 <span class="note__title"><strong>Note</strong></span>
 A change in VM size or underlying hardware should not affect
-BBR's ability to restore data, as long as there is adequate storage space to restore the data.</p>
+BBR's ability to restore data, as long as there is adequate storage space to restore the data.
+</p>
 
 ## <a id="recreate-vms"></a> Step 1: Re-create VMs
 
@@ -67,7 +68,8 @@ If this artifact is encrypted, you must decrypt it.
 The BBR restore command can take a long time to complete.
 You can run it independently of the SSH session so that the process can continue running even if
 your connection to the jumpbox fails. The command above uses <code>nohup</code>, but you run
-the command in a <code>screen</code> or <code>tmux</code> session instead.</p>
+the command in a <code>screen</code> or <code>tmux</code> session instead.
+</p>
 
 Use the optional `--debug` flag to enable debug logs. For more information, see [BBR logging](logging.html).
 
